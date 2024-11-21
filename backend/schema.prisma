@@ -1,0 +1,60 @@
+datasource db {
+    provider = "postgresql"
+    url = env("DATABASE_URL")
+}
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+model User {
+    id Int @id @default(autoincrement())
+    username String @unique
+    email String @unique
+    profileImageUrl String?
+    location String?
+    numYearsExperience Int?
+    favoriteSubject String?
+    createdAt DateTime @default(now())
+    updatedAt DateTime @default(now())
+    posts Post[]
+    comments Comment[]
+}
+
+model Post {
+    id Int @id @default(autoincrement())
+    imageUrl String
+    title String
+    photographer User @relation(fields: [photographerId], references: [id] )
+    photographerId Int 
+    caption String?
+    fullDescription String?
+    lat Decimal?
+    lng Decimal?
+    partOfDay String?
+    datePhotographed DateTime?
+    createdAt DateTime @default(now())
+    updatedAt DateTime @default(now())
+    comments Comment[]
+}
+
+model Comment {
+    id Int @id @default(autoincrement())
+    commentText String
+    post Post @relation(fields: [postId], references: [id])
+    postId Int 
+    commenter User @relation(fields: [commenterId], references: [id])
+    commenterId Int
+    createdAt DateTime @default(now())
+    updatedAt DateTime @default(now())
+    replies CommentReply[]
+}
+
+model CommentReply {
+    id Int @id @default(autoincrement())
+    replyText String
+    comment Comment @relation(fields: [replyingTo], references: [id])
+    replyingTo Int
+    createdAt DateTime @default(now())
+    updatedAt DateTime @default(now())
+}
