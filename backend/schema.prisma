@@ -9,12 +9,12 @@ generator client {
 
 model User {
     id Int @id @default(autoincrement())
-    username String @unique
+    username String @unique @db.VarChar(255)
     email String @unique
     profileImageUrl String?
-    location String?
+    location String? @db.VarChar(255)
     numYearsExperience Int?
-    favoriteSubject String?
+    favoriteSubject String? @db.VarChar(255)
     createdAt DateTime @default(now())
     updatedAt DateTime @default(now())
     posts Post[]
@@ -24,26 +24,26 @@ model User {
 model Post {
     id Int @id @default(autoincrement())
     imageUrl String
-    title String
-    photographer User @relation(fields: [photographerId], references: [id] )
+    title String @db.VarChar(255)
+    photographer User @relation(fields: [photographerId], references: [id], onDelete: Cascade )
     photographerId Int 
-    caption String?
-    fullDescription String?
-    lat Decimal?
-    lng Decimal?
-    partOfDay String?
+    caption String? @db.VarChar(255)
+    fullDescription String? @db.VarChar(500)
+    lat Decimal? @db.Decimal(100, 98)
+    lng Decimal? @db.Decimal(100, 97)
+    partOfDay String? @db.VarChar(255)
     datePhotographed DateTime?
-    createdAt DateTime @default(now())
+    createdAt DateTime @default(now()) @db.Timestamp()
     updatedAt DateTime @default(now())
     comments Comment[]
 }
 
 model Comment {
     id Int @id @default(autoincrement())
-    commentText String
-    post Post @relation(fields: [postId], references: [id])
+    commentText String @db.VarChar(255)
+    post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
     postId Int 
-    commenter User @relation(fields: [commenterId], references: [id])
+    commenter User @relation(fields: [commenterId], references: [id], onDelete: Cascade)
     commenterId Int
     createdAt DateTime @default(now())
     updatedAt DateTime @default(now())
@@ -52,8 +52,8 @@ model Comment {
 
 model CommentReply {
     id Int @id @default(autoincrement())
-    replyText String
-    comment Comment @relation(fields: [replyingTo], references: [id])
+    replyText String @db.VarChar(255)
+    comment Comment @relation(fields: [replyingTo], references: [id], onDelete: Cascade)
     replyingTo Int
     createdAt DateTime @default(now())
     updatedAt DateTime @default(now())
