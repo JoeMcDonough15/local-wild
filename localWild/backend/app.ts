@@ -1,5 +1,4 @@
 import express, { NextFunction, Request, Response } from "express";
-import { ApiError } from "../types";
 require("express-async-errors");
 import morgan from "morgan";
 import cors from "cors";
@@ -46,7 +45,7 @@ app.use(routes);
 // Catch unhandled requests and forward to error handler.
 app.use((_req: Request, _res: Response, next) => {
   // console.log(_req._parsedOriginalUrl.pathname, " ^^^^^^")
-  const err: ApiError = new Error("The requested resource couldn't be found.");
+  const err = new Error("The requested resource couldn't be found.");
   err.title = "Resource Not Found";
   err.errors = {
     name: "Resource Not Found Error",
@@ -71,7 +70,7 @@ app.use((_req: Request, _res: Response, next) => {
 // });
 
 // Error formatter
-app.use((err: ApiError, _req: Request, res: Response, _next: NextFunction) => {
+app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
   res.status(err.status || 500);
   console.error(err);
   res.json({

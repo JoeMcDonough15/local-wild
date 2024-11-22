@@ -5,7 +5,6 @@ import { check } from "express-validator";
 import handleValidationErrors from "../../utils/validation";
 import { setTokenCookie } from "../../utils/auth";
 const { User } = require("../../db/models");
-import { SafeUser } from "../../../types";
 
 const router = express.Router();
 
