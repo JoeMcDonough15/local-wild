@@ -1,14 +1,13 @@
 // backend/routes/index.js
-const express = require("express");
+import express from "express";
 const router = express.Router();
-const path = require("path");
-const apiRouter = require("./api");
+import path from "path";
+import apiRouter from "./api";
 
 router.use("/api", apiRouter);
 // Static routes
 // Serve React build files in production
 if (process.env.NODE_ENV === "production") {
-  const path = require("path");
   // Serve the frontend's index.html file at the root route
   router.get("/", (req, res) => {
     res.cookie("XSRF-TOKEN", req.csrfToken());
@@ -37,4 +36,4 @@ if (process.env.NODE_ENV !== "production") {
   });
 }
 
-module.exports = router;
+export default router;

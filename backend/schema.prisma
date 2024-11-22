@@ -18,7 +18,7 @@ model User {
     createdAt DateTime @default(now())
     updatedAt DateTime @default(now())
     posts Post[]
-    comments Comment[]
+    comments CommentOnPost[]
 }
 
 model Post {
@@ -35,10 +35,10 @@ model Post {
     datePhotographed DateTime?
     createdAt DateTime @default(now()) @db.Timestamp()
     updatedAt DateTime @default(now())
-    comments Comment[]
+    comments CommentOnPost[]
 }
 
-model Comment {
+model CommentOnPost {
     id Int @id @default(autoincrement())
     commentText String @db.VarChar(255)
     post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
@@ -53,7 +53,7 @@ model Comment {
 model CommentReply {
     id Int @id @default(autoincrement())
     replyText String @db.VarChar(255)
-    comment Comment @relation(fields: [replyingTo], references: [id], onDelete: Cascade)
+    comment CommentOnPost @relation(fields: [replyingTo], references: [id], onDelete: Cascade)
     replyingTo Int
     createdAt DateTime @default(now())
     updatedAt DateTime @default(now())

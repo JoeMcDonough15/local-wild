@@ -13,8 +13,5 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "@types/csurf": "^1.11.5"
-  }
+  "license": "ISC"
 }

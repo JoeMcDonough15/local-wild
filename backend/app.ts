@@ -10,7 +10,7 @@ const csurf = require("csurf");
 const { environment } = configurationObj;
 const isProduction = environment === "production";
 // const { ValidationError } = require("sequelize");
-const routes = require("./routes");
+import routes from "./routes";
 const app = express();
 app.use(morgan("dev"));
 app.use(cookieParser());
