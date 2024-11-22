@@ -1,11 +1,3 @@
-import { Request } from "express";
-
-export interface ApiError extends Error {
-  title?: string;
-  errors?: Error;
-  status?: number;
-}
-
 export interface User {
   id: number;
   username: string;
@@ -18,6 +10,14 @@ export interface User {
   updatedAt: Date;
   posts: Post[];
   comments: CommentOnPost[];
+}
+
+declare global {
+  interface Error {
+    title?: string;
+    errors?: Record<string, string>;
+    status?: number;
+  }
 }
 
 declare global {

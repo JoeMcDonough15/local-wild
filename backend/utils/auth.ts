@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import configurationObj from "../config";
-import { ApiError, User as UserType } from "../types";
+import { User as UserType } from "../../types";
 const { jwtConfig } = configurationObj;
 // const { User } = require("../db/models");
 
@@ -58,7 +58,7 @@ export const restoreUser = (
     token,
     secret,
     undefined,
-    async (err: ApiError | null, jwtPayload) => {
+    async (err: Error | null, jwtPayload) => {
       if (err) {
         return next();
       }
@@ -94,7 +94,7 @@ export const requireAuth = function (
 ) {
   if (req.user) return next();
 
-  const err: ApiError = new Error("Authentication required");
+  const err = new Error("Authentication required");
   err.title = "Authentication required";
   err.errors = {
     name: "Authentication Error",
