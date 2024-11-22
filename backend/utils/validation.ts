@@ -25,6 +25,4 @@ const handleValidationErrors = (
   next();
 };
 
-module.exports = {
-  handleValidationErrors,
-};
+export default handleValidationErrors;

@@ -12,6 +12,12 @@ export interface User {
   comments: CommentOnPost[];
 }
 
+export interface SafeUser {
+  id: number;
+  email: string;
+  username: string;
+}
+
 declare global {
   interface Error {
     title?: string;

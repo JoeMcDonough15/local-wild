@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import configurationObj from "../config";
-import { User as UserType } from "../../types";
+import { SafeUser, User as UserType } from "../../types";
 const { jwtConfig } = configurationObj;
 // const { User } = require("../db/models");
 
@@ -10,7 +10,7 @@ const { secret, expiresIn } = jwtConfig;
 // Sends a JWT Cookie
 export const setTokenCookie = (
   res: Response,
-  user: UserType
+  user: UserType | SafeUser
 ): string | undefined => {
   // Create the token.
   const safeUser = {
