@@ -1,5 +1,4 @@
 import { validationResult } from "express-validator";
-import type { ValidationError } from "express-validator";
 import type { NextFunction, Request, Response } from "express";
 import type { ApiError } from "../types/index.js";
 

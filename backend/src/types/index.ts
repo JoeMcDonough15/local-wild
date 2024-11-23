@@ -1,15 +1,15 @@
 export interface User {
-  id: number;
-  username: string;
-  email: string;
+  id?: number;
+  username?: string;
+  email?: string;
   profileImageUrl?: string;
   location?: string;
   numYearsExperience?: number;
   favoriteSubject?: string;
-  createdAt: Date;
-  updatedAt: Date;
-  posts: Post[];
-  comments: CommentOnPost[];
+  createdAt?: Date;
+  updatedAt?: Date;
+  posts?: Post[];
+  comments?: CommentOnPost[];
 }
 
 export interface SafeUser {
