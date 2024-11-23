@@ -1,5 +1,5 @@
-# README
+# Local Wild
 
-# DB Schema
+## DB Schema
 
-![localWild (2)](https://github.com/user-attachments/assets/c22f370e-61ba-44e3-ab0b-3075b9282742)
+![db schema](https://github.com/user-attachments/assets/6d6639f4-ad8a-458c-a525-0d57965332b5)
