@@ -17,6 +17,7 @@ model User {
     id Int @id @default(autoincrement())
     username String @unique @db.VarChar(255)
     email String @unique
+    password String @db.VarChar(255)
     profileImageUrl String?
     location String? @db.VarChar(255)
     numYearsExperience Int?
