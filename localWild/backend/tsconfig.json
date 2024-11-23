@@ -1,6 +1,4 @@
 {
-  "exclude": ["node_modules"],
-
   "compilerOptions": {
     "incremental": true,
     "target": "es2022" /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */,
@@ -22,6 +20,11 @@
     "allowUnusedLabels": false,
     "allowUnreachableCode": false,
     /* Completeness */
-    "skipLibCheck": true /* Skip type checking all .d.ts files. */
-  }
+    "skipLibCheck": true /* Skip type checking all .d.ts files. */,
+    "typeRoots": [
+      "node_modules/@types/"
+    ] /* avoids thousands of errors about node_modules, even when they are excluded */
+  },
+  "include": ["./src/**/*.ts"],
+  "exclude": ["node_modules"]
 }

@@ -9,7 +9,6 @@ dotenv.config();
 import csurf from "csurf";
 import routes from "./routes/index.js";
 const { environment, port } = configurationObj;
-console.log("port: ", port);
 const isProduction = environment === "production";
 // initialize app
 const app = express();
