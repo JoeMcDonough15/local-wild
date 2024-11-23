@@ -4,9 +4,12 @@ import cors from "cors";
 import helmet from "helmet";
 import cookieParser from "cookie-parser";
 import configurationObj from "./config/index.js";
-// import csurf from "csurf";
+import dotenv from "dotenv";
+dotenv.config();
+import csurf from "csurf";
 import routes from "./routes/index.js";
 const { environment, port } = configurationObj;
+console.log("port: ", port);
 const isProduction = environment === "production";
 // initialize app
 const app = express();
@@ -25,17 +28,15 @@ app.use(helmet.crossOriginResourcePolicy({
     policy: "cross-origin",
 }));
 // Set the _csrf token and create req.csrfToken method
-// app.use(
-//   csurf({
-//     cookie: {
-//       secure: isProduction,
-//       sameSite: isProduction && "lax",
-//       httpOnly: true,
-//     },
-//   })
-// );
+app.use(csurf({
+    cookie: {
+        secure: isProduction,
+        sameSite: isProduction && "lax",
+        httpOnly: true,
+    },
+}));
 app.use(routes);
-app.get("/", (_req, res) => {
+app.get("/", async (_req, res) => {
     res.json({ message: "hello" });
 });
 // Catch unhandled requests and forward to error handler.
