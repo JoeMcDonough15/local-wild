@@ -1,5 +1,7 @@
-import { validationResult, ValidationError } from "express-validator";
-import { NextFunction, Request, Response } from "express";
+import { validationResult } from "express-validator";
+import type { ValidationError } from "express-validator";
+import type { NextFunction, Request, Response } from "express";
+import type { ApiError } from "../types/index.js";
 
 // middleware for formatting errors from express-validator middleware
 // (to customize, see express-validator's documentation)
@@ -12,11 +14,11 @@ const handleValidationErrors = (
 
   if (!validationErrors.isEmpty()) {
     const errors: Record<string, string> = {};
-    validationErrors
-      .array()
-      .forEach((error: ValidationError) => (errors[error.param] = error.msg));
+    for (const error of validationErrors.array()) {
+      errors[error.param] = error.msg;
+    }
 
-    const err = Error("Bad request.");
+    const err: ApiError = Error("Bad request.");
     err.errors = errors;
     err.status = 400;
     err.title = "Bad request.";

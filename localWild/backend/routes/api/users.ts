@@ -1,9 +1,8 @@
 import express, { Request, Response } from "express";
-const bcrypt = require("bcryptjs");
+import bcrypt from "bcryptjs";
 import { check } from "express-validator";
-const { handleValidationErrors } = require("../../utils/validation");
-const { setTokenCookie, requireAuth } = require("../../utils/auth");
-const { User } = require("../../db/models");
+import handleValidationErrors from "../../utils/validation.js";
+import { setTokenCookie, requireAuth } from "../../utils/auth.js";
 
 const router = express.Router();
 
@@ -25,25 +24,25 @@ const validateSignup = [
   handleValidationErrors,
 ];
 
-// Sign up
-router.post("/", validateSignup, async (req: Request, res: Response) => {
-  const { email, password, username } = req.body;
+// // Sign up
+// router.post("/", validateSignup, async (req: Request, res: Response) => {
+//   const { email, password, username } = req.body;
 
-  const hashedPassword = bcrypt.hashSync(password);
-  const user = await User.create({ email, username, hashedPassword });
+//   const hashedPassword = bcrypt.hashSync(password);
+//   const user = await User.create({ email, username, hashedPassword });
 
-  const safeUser = {
-    id: user.id,
-    email: user.email,
-    username: user.username,
-  };
+//   const safeUser = {
+//     id: user.id,
+//     email: user.email,
+//     username: user.username,
+//   };
 
-  await setTokenCookie(res, safeUser);
+//   await setTokenCookie(res, safeUser);
 
-  return res.json({
-    user: safeUser,
-  });
-});
+//   return res.json({
+//     user: safeUser,
+//   });
+// });
 
 // Restore session user
 router.get("/", (req, res) => {
@@ -57,7 +56,8 @@ router.get("/", (req, res) => {
     return res.json({
       user: safeUser,
     });
-  } else return res.json({ user: null });
+  }
+  return res.json({ user: null });
 });
 
-module.exports = router;
+export default router;

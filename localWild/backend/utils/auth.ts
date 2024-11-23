@@ -1,9 +1,8 @@
-import { NextFunction, Request, Response } from "express";
+import type { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
-import configurationObj from "../config";
-import { SafeUser, User as UserType } from "../../types";
+import configurationObj from "../config/index.js";
+import type { ApiError, SafeUser, User as UserType } from "../types/index.ts";
 const { jwtConfig } = configurationObj;
-// const { User } = require("../db/models");
 
 const { secret, expiresIn } = jwtConfig;
 
@@ -19,12 +18,13 @@ export const setTokenCookie = (
     username: user.username,
   };
 
+  // biome-ignore lint/suspicious/noImplicitAnyLet: <explanation>
   let token;
   if (secret && expiresIn) {
     token = jwt.sign(
       { data: safeUser },
       secret,
-      { expiresIn: parseInt(expiresIn) } // 604,800 seconds = 1 week
+      { expiresIn: Number.parseInt(expiresIn) } // 604,800 seconds = 1 week
     );
   }
 
@@ -33,7 +33,7 @@ export const setTokenCookie = (
   if (expiresIn) {
     // Set the token cookie
     res.cookie("token", token, {
-      maxAge: parseInt(expiresIn) * 1000, // maxAge in milliseconds
+      maxAge: Number.parseInt(expiresIn) * 1000, // maxAge in milliseconds
       httpOnly: true,
       secure: isProduction,
       sameSite: isProduction && "lax",
@@ -64,6 +64,7 @@ export const restoreUser = (
       }
 
       try {
+        // biome-ignore lint/suspicious/noImplicitAnyLet: <explanation>
         let id;
         if (typeof jwtPayload !== "string" && jwtPayload?.data) {
           id = jwtPayload?.data?.id;
@@ -87,14 +88,14 @@ export const restoreUser = (
 };
 
 // If there is no current user, return an error
-export const requireAuth = function (
+export const requireAuth = (
   req: Request,
   _res: Response,
   next: NextFunction
-) {
+) => {
   if (req.user) return next();
 
-  const err = new Error("Authentication required");
+  const err: ApiError = new Error("Authentication required");
   err.title = "Authentication required";
   err.errors = {
     name: "Authentication Error",

@@ -78,15 +78,18 @@ importers:
       '@types/multer':
         specifier: ^1.4.12
         version: 1.4.12
+      '@types/node':
+        specifier: ^22.9.1
+        version: 22.9.1
       '@types/pg':
         specifier: ^8.11.10
         version: 8.11.10
       dotenv-cli:
-        specifier: ^7.3.0
+        specifier: ^7.4.3
         version: 7.4.3
       node-env-types:
         specifier: ^2.0.2
-        version: 2.0.2(dotenv@16.4.5)(typescript@5.6.3)
+        version: 2.0.2(dotenv@16.4.5)(typescript@5.7.2)
       nodemon:
         specifier: ^3.0.2
         version: 3.1.7
@@ -94,8 +97,8 @@ importers:
         specifier: ^5.22.0
         version: 5.22.0
       typescript:
-        specifier: ^5.6.3
-        version: 5.6.3
+        specifier: ^5.7.2
+        version: 5.7.2
 
 packages:
 
@@ -923,8 +926,8 @@ packages:
   typedarray@0.0.6:
     resolution: {integrity: sha512-/aCDEGatGvZ2BIk+HmLf4ifCJFwvKFNb9/JeZPMulfgFracn9QFcAf5GO8B/mweUjSoblS5In0cWhqpfs/5PQA==}
 
-  typescript@5.6.3:
-    resolution: {integrity: sha512-hjcS1mhfuyi4WW8IWtjP7brDrG2cuDZukyrYrSauoXGNgx0S7zceP07adYkJycEr56BOUTNPzbInooiN3fn1qw==}
+  typescript@5.7.2:
+    resolution: {integrity: sha512-i5t66RHxDvVN40HfDd1PsEThGNnlMCMT3jMUuoh9/0TaqWevNontacunWyN02LA9/fIbEWlcHZcgTKb9QoaLfg==}
     engines: {node: '>=14.17'}
     hasBin: true
 
@@ -1544,12 +1547,12 @@ snapshots:
 
   negotiator@0.6.3: {}
 
-  node-env-types@2.0.2(dotenv@16.4.5)(typescript@5.6.3):
+  node-env-types@2.0.2(dotenv@16.4.5)(typescript@5.7.2):
     dependencies:
       '@swc/core': 1.9.2
       chalk: 5.3.0
       dotenv: 16.4.5
-      typescript: 5.6.3
+      typescript: 5.7.2
     transitivePeerDependencies:
       - '@swc/helpers'
 
@@ -1809,7 +1812,7 @@ snapshots:
 
   typedarray@0.0.6: {}
 
-  typescript@5.6.3: {}
+  typescript@5.7.2: {}
 
   uid-safe@2.1.5:
     dependencies:

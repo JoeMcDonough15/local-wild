@@ -18,11 +18,16 @@ export interface SafeUser {
   username: string;
 }
 
+export interface ApiError {
+  title?: string;
+  errors?: Record<string, string>;
+  status?: number;
+  message?: string;
+}
+
 declare global {
-  interface Error {
-    title?: string;
-    errors?: Record<string, string>;
-    status?: number;
+  export interface Error {
+    api?: ApiError;
   }
 }
 

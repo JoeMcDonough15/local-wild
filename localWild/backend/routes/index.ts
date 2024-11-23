@@ -1,8 +1,8 @@
 // backend/routes/index.js
 import express from "express";
 const router = express.Router();
-import path from "path";
-import apiRouter from "./api";
+import path from "node:path";
+import apiRouter from "../routes/api/index.js";
 
 router.use("/api", apiRouter);
 // Static routes
@@ -10,7 +10,7 @@ router.use("/api", apiRouter);
 if (process.env.NODE_ENV === "production") {
   // Serve the frontend's index.html file at the root route
   router.get("/", (req, res) => {
-    res.cookie("XSRF-TOKEN", req.csrfToken());
+    // res.cookie("XSRF-TOKEN", req.csrfToken());
     res.sendFile(
       path.resolve(__dirname, "../../frontend", "dist", "index.html")
     );
@@ -21,7 +21,7 @@ if (process.env.NODE_ENV === "production") {
 
   // Serve the frontend's index.html file at all other routes NOT starting with /api
   router.get(/^(?!\/?api).*/, (req, res) => {
-    res.cookie("XSRF-TOKEN", req.csrfToken());
+    // res.cookie("XSRF-TOKEN", req.csrfToken());
     res.sendFile(
       path.resolve(__dirname, "../../frontend", "dist", "index.html")
     );
@@ -31,7 +31,7 @@ if (process.env.NODE_ENV === "production") {
 // Add a XSRF-TOKEN cookie in development
 if (process.env.NODE_ENV !== "production") {
   router.get("/api/csrf/restore", (req, res) => {
-    res.cookie("XSRF-TOKEN", req.csrfToken());
+    // res.cookie("XSRF-TOKEN", req.csrfToken());
     res.status(201).json({});
   });
 }
