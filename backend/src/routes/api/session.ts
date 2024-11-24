@@ -47,10 +47,12 @@ router.post(
     });
 
     if (!user || !bcrypt.compareSync(password, user.password)) {
-      const err: ApiError = { message: "Login failed" };
+      const err: ApiError = {
+        message: "The provided credentials were invalid.",
+      };
       err.status = 401;
       err.title = "Login failed";
-      err.errors = { credential: "The provided credentials were invalid." };
+      err.errors = { "Login failed": "The provided credentials were invalid" };
       return next(err);
     }
 

@@ -1,3 +1,9 @@
+export interface ServerError {
+  title?: string;
+  errors?: Record<string, string>;
+  message?: string;
+}
+
 export interface User {
   id?: number;
   username?: string;
@@ -16,22 +22,6 @@ export interface SafeUser {
   id: number;
   email: string;
   username: string;
-}
-
-export interface ApiError {
-  title?: string;
-  errors?: Record<string, string>;
-  status?: number;
-  message?: string;
-}
-
-declare global {
-  namespace Express {
-    interface Request {
-      // user: User | null; // this was working
-      user: SafeUser | null;
-    }
-  }
 }
 
 export interface Post {
@@ -66,4 +56,15 @@ export interface CommentReply {
   replyingTo: number;
   createdAt: Date;
   updatedAt: Date;
+}
+
+export interface Login {
+  email: string;
+  password: string;
+}
+
+export interface Signup {
+  username: string;
+  email: string;
+  password: string;
 }

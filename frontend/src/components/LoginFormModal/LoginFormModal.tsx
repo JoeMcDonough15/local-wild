@@ -1,41 +1,34 @@
 import { useState } from "react";
 import { thunkLogin } from "../../redux/session";
-import { useDispatch, useSelector } from "react-redux";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import "./LoginForm.css";
 
-function LoginFormPage() {
-  const navigate = useNavigate();
+function LoginFormModal() {
   const dispatch = useDispatch();
-  const sessionUser = useSelector((state) => state.session.user);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [errors, setErrors] = useState({});
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [errors, setErrors] = useState(
+    {} as { email?: string; password?: string }
+  );
 
-  if (sessionUser) return <Navigate to="/" replace={true} />;
-
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const serverResponse = await dispatch(
-      thunkLogin({
-        email,
-        password,
-      })
-    );
+    // const serverResponse = await dispatch();
+    // thunkLogin({
+    //   email,
+    //   password,
+    // })
 
-     if (serverResponse) {
-       setErrors(serverResponse);
-     } else {
-       navigate("/");
-     }
+    // if (serverResponse) {
+    //   setErrors(serverResponse);
+    // } else {
+    // }
   };
 
   return (
     <>
       <h1>Log In</h1>
-      {errors.length > 0 &&
-        errors.map((message) => <p key={message}>{message}</p>)}
       <form onSubmit={handleSubmit}>
         <label>
           Email
@@ -63,4 +56,4 @@ function LoginFormPage() {
   );
 }
 
-export default LoginFormPage;
+export default LoginFormModal;
