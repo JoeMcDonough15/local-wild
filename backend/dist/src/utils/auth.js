@@ -33,7 +33,11 @@ export const restoreUser = (req, res, next) => {
         const setUserOnReq = async () => {
             const currentUser = await prisma.user.findUnique({
                 where: { id },
-                select: { email: true, createdAt: true, updatedAt: true },
+                select: {
+                    id: true,
+                    username: true,
+                    email: true,
+                },
             });
             return currentUser;
         };

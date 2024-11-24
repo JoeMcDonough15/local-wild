@@ -3,7 +3,7 @@ import type { Request, Response, NextFunction } from "express";
 import bcrypt from "bcryptjs";
 import { check } from "express-validator";
 import handleValidationErrors from "../../utils/validation.js";
-import { setTokenCookie } from "../../utils/auth.js";
+import { restoreUser, setTokenCookie } from "../../utils/auth.js";
 import type { ApiError } from "../../types/index.js";
 import { prisma } from "../../db/database_client.js";
 const router = express.Router();
@@ -21,9 +21,17 @@ const validateLogin = [
   handleValidationErrors,
 ];
 
-// Restore user
-router.get("/", (req: Request, res: Response) => {
-  return res.json(req.user);
+router.use(restoreUser);
+
+// Get currently logged in user
+router.get("/", (req, res) => {
+  const { user } = req;
+  if (user) {
+    return res.json({
+      user,
+    });
+  }
+  return res.json({ user: null });
 });
 
 // Log in
@@ -52,7 +60,7 @@ router.post(
       username: user.username,
     };
 
-    await setTokenCookie(res, safeUser);
+    setTokenCookie(res, safeUser);
 
     return res.json({
       user: safeUser,

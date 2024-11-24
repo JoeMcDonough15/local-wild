@@ -1,6 +1,9 @@
 import express from "express";
+import bcrypt from "bcryptjs";
 import { check } from "express-validator";
 import handleValidationErrors from "../../utils/validation.js";
+import { setTokenCookie, requireAuth } from "../../utils/auth.js";
+import { prisma } from "../../db/database_client.js";
 const router = express.Router();
 //backend validation for signup
 const validateSignup = [
@@ -19,34 +22,41 @@ const validateSignup = [
         .withMessage("Password must be 6 characters or more."),
     handleValidationErrors,
 ];
-// // Sign up
-// router.post("/", validateSignup, async (req: Request, res: Response) => {
-//   const { email, password, username } = req.body;
-//   const hashedPassword = bcrypt.hashSync(password);
-//   const user = await User.create({ email, username, hashedPassword });
-//   const safeUser = {
-//     id: user.id,
-//     email: user.email,
-//     username: user.username,
-//   };
-//   await setTokenCookie(res, safeUser);
-//   return res.json({
-//     user: safeUser,
-//   });
-// });
-// Restore session user
-router.get("/", (req, res) => {
-    const { user } = req;
-    if (user) {
+// Sign up
+router.post("/", validateSignup, async (req, res, next) => {
+    const { email, password, username } = req.body;
+    try {
+        const hashedPassword = bcrypt.hashSync(password);
+        const user = await prisma.user.create({
+            data: { email, username, password: hashedPassword },
+        });
         const safeUser = {
             id: user.id,
             email: user.email,
             username: user.username,
         };
-        return res.json({
+        setTokenCookie(res, safeUser);
+        return res.status(201).json({
             user: safeUser,
         });
     }
-    return res.json({ user: null });
+    catch (err) {
+        return next(err);
+    }
+});
+// Delete account
+router.delete("/", requireAuth, async (req, res, next) => {
+    try {
+        const { user } = req;
+        const userId = user?.id;
+        if (!userId)
+            return;
+        await prisma.user.delete({ where: { id: userId } });
+        res.clearCookie("token");
+        res.status(200).json({ message: "Your account has been deleted." });
+    }
+    catch (err) {
+        return next(err);
+    }
 });
 export default router;

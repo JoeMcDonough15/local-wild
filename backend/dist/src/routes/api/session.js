@@ -2,7 +2,7 @@ import express from "express";
 import bcrypt from "bcryptjs";
 import { check } from "express-validator";
 import handleValidationErrors from "../../utils/validation.js";
-import { setTokenCookie } from "../../utils/auth.js";
+import { restoreUser, setTokenCookie } from "../../utils/auth.js";
 import { prisma } from "../../db/database_client.js";
 const router = express.Router();
 // backend validation for login
@@ -17,9 +17,16 @@ const validateLogin = [
         .withMessage("Please provide a password."),
     handleValidationErrors,
 ];
-// Restore user
+router.use(restoreUser);
+// Get currently logged in user
 router.get("/", (req, res) => {
-    return res.json(req.user);
+    const { user } = req;
+    if (user) {
+        return res.json({
+            user,
+        });
+    }
+    return res.json({ user: null });
 });
 // Log in
 router.post("/", validateLogin, async (req, res, next) => {
@@ -41,7 +48,7 @@ router.post("/", validateLogin, async (req, res, next) => {
         email: user.email,
         username: user.username,
     };
-    await setTokenCookie(res, safeUser);
+    setTokenCookie(res, safeUser);
     return res.json({
         user: safeUser,
     });
