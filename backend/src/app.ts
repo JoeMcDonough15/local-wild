@@ -5,8 +5,6 @@ import cors from "cors";
 import helmet from "helmet";
 import cookieParser from "cookie-parser";
 import configurationObj from "./config/index.js";
-import dotenv from "dotenv";
-dotenv.config();
 import csurf from "csurf";
 import routes from "./routes/index.js";
 import type { ApiError } from "./types/index.js";
@@ -48,9 +46,9 @@ app.use(
 
 app.use(routes);
 
-app.get("/", async (_req, res) => {
-  res.json({ message: "hello" });
-});
+// app.get("/", (_req, res, _next) => {
+//   res.status(200).json({ message: "TEST" });
+// });
 
 // Catch unhandled requests and forward to error handler.
 app.use((_req, _res, next) => {
@@ -69,7 +67,7 @@ app.use((_req, _res, next) => {
 // Error formatter
 app.use((err: ApiError, _req: Request, res: Response, _next: NextFunction) => {
   res.status(err.status || 500);
-  console.error(err);
+  // console.error(err);
   res.json({
     title: err.title || "Server Error",
     message: err.message,
@@ -77,4 +75,4 @@ app.use((err: ApiError, _req: Request, res: Response, _next: NextFunction) => {
   });
 });
 
-app.listen(port, () => console.log(`Listening on port ${port}...`));
+app.listen(port, () => console.log(`Listening on port ${port}...}`));

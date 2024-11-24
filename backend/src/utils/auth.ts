@@ -1,36 +1,24 @@
 import type { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import configurationObj from "../config/index.js";
-import type { ApiError, SafeUser, User as UserType } from "../types/index.ts";
+import type { ApiError, SafeUser } from "../types/index.ts";
+import { prisma } from "../db/database_client.js";
 const { jwtConfig } = configurationObj;
 
 const { secret, expiresIn } = jwtConfig;
 
 // Sends a JWT Cookie
-export const setTokenCookie = (
-  res: Response,
-  user: UserType | SafeUser
-): string | undefined => {
+export const setTokenCookie = (res: Response, user: SafeUser): void => {
   // Create the token.
-  const safeUser = {
-    id: user.id,
-    email: user.email,
-    username: user.username,
-  };
-
-  // biome-ignore lint/suspicious/noImplicitAnyLet: <explanation>
-  let token;
   if (secret && expiresIn) {
-    token = jwt.sign(
-      { data: safeUser },
+    const token = jwt.sign(
+      { data: user },
       secret,
       { expiresIn: Number.parseInt(expiresIn) } // 604,800 seconds = 1 week
     );
-  }
 
-  const isProduction = process.env.NODE_ENV === "production";
+    const isProduction = process.env.NODE_ENV === "production";
 
-  if (expiresIn) {
     // Set the token cookie
     res.cookie("token", token, {
       maxAge: Number.parseInt(expiresIn) * 1000, // maxAge in milliseconds
@@ -39,8 +27,6 @@ export const setTokenCookie = (
       sameSite: isProduction && "lax",
     });
   }
-
-  return token;
 };
 
 export const restoreUser = (
@@ -52,39 +38,34 @@ export const restoreUser = (
   const { token } = req.cookies;
   req.user = null;
 
-  if (!secret) return;
+  if (!token || !secret) {
+    res.clearCookie("token");
+    return next();
+  }
 
-  return jwt.verify(
-    token,
-    secret,
-    undefined,
-    async (err: Error | null, jwtPayload) => {
-      if (err) {
-        return next();
-      }
+  const decodeObject = jwt.verify(token, secret);
 
-      try {
-        // biome-ignore lint/suspicious/noImplicitAnyLet: <explanation>
-        let id;
-        if (typeof jwtPayload !== "string" && jwtPayload?.data) {
-          id = jwtPayload?.data?.id;
-        }
-        // @ts-ignore // ! fix this once I am using prisma client
-        req.user = await User.findByPk(id, {
-          attributes: {
-            include: ["email", "createdAt", "updatedAt"],
-          },
-        });
-      } catch (e) {
-        res.clearCookie("token");
-        return next();
-      }
+  if (typeof decodeObject !== "string") {
+    const id = decodeObject.data.id;
+    const setUserOnReq = async () => {
+      const currentUser = await prisma.user.findUnique({
+        where: { id },
+        select: {
+          id: true,
+          username: true,
+          email: true,
+        },
+      });
 
+      return currentUser;
+    };
+
+    setUserOnReq().then((currentUser) => {
+      req.user = currentUser;
       if (!req.user) res.clearCookie("token");
-
       return next();
-    }
-  );
+    });
+  }
 };
 
 // If there is no current user, return an error
