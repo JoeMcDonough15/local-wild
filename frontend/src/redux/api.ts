@@ -74,7 +74,11 @@ const serverMethods = {
       return fetchWithJson("/session/deactivate", { method: "DELETE" });
     },
   },
-  users: {},
+  users: {
+    getUser: async (userId: number): Promise<User> => {
+      return fetchWithJson(`/users/${userId}`);
+    },
+  },
 };
 
 export default serverMethods;

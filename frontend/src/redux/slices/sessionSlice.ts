@@ -6,13 +6,11 @@ import {
 
 import type { User, Login, ServerError, Signup, SafeUser } from "../../types";
 import serverMethods from "../api";
+import { userSlice } from "../slices/userSlice";
 
-interface SessionState {
-  sessionUser: User | SafeUser | null;
-}
-
-const initialState: SessionState = {
-  sessionUser: null,
+const storeSessionUser = (user: User): SafeUser => {
+  const { email, id, username } = user;
+  return { email, id, username };
 };
 
 // thunks
@@ -20,15 +18,16 @@ const initialState: SessionState = {
 // thunk to log a user in
 export const loginThunk = createAsyncThunk(
   "session/login",
-  async (
-    credentials: Login,
-    { dispatch }
-  ): Promise<ServerError | undefined> => {
+  async (credentials: Login, { dispatch }): Promise<ServerError | User> => {
     try {
       // sends out the request, throws any errors necessary, parses the response
       const loggedInUser: User = await serverMethods.session.login(credentials);
-      // dispatch an action that adds this user to the store, no need to return?
-      dispatch(sessionSlice.actions.setUser(loggedInUser));
+
+      // dispatch an action that adds this user to the store
+      dispatch(sessionSlice.actions.setUser(storeSessionUser(loggedInUser)));
+      // dispatch an action to set the currentUser of the userSlice to the logged in user
+      dispatch(userSlice.actions.setCurrentUser(loggedInUser));
+      return loggedInUser;
     } catch (error) {
       if (error instanceof Error) {
         const errorResponse: ServerError = error;
@@ -45,6 +44,7 @@ export const logoutThunk = createAsyncThunk(
   async (_: null, { dispatch }) => {
     await serverMethods.session.logout();
     dispatch(sessionSlice.actions.removeUser());
+    dispatch(userSlice.actions.removeCurrentUser());
   }
 );
 
@@ -54,7 +54,9 @@ export const signupThunk = createAsyncThunk(
   async (userDetails: Signup, { dispatch }): Promise<ServerError | User> => {
     try {
       const newUser = await serverMethods.session.signUp(userDetails);
-      dispatch(sessionSlice.actions.setUser(newUser));
+      dispatch(sessionSlice.actions.setUser(storeSessionUser(newUser)));
+      // dispatch an action to set the currentUser of the userSlice to the logged in user
+      dispatch(userSlice.actions.setCurrentUser(newUser));
       return newUser;
     } catch (error) {
       if (error instanceof Error) {
@@ -72,15 +74,24 @@ export const deactivateAccountThunk = createAsyncThunk(
   async (_: null, { dispatch }) => {
     await serverMethods.session.deleteAccount();
     dispatch(sessionSlice.actions.removeUser());
+    dispatch(userSlice.actions.removeCurrentUser());
   }
 );
+
+interface SessionState {
+  sessionUser: SafeUser | null;
+}
+
+const initialState: SessionState = {
+  sessionUser: null,
+};
 
 // reducer
 export const sessionSlice = createSlice({
   name: "session",
   initialState,
   reducers: {
-    setUser: (state, action: PayloadAction<User>) => {
+    setUser: (state, action: PayloadAction<SafeUser>) => {
       state.sessionUser = action.payload;
     },
 
