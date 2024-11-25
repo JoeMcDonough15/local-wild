@@ -1,5 +1,11 @@
 import Cookies from "js-cookie";
-import type { Login, ConfirmationMessage, User, Signup } from "../types";
+import type {
+  Login,
+  ConfirmationMessage,
+  User,
+  Signup,
+  SafeUser,
+} from "../types";
 
 const xsrfToken = Cookies.get("XSRF-TOKEN");
 
@@ -49,9 +55,6 @@ async function fetchWithFormData<T>(
 
 const serverMethods = {
   session: {
-    restore: async (): Promise<User> => {
-      return fetchWithJson("/session");
-    },
     login: async (loginCredentials: Login): Promise<User> => {
       return fetchWithJson("/session", {
         method: "POST",
@@ -61,18 +64,17 @@ const serverMethods = {
     logout: async (): Promise<ConfirmationMessage> => {
       return fetchWithJson("/session", { method: "DELETE" });
     },
-  },
-  users: {
     signUp: async (userDetails: Signup): Promise<User> => {
-      return fetchWithJson("/users", {
+      return fetchWithJson("/session/signup", {
         method: "POST",
         body: JSON.stringify(userDetails),
       });
     },
     deleteAccount: async (): Promise<ConfirmationMessage> => {
-      return fetchWithJson("/users", { method: "DELETE" });
+      return fetchWithJson("/session/deactivate", { method: "DELETE" });
     },
   },
+  users: {},
 };
 
 export default serverMethods;

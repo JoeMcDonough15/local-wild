@@ -4,7 +4,7 @@ import bcrypt from "bcryptjs";
 import { check } from "express-validator";
 import handleValidationErrors from "../../utils/validation.js";
 import { requireAuth, setTokenCookie } from "../../utils/auth.js";
-import type { ApiError } from "../../types/index.js";
+import type { ApiError, NewUser, SafeUser } from "../../types/index.js";
 import { prisma } from "../../db/database_client.js";
 const router = express.Router();
 
@@ -82,8 +82,10 @@ router.post(
 
     setTokenCookie(res, safeUser);
 
+    const { password: newPassword, ...userDetails } = user;
+
     return res.json({
-      user: safeUser,
+      user: userDetails,
     });
   }
 );
@@ -107,6 +109,8 @@ router.post(
         data: { email, username, password: hashedPassword },
       });
 
+      const { password: newPassword, ...userDetails } = user;
+
       const safeUser = {
         id: user.id,
         email: user.email,
@@ -116,7 +120,7 @@ router.post(
       setTokenCookie(res, safeUser);
 
       return res.status(201).json({
-        user: safeUser,
+        user: userDetails,
       });
     } catch (err) {
       return next(err);

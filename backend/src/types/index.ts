@@ -19,6 +19,12 @@ export interface SafeUser {
   username: string;
 }
 
+export interface NewUser {
+  username: string;
+  email: string;
+  password: string;
+}
+
 export interface ApiError {
   title?: string;
   errors?: Record<string, string>;
@@ -29,7 +35,6 @@ export interface ApiError {
 declare global {
   namespace Express {
     interface Request {
-      // user: User | null; // this was working
       user: SafeUser | null;
     }
   }

@@ -17,9 +17,10 @@ router.get("/:id", async (req, res, next) => {
   if (!user) {
     const userNotFound: ApiError = {
       message: "User not found",
+      status: 404,
       errors: { userNotFoundError: "This user could not be found" },
     };
-    next(userNotFound);
+    return next(userNotFound);
   }
   res.status(200).json(user);
 });

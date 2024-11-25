@@ -68,8 +68,9 @@ router.post("/", validateLogin, async (req, res, next) => {
         username: user.username,
     };
     setTokenCookie(res, safeUser);
+    const { password: newPassword, ...userDetails } = user;
     return res.json({
-        user: safeUser,
+        user: userDetails,
     });
 });
 // Log out
@@ -85,6 +86,7 @@ router.post("/signup", validateSignup, async (req, res, next) => {
         const user = await prisma.user.create({
             data: { email, username, password: hashedPassword },
         });
+        const { password: newPassword, ...userDetails } = user;
         const safeUser = {
             id: user.id,
             email: user.email,
@@ -92,7 +94,7 @@ router.post("/signup", validateSignup, async (req, res, next) => {
         };
         setTokenCookie(res, safeUser);
         return res.status(201).json({
-            user: safeUser,
+            user: userDetails,
         });
     }
     catch (err) {
