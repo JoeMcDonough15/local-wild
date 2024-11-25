@@ -4,15 +4,15 @@ import {
   type PayloadAction,
 } from "@reduxjs/toolkit";
 
-import type { SafeUser, Login, ServerError } from "../../types";
+import type { User, Login, ServerError } from "../../types";
 import serverMethods from "../api";
 
 interface SessionState {
-  currentUser: SafeUser | null;
+  sessionUser: User | null;
 }
 
 const initialState: SessionState = {
-  currentUser: null,
+  sessionUser: null,
 };
 
 // thunks
@@ -68,12 +68,12 @@ export const sessionSlice = createSlice({
   name: "session",
   initialState,
   reducers: {
-    setUser: (state, action: PayloadAction<SafeUser>) => {
-      state.currentUser = action.payload;
+    setUser: (state, action: PayloadAction<User>) => {
+      state.sessionUser = action.payload;
     },
 
     removeUser: (state) => {
-      state.currentUser = null;
+      state.sessionUser = null;
     },
   },
 });

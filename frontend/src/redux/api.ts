@@ -1,5 +1,5 @@
 import Cookies from "js-cookie";
-import type { Login, ConfirmationMessage, SafeUser, Signup } from "../types";
+import type { Login, ConfirmationMessage, User, Signup } from "../types";
 
 const xsrfToken = Cookies.get("XSRF-TOKEN");
 
@@ -49,10 +49,10 @@ async function fetchWithFormData<T>(
 
 const serverMethods = {
   session: {
-    restore: async (): Promise<SafeUser> => {
+    restore: async (): Promise<User> => {
       return fetchWithJson("/session");
     },
-    login: async (loginCredentials: Login): Promise<SafeUser> => {
+    login: async (loginCredentials: Login): Promise<User> => {
       return fetchWithJson("/session", {
         method: "POST",
         body: JSON.stringify(loginCredentials),
@@ -63,7 +63,7 @@ const serverMethods = {
     },
   },
   users: {
-    signUp: async (userDetails: Signup): Promise<SafeUser> => {
+    signUp: async (userDetails: Signup): Promise<User> => {
       return fetchWithJson("/users", {
         method: "POST",
         body: JSON.stringify(userDetails),
