@@ -4,6 +4,10 @@ export interface ServerError {
   message?: string;
 }
 
+export interface ConfirmationMessage {
+  message: string;
+}
+
 export interface User {
   id?: number;
   username?: string;

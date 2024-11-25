@@ -1,28 +1,19 @@
-import {
-	legacy_createStore as createStore,
-	applyMiddleware,
-	compose,
-	combineReducers,
-} from "redux";
-import thunk from "redux-thunk";
-import sessionReducer from "./session";
+import { configureStore } from "@reduxjs/toolkit";
+import { useDispatch, useSelector } from "react-redux";
+import sessionReducer from "./slices/sessionSlice";
+// import usersReducer from "./slices/userSlice";
+// import postsReducer from ".slices//postSlice";
+// import commentsReducer from "./slices/commentsSlice";
 
-const rootReducer = combineReducers({
-	session: sessionReducer,
+export const store = configureStore({
+  reducer: {
+    session: sessionReducer,
+    // users: usersReducer,
+  },
 });
 
-let enhancer;
-if (import.meta.env.MODE === "production") {
-	enhancer = applyMiddleware(thunk);
-} else {
-	const logger = (await import("redux-logger")).default;
-	const composeEnhancers =
-		window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-	enhancer = composeEnhancers(applyMiddleware(thunk, logger));
-}
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
 
-const configureStore = (preloadedState) => {
-	return createStore(rootReducer, preloadedState, enhancer);
-};
-
-export default configureStore;
+export const useAppDispatch = useDispatch.withTypes<AppDispatch>();
+export const useAppSelector = useSelector.withTypes<RootState>();

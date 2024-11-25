@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { thunkLogin } from "../../redux/session";
+import { thunkLogin } from "../../redux/slices/sessionSlice";
 import { useDispatch } from "react-redux";
 import "./LoginForm.css";
 
