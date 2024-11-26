@@ -75,4 +75,4 @@ app.use((err: ApiError, _req: Request, res: Response, _next: NextFunction) => {
   });
 });
 
-app.listen(port, () => console.log(`Listening on port ${port}...}`));
+app.listen(port, () => console.log(`Listening on port ${port}...`));
