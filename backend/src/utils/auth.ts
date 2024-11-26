@@ -48,7 +48,7 @@ export const restoreUser = (
   if (typeof decodeObject !== "string") {
     const id = decodeObject.data.id;
     const setUserOnReq = async () => {
-      const currentUser = await prisma.user.findUnique({
+      const currentUser: SafeUser | null = await prisma.user.findUnique({
         where: { id },
         select: {
           id: true,

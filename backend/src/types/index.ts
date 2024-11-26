@@ -2,10 +2,11 @@ export interface User {
   id?: number;
   username?: string;
   email?: string;
-  profileImageUrl?: string;
-  location?: string;
-  numYearsExperience?: number;
-  favoriteSubject?: string;
+  password?: string;
+  profileImageUrl?: string | null;
+  location?: string | null;
+  numYearsExperience?: number | null;
+  favoriteSubject?: string | null;
   createdAt?: Date;
   updatedAt?: Date;
   posts?: Post[];
@@ -18,6 +19,12 @@ export interface SafeUser {
   username: string;
 }
 
+export interface NewUser {
+  username: string;
+  email: string;
+  password: string;
+}
+
 export interface ApiError {
   title?: string;
   errors?: Record<string, string>;
@@ -26,15 +33,9 @@ export interface ApiError {
 }
 
 declare global {
-  export interface Error {
-    api?: ApiError;
-  }
-}
-
-declare global {
   namespace Express {
     interface Request {
-      user: User | null;
+      user: SafeUser | null;
     }
   }
 }

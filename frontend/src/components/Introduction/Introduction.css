@@ -1,0 +1,26 @@
+.introduction-image {
+  bottom: 0;
+  height: 100vh;
+  left: 0;
+  object-fit: cover;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 100vw;
+}
+
+.scroll-button {
+  position: absolute;
+  bottom: 50px;
+  right: 50px;
+}
+
+@media screen and (max-width: 500) {
+  .introduction-image {
+    height: auto;
+  }
+
+  .scroll-button {
+    display: none;
+  }
+}
