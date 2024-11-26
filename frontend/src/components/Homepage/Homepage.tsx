@@ -22,9 +22,7 @@ const Homepage = () => {
         style={{ marginTop: "200vh" }}
         ref={homepageContent}
         id="homepage-content"
-      >
-        <h1>Homepage</h1>
-      </div>
+      ></div>
     </>
   );
 };

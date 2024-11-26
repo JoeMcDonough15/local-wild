@@ -12,6 +12,7 @@ import Navigation from "./components/Navigation";
 import Homepage from "./components/Homepage";
 import { restoreUserThunk } from "./store/slices/sessionSlice";
 import { useAppDispatch } from "./store";
+import Footer from "./components/Footer";
 
 function ErrorBoundary() {
   const error = useRouteError();
@@ -56,6 +57,7 @@ function Layout() {
       <ScrollRestoration />
       <Navigation />
       <Outlet />
+      <Footer />
       <Modal />
     </ModalProvider>
   );
