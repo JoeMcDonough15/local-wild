@@ -22,6 +22,7 @@
   "dependencies": {
     "prisma": "^5.22.0",
     "@prisma/client": "^5.22.0",
+    "tsx": "^4.19.2",
     "bcryptjs": "^2.4.3",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
@@ -50,7 +51,6 @@
     "dotenv-cli": "^7.4.3",
     "node-env-types": "^2.0.2",
     "nodemon": "^3.0.2",
-    "tsx": "^4.19.2",
     "typescript": "^5.7.2"
   }
 }
