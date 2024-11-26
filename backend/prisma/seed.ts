@@ -40,7 +40,6 @@ async function main() {
       favoriteSubject: "bears",
     },
   });
-  console.log({ alice, bob });
 }
 main()
   .then(async () => {

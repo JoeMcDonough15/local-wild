@@ -5,9 +5,13 @@
   "main": "dist/src/app.js",
   "type": "module",
   "scripts": {
-    "start": "npx dotenv-cli -- nodemon",
+    "db:generate": "npx prisma generate",
     "db:migrate": "npx prisma migrate dev --name local_wild_db",
-    "db:reset": "npx prisma migrate reset"
+    "db:reset": "npx prisma migrate reset --schema=./prisma/schema.prisma --force",
+    "build": "npm run db:generate && npm run db:reset && tsc",
+    "start": "per-env",
+    "start:development": "npx dotenv-cli -- nodemon",
+    "start:production": "node dist/src/app.js"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
@@ -16,6 +20,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "prisma": "^5.22.0",
     "@prisma/client": "^5.22.0",
     "bcryptjs": "^2.4.3",
     "cookie-parser": "^1.4.6",
@@ -45,7 +50,6 @@
     "dotenv-cli": "^7.4.3",
     "node-env-types": "^2.0.2",
     "nodemon": "^3.0.2",
-    "prisma": "^5.22.0",
     "tsx": "^4.19.2",
     "typescript": "^5.7.2"
   }
