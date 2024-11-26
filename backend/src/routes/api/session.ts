@@ -105,7 +105,7 @@ router.post(
       // first, query the db and see if there's a user with this email or username
 
       const usersMatched = await prisma.user.findMany({
-        where: { OR: [email, username] },
+        where: { OR: [{ email }, { username }] },
       });
 
       const emailMustBeUnique = "The email address you chose is already taken.";

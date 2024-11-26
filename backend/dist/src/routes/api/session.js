@@ -83,7 +83,7 @@ router.post("/signup", validateSignup, async (req, res, next) => {
     try {
         // first, query the db and see if there's a user with this email or username
         const usersMatched = await prisma.user.findMany({
-            where: { OR: [email, username] },
+            where: { OR: [{ email }, { username }] },
         });
         const emailMustBeUnique = "The email address you chose is already taken.";
         const usernameMustBeUnique = "The username you chose is already taken.";

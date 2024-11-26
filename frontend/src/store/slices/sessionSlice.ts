@@ -42,12 +42,9 @@ export const loginThunk = createAsyncThunk(
       dispatch(sessionSlice.actions.setUser(storeSessionUser(loggedInUser)));
       // dispatch an action to set the currentUser of the userSlice to the logged in user
       dispatch(userSlice.actions.setCurrentUser(loggedInUser));
-    } catch (error) {
-      if (error instanceof Error) {
-        const errorResponse: ServerError = error;
-        return errorResponse;
-      }
-      throw error;
+    } catch (error: any) {
+      const errorResponse: ServerError = error;
+      return errorResponse;
     }
   }
 );
@@ -65,19 +62,18 @@ export const logoutThunk = createAsyncThunk(
 // thunk to signup a user
 export const signupThunk = createAsyncThunk(
   "session/signup",
-  async (userDetails: Signup, { dispatch }): Promise<ServerError | User> => {
+  async (
+    userDetails: Signup,
+    { dispatch }
+  ): Promise<ServerError | undefined> => {
     try {
       const newUser = await serverMethods.session.signUp(userDetails);
       dispatch(sessionSlice.actions.setUser(storeSessionUser(newUser)));
       // dispatch an action to set the currentUser of the userSlice to the logged in user
       dispatch(userSlice.actions.setCurrentUser(newUser));
-      return newUser;
-    } catch (error) {
-      if (error instanceof Error) {
-        const errorResponse: ServerError = error;
-        return errorResponse;
-      }
-      throw error;
+    } catch (error: any) {
+      const errorResponse: ServerError = error;
+      return errorResponse;
     }
   }
 );

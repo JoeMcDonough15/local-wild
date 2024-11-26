@@ -3,7 +3,7 @@ import { useModal } from "../../context/useModal";
 import { useAppDispatch } from "../../store";
 import { loginThunk } from "../../store/slices/sessionSlice";
 import "./LoginFormModal.css";
-import { ExtendedPayload } from "../../types";
+import { PayloadAction } from "@reduxjs/toolkit";
 
 function LoginFormModal() {
   const dispatch = useAppDispatch();
@@ -13,12 +13,12 @@ function LoginFormModal() {
   const { closeModal } = useModal();
 
   const login = async (credential: { email: string; password: string }) => {
-    const serverResponse: ExtendedPayload<any> = await dispatch(
+    const serverResponse: PayloadAction<any> = await dispatch(
       loginThunk(credential)
     );
 
-    if (serverResponse.error) {
-      setErrors({ credential: serverResponse?.error?.message });
+    if (serverResponse.payload) {
+      setErrors({ credential: serverResponse?.payload?.message });
     } else {
       closeModal();
     }

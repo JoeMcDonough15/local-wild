@@ -72,10 +72,11 @@ const serverMethods = {
       return fetchWithJson("/session", { method: "DELETE" });
     },
     signUp: async (userDetails: Signup): Promise<User> => {
-      return fetchWithJson("/session/signup", {
+      const response: { user: User } = await fetchWithJson("/session/signup", {
         method: "POST",
         body: JSON.stringify(userDetails),
       });
+      return response?.user;
     },
     deleteAccount: async (): Promise<ConfirmationMessage> => {
       return fetchWithJson("/session/deactivate", { method: "DELETE" });

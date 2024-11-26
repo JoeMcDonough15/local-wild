@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useModal } from "../../context/useModal";
 import { useAppDispatch } from "../../store";
 import { signupThunk } from "../../store/slices/sessionSlice";
+import { PayloadAction } from "@reduxjs/toolkit";
 
 function SignupFormModal() {
   const dispatch = useAppDispatch();
@@ -11,7 +12,6 @@ function SignupFormModal() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errors, setErrors] = useState(
     {} as {
-      server?: string;
       email?: string;
       username?: string;
       password?: string;
@@ -49,7 +49,7 @@ function SignupFormModal() {
 
     setErrors({});
 
-    const serverResponse = await dispatch(
+    const serverResponse: PayloadAction<any> = await dispatch(
       signupThunk({
         email,
         username,
@@ -57,13 +57,11 @@ function SignupFormModal() {
       })
     );
 
-    if (serverResponse) {
-      console.log("server response: ", serverResponse);
-      //   setErrors({
-      //     // email: serverResponse.errors?.email?.[0],
-      //     // password: serverResponse.password?.[0],
-      //     // username: serverResponse.username?.[0],
-      //   });
+    if (serverResponse.payload) {
+      setErrors({
+        email: serverResponse.payload.errors?.email,
+        username: serverResponse.payload.errors?.username,
+      });
     } else {
       closeModal();
     }
@@ -72,7 +70,6 @@ function SignupFormModal() {
   return (
     <>
       <h1>Sign Up</h1>
-      {errors.server && <p className="error-text">{errors.server}</p>}
       <form className="form-container flex-col" onSubmit={handleSubmit}>
         <label>
           Email
