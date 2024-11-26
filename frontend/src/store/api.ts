@@ -66,7 +66,7 @@ const serverMethods = {
         method: "POST",
         body: JSON.stringify(loginCredentials),
       });
-      return response?.user;
+      return response.user;
     },
     logout: async (): Promise<ConfirmationMessage> => {
       return fetchWithJson("/session", { method: "DELETE" });
@@ -76,7 +76,7 @@ const serverMethods = {
         method: "POST",
         body: JSON.stringify(userDetails),
       });
-      return response?.user;
+      return response.user;
     },
     deleteAccount: async (): Promise<ConfirmationMessage> => {
       return fetchWithJson("/session/deactivate", { method: "DELETE" });

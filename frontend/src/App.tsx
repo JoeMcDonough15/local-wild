@@ -64,7 +64,6 @@ function Layout() {
 const router = createBrowserRouter([
   {
     element: <Layout />,
-    path: "/",
     errorElement: <ErrorBoundary />,
     children: [
       {
