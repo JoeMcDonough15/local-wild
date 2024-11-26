@@ -1,98 +1,125 @@
 import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { thunkSignup } from "../../redux/slices/sessionSlice";
-import "./SignupForm.css";
+import { useModal } from "../../context/useModal";
+import { useAppDispatch } from "../../store";
+import { signupThunk } from "../../store/slices/sessionSlice";
 
-const SignupFormModal = () => {
-  const dispatch = useDispatch();
+function SignupFormModal() {
+  const dispatch = useAppDispatch();
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errors, setErrors] = useState(
     {} as {
+      server?: string;
       email?: string;
       username?: string;
       password?: string;
       confirmPassword?: string;
-      server?: string;
     }
   );
+  const { closeModal } = useModal();
 
-  const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleClientSideErrors = () => {
+    const errors = {} as {
+      password?: string;
+      confirmPassword?: string;
+    };
 
-    if (password !== confirmPassword) {
-      return setErrors({
-        confirmPassword:
-          "Confirm Password field must be the same as the Password field",
-      });
+    if (password.length < 5) {
+      errors.password = "Password must be at least 5 characters long";
     }
 
-    //     const serverResponse = await dispatch(
-    //       thunkSignup({
-    //         email,
-    //         username,
-    //         password,
-    //       })
-    //     );
+    if (password !== confirmPassword) {
+      errors.confirmPassword =
+        "Confirm Password field must match Password field";
+    }
 
-    //     if (serverResponse) {
-    //       setErrors(serverResponse);
-    //     } else {
-
-    //     }
-    //   };
-
-    return (
-      <>
-        <h1>Sign Up</h1>
-        {errors.server && <p>{errors.server}</p>}
-        <form onSubmit={handleSubmit}>
-          <label>
-            Email
-            <input
-              type="text"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </label>
-          {errors.email && <p>{errors.email}</p>}
-          <label>
-            Username
-            <input
-              type="text"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              required
-            />
-          </label>
-          {errors.username && <p>{errors.username}</p>}
-          <label>
-            Password
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </label>
-          {errors.password && <p>{errors.password}</p>}
-          <label>
-            Confirm Password
-            <input
-              type="password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              required
-            />
-          </label>
-          {errors.confirmPassword && <p>{errors.confirmPassword}</p>}
-          <button type="submit">Sign Up</button>
-        </form>
-      </>
-    );
+    return errors;
   };
-};
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const clientSideErrors = handleClientSideErrors();
+
+    if (Object.values(clientSideErrors).length > 0) {
+      return setErrors(clientSideErrors);
+    }
+
+    setErrors({});
+
+    const serverResponse = await dispatch(
+      signupThunk({
+        email,
+        username,
+        password,
+      })
+    );
+
+    if (serverResponse) {
+      console.log("server response: ", serverResponse);
+      //   setErrors({
+      //     // email: serverResponse.errors?.email?.[0],
+      //     // password: serverResponse.password?.[0],
+      //     // username: serverResponse.username?.[0],
+      //   });
+    } else {
+      closeModal();
+    }
+  };
+
+  return (
+    <>
+      <h1>Sign Up</h1>
+      {errors.server && <p className="error-text">{errors.server}</p>}
+      <form className="form-container flex-col" onSubmit={handleSubmit}>
+        <label>
+          Email
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+        </label>
+        {errors.email && <p className="error-text">{errors.email}</p>}
+        <label>
+          Username
+          <input
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+          />
+        </label>
+        {errors.username && <p className="error-text">{errors.username}</p>}
+        <label>
+          Password
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+        </label>
+        {errors.password && <p className="error-text">{errors.password}</p>}
+        <label>
+          Confirm Password
+          <input
+            type="password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            required
+          />
+        </label>
+        {errors.confirmPassword && (
+          <p className="error-text">{errors.confirmPassword}</p>
+        )}
+        <button type="submit">Sign Up</button>
+      </form>
+    </>
+  );
+}
+
 export default SignupFormModal;

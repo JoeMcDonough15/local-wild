@@ -1,45 +1,49 @@
 import { useState } from "react";
-import { thunkLogin } from "../../redux/slices/sessionSlice";
-import { useDispatch } from "react-redux";
-import "./LoginForm.css";
+import { useModal } from "../../context/useModal";
+import { useAppDispatch } from "../../store";
+import { loginThunk } from "../../store/slices/sessionSlice";
+import "./LoginFormModal.css";
+import { ExtendedPayload } from "../../types";
 
 function LoginFormModal() {
-  const dispatch = useDispatch();
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [errors, setErrors] = useState(
-    {} as { email?: string; password?: string }
-  );
+  const dispatch = useAppDispatch();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [errors, setErrors] = useState({} as { credential?: string });
+  const { closeModal } = useModal();
 
-  const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
+  const login = async (credential: { email: string; password: string }) => {
+    const serverResponse: ExtendedPayload<any> = await dispatch(
+      loginThunk(credential)
+    );
+
+    if (serverResponse.error) {
+      setErrors({ credential: serverResponse?.error?.message });
+    } else {
+      closeModal();
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // const serverResponse = await dispatch();
-    // thunkLogin({
-    //   email,
-    //   password,
-    // })
-
-    // if (serverResponse) {
-    //   setErrors(serverResponse);
-    // } else {
-    // }
+    await login({ email, password });
   };
 
   return (
     <>
-      <h1>Log In</h1>
-      <form onSubmit={handleSubmit}>
+      <h1 className="login-header">Log In</h1>
+      {errors.credential && <p className="error-text">{errors.credential}</p>}
+      <form className="form-container flex-col" onSubmit={handleSubmit}>
         <label>
           Email
           <input
-            type="text"
+            type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
           />
         </label>
-        {errors.email && <p>{errors.email}</p>}
         <label>
           Password
           <input
@@ -49,8 +53,18 @@ function LoginFormModal() {
             required
           />
         </label>
-        {errors.password && <p>{errors.password}</p>}
         <button type="submit">Log In</button>
+        <p
+          onClick={() => {
+            login({
+              email: "alice@prisma.io",
+              password: "myPassword",
+            });
+          }}
+          className="demo-user"
+        >
+          Demo User
+        </p>
       </form>
     </>
   );

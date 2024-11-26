@@ -1,13 +1,5 @@
 import Cookies from "js-cookie";
-import type {
-  Login,
-  ConfirmationMessage,
-  User,
-  Signup,
-  SafeUser,
-} from "../types";
-
-const xsrfToken = Cookies.get("XSRF-TOKEN");
+import type { Login, ConfirmationMessage, User, Signup } from "../types";
 
 const URL_ROOT = "/api";
 
@@ -15,11 +7,16 @@ async function fetchWithJson<T>(
   url: string,
   options: RequestInit = {}
 ): Promise<T> {
+  const xsrfToken =
+    Cookies.get("XSRF-TOKEN") ||
+    (await fetch(`${URL_ROOT}/csrf/restore`)
+      .then((data) => data.json())
+      .then((tokenObject) => tokenObject.token));
   if (!xsrfToken) throw new Error("No xsrf-token");
   options.method = options.method || "GET";
   if (options.method === "GET") {
     options.headers = {};
-  } else {
+  } else if (xsrfToken) {
     options.headers = {
       "Content-Type": "application/json",
       "XSRF-Token": xsrfToken,
@@ -39,6 +36,11 @@ async function fetchWithFormData<T>(
   url: string,
   options: RequestInit = {}
 ): Promise<T> {
+  const xsrfToken =
+    Cookies.get("XSRF-TOKEN") ||
+    (await fetch(`${URL_ROOT}/csrf/restore`)
+      .then((data) => data.json())
+      .then((tokenObject) => tokenObject.token));
   if (!xsrfToken) throw new Error("No xsrf-token");
   const response = await fetch(`${URL_ROOT}${url}`, {
     ...options,
@@ -55,11 +57,16 @@ async function fetchWithFormData<T>(
 
 const serverMethods = {
   session: {
+    restore: async (): Promise<User | null> => {
+      const response: { user: User | null } = await fetchWithJson("/session");
+      return response?.user;
+    },
     login: async (loginCredentials: Login): Promise<User> => {
-      return fetchWithJson("/session", {
+      const response: { user: User } = await fetchWithJson("/session", {
         method: "POST",
         body: JSON.stringify(loginCredentials),
       });
+      return response?.user;
     },
     logout: async (): Promise<ConfirmationMessage> => {
       return fetchWithJson("/session", { method: "DELETE" });

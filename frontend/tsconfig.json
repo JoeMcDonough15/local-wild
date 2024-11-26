@@ -1,34 +1,7 @@
 {
-  "compilerOptions": {
-    "target": "es2022" /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */,
-    /* Modules */
-    "module": "es2022" /* Specify what module code is generated. */,
-    "outDir": "dist",
-    "esModuleInterop": true /* Emit additional JavaScript to ease support for importing CommonJS modules. This enables `allowSyntheticDefaultImports` for type compatibility. */,
-    "forceConsistentCasingInFileNames": true /* Ensure that casing is correct in imports. */,
-    /* Type Checking */
-    "strict": true /* Enable all strict type-checking options. */,
-    // "noUnusedLocals": true,
-    // "noUnusedParameters": true,
-    "exactOptionalPropertyTypes": true,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
-    "noUncheckedIndexedAccess": true,
-    "noImplicitOverride": true,
-    "allowUnusedLabels": false,
-    "allowUnreachableCode": false,
-    /* Completeness */
-    "skipLibCheck": true /* Skip type checking all .d.ts files. */,
-    "typeRoots": ["./node_modules/@types"],
-    "types": ["react", "react-dom"],
-    "moduleResolution": "Bundler",
-    "allowImportingTsExtensions": true,
-    "isolatedModules": true,
-    "moduleDetection": "force",
-    "incremental": true,
-    "noEmit": true,
-    "jsx": "react-jsx"
-  },
-  "include": ["./src/**/*.ts"],
-  "exclude": ["node_modules"]
+	"files": [],
+	"references": [
+		{ "path": "./tsconfig.app.json" },
+		{ "path": "./tsconfig.node.json" }
+	]
 }

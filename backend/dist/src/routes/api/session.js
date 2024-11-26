@@ -34,7 +34,6 @@ const validateSignup = [
         .withMessage("Password must be 6 characters or more."),
     handleValidationErrors,
 ];
-// router.use(restoreUser);
 // Get currently logged in user
 router.get("/", (req, res) => {
     const { user } = req;
@@ -82,6 +81,34 @@ router.delete("/", (_req, res) => {
 router.post("/signup", validateSignup, async (req, res, next) => {
     const { email, password, username } = req.body;
     try {
+        // first, query the db and see if there's a user with this email or username
+        const usersMatched = await prisma.user.findMany({
+            where: { OR: [email, username] },
+        });
+        const emailMustBeUnique = "The email address you chose is already taken.";
+        const usernameMustBeUnique = "The username you chose is already taken.";
+        const uniqueConstraintErrors = {
+            title: "Invalid input",
+            errors: {},
+            status: 400,
+            message: "Email and Username must both be unique",
+        };
+        usersMatched.forEach((userMatched) => {
+            if (userMatched.email === email && userMatched.username === username) {
+                uniqueConstraintErrors.errors.email = emailMustBeUnique;
+                uniqueConstraintErrors.errors.username = usernameMustBeUnique;
+            }
+            else if (userMatched.email === email) {
+                uniqueConstraintErrors.errors.email = emailMustBeUnique;
+            }
+            else if (userMatched.username === username) {
+                uniqueConstraintErrors.errors.username = usernameMustBeUnique;
+            }
+        });
+        if (Object.keys(uniqueConstraintErrors.errors).length > 0) {
+            return next(uniqueConstraintErrors);
+        }
+        // then, if no user exists with either of those details, create our new user
         const hashedPassword = bcrypt.hashSync(password);
         const user = await prisma.user.create({
             data: { email, username, password: hashedPassword },

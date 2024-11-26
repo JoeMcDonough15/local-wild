@@ -1,17 +1,16 @@
+import react from "@vitejs/plugin-react-swc";
 import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
+//@ts-expect-error no typestubs
+import eslint from "vite-plugin-eslint";
 
-// https://vitejs.dev/config/
-export default defineConfig((mode) => ({
-  plugins: [react()],
-  server: {
-    port: 3000,
-    proxy: {
-      "/api": {
-        target: "http://localhost:8000",
-        changeOrigin: true,
-        secure: true,
-      },
-    },
-  },
+// https://vite.dev/config/
+export default defineConfig(({ mode }) => ({
+	plugins: [
+		react(),
+		eslint({
+			lintOnStart: true,
+			failOnError: mode === "production",
+		}),
+	],
+	server: { proxy: { "/api": "http://127.0.0.1:5000" } },
 }));

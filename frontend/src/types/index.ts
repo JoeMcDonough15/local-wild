@@ -1,7 +1,14 @@
+import { PayloadAction } from "@reduxjs/toolkit";
+
 export interface ServerError {
   title?: string;
   errors?: Record<string, string>;
   message?: string;
+  status?: number;
+}
+
+export interface ExtendedPayload<T> extends PayloadAction<T> {
+  error?: ServerError;
 }
 
 export interface ConfirmationMessage {

@@ -15,10 +15,25 @@ const storeSessionUser = (user: User): SafeUser => {
 
 // thunks
 
+// thunk to restore logged in user
+export const restoreUserThunk = createAsyncThunk(
+  "session/restore",
+  async (_, { dispatch }) => {
+    const sessionUser = await serverMethods.session.restore();
+    if (sessionUser) {
+      dispatch(sessionSlice.actions.setUser(storeSessionUser(sessionUser)));
+      dispatch(userSlice.actions.setCurrentUser(sessionUser));
+    }
+  }
+);
+
 // thunk to log a user in
 export const loginThunk = createAsyncThunk(
   "session/login",
-  async (credentials: Login, { dispatch }): Promise<ServerError | User> => {
+  async (
+    credentials: Login,
+    { dispatch }
+  ): Promise<ServerError | undefined> => {
     try {
       // sends out the request, throws any errors necessary, parses the response
       const loggedInUser: User = await serverMethods.session.login(credentials);
@@ -27,7 +42,6 @@ export const loginThunk = createAsyncThunk(
       dispatch(sessionSlice.actions.setUser(storeSessionUser(loggedInUser)));
       // dispatch an action to set the currentUser of the userSlice to the logged in user
       dispatch(userSlice.actions.setCurrentUser(loggedInUser));
-      return loggedInUser;
     } catch (error) {
       if (error instanceof Error) {
         const errorResponse: ServerError = error;
@@ -41,7 +55,7 @@ export const loginThunk = createAsyncThunk(
 // thunk to logout a user
 export const logoutThunk = createAsyncThunk(
   "session/logout",
-  async (_: null, { dispatch }) => {
+  async (_, { dispatch }) => {
     await serverMethods.session.logout();
     dispatch(sessionSlice.actions.removeUser());
     dispatch(userSlice.actions.removeCurrentUser());
@@ -71,7 +85,7 @@ export const signupThunk = createAsyncThunk(
 // thunk to deactivate a user's account
 export const deactivateAccountThunk = createAsyncThunk(
   "session/deactivate",
-  async (_: null, { dispatch }) => {
+  async (_, { dispatch }) => {
     await serverMethods.session.deleteAccount();
     dispatch(sessionSlice.actions.removeUser());
     dispatch(userSlice.actions.removeCurrentUser());
