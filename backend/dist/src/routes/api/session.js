@@ -4,6 +4,7 @@ import { check } from "express-validator";
 import handleValidationErrors from "../../utils/validation.js";
 import { requireAuth, setTokenCookie } from "../../utils/auth.js";
 import { prisma } from "../../db/database_client.js";
+import { singleMulterUpload, singlePublicFileUpload } from "../../aws/index.js";
 const router = express.Router();
 // backend validation for login
 const validateLogin = [
@@ -123,6 +124,43 @@ router.post("/signup", validateSignup, async (req, res, next) => {
         return res.status(201).json({
             user: userDetails,
         });
+    }
+    catch (err) {
+        return next(err);
+    }
+});
+// Update a user's profile/account
+router.put("/", requireAuth, singleMulterUpload("image"), async (req, res, next) => {
+    const { user } = req;
+    const userId = user?.id;
+    const { favoriteSubject, location, numYearsExperience } = req.body;
+    const imgFile = req.file;
+    if (!userId)
+        return;
+    try {
+        let resourceUrl;
+        if (imgFile) {
+            resourceUrl = await singlePublicFileUpload(imgFile);
+        }
+        const userToUpdate = await prisma.user.update({
+            where: { id: userId },
+            data: {
+                favoriteSubject: favoriteSubject ?? null,
+                numYearsExperience: parseInt(numYearsExperience) ?? null,
+                location: location ?? null,
+                profileImageUrl: resourceUrl ?? null,
+            },
+        });
+        if (!userToUpdate) {
+            const userNotFound = {
+                message: "User not found",
+                status: 404,
+                errors: { userNotFoundError: "This user could not be found" },
+            };
+            return next(userNotFound);
+        }
+        const { password, ...userDetails } = userToUpdate;
+        res.status(200).json({ user: userDetails });
     }
     catch (err) {
         return next(err);
