@@ -5,76 +5,82 @@ import { prisma } from "../../db/database_client.js";
 import { singleMulterUpload, singlePublicFileUpload } from "../../aws/index.js";
 import { validatePost } from "../../utils/validation.js";
 
-const getAllPosts = (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-  id: number | null = null
-) => {
-  const { slide } = req.query;
-  if (slide && isNaN(Math.floor(Number(slide)))) {
+const router = express.Router();
+
+// * get all posts (for homepage MVP and for user profiles)
+router.get("/", (req, res, next) => {
+  const size = 3;
+  let offset = 0;
+
+  const { slide, userId } = req.query;
+  if (
+    (slide && isNaN(Math.floor(Number(slide)))) ||
+    (userId && isNaN(Math.floor(Number(userId))))
+  ) {
     const err: ApiError = {
       title: "Bad Request",
-      message: `${slide} is not a digit`,
+      message: "Slide number and userId must both be digits.",
       status: 400,
     };
     return next(err);
   }
-  const size = 3;
-  const offset = (Number(slide) - 1) * size;
+  if (slide) {
+    offset = (Number(slide) - 1) * size;
+  }
+
+  const queryObj = {
+    select: { imageUrl: true, title: true },
+    orderBy: [{ createdAt: "desc" } as any],
+    skip: offset,
+    take: size,
+  };
 
   try {
     let posts;
-    if (id) {
+    if (userId) {
       posts = prisma.post.findMany({
-        where: { photographerId: id },
-        orderBy: [{ createdAt: "desc" }],
-        select: { imageUrl: true, title: true },
-        skip: offset,
-        take: size,
+        ...queryObj,
+        where: { photographerId: Number(userId) },
       });
     } else {
-      posts = prisma.post.findMany({
-        orderBy: [{ createdAt: "desc" }],
-        select: { imageUrl: true, title: true },
-        skip: offset,
-        take: size,
-      });
+      posts = prisma.post.findMany(queryObj);
     }
     res.status(200).json({ posts });
   } catch (err) {
     next(err);
   }
-};
-
-const router = express.Router();
-
-// * get all posts
-
-// ? get all posts - homepage MVP
-router.get("/", (req, res, next) => {
-  getAllPosts(req, res, next);
-});
-
-// ? get all posts by a single user - for when viewing a user's profile
-router.get("/:id", (req, res, next) => {
-  const { id } = req.params;
-  const postId = Number(id);
-  getAllPosts(req, res, next, postId);
 });
 
 // * get a single post's details by id
-// ? for a post's details page
-// * requireAuth?
-// 1. do a query for a single post by id - findUnique()
-// 2. decide if there are any fields that we don't want to include
-// 3. associate the user's details with the query
-// *    - username and id I think.  We'd want to put the username of the user who took the photo on the details page
-// *    - and we would want the id so if the person viewing the post details page clicks the username, they can link to that user's profile
-// 4. associate any comments that belong to the post
-// *    - these would be listed under the post like the wireframe
-// 5. associate any comment replies that belong to each comment
-// *    - these would be listed under each comment like the wireframe
+router.get("/:id", requireAuth, (req, res, next) => {
+  const { id } = req.params;
+  if (isNaN(Math.floor(Number(id)))) {
+    const err: ApiError = {
+      title: "Bad Request",
+      message: "id must be a digit.",
+      status: 400,
+    };
+    return next(err);
+  }
+
+  const post = prisma.post.findUnique({
+    where: { id: Number(id) },
+    include: {
+      photographer: { select: { id: true, username: true } },
+      comments: { include: { replies: true } },
+    },
+  });
+
+  if (!post) {
+    const userNotFound: ApiError = {
+      message: "This post could not be found",
+      status: 404,
+    };
+    return next(userNotFound);
+  }
+
+  res.status(200).json({ post });
+});
 
 // * create a new post
 // * requireAuth

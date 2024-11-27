@@ -80,12 +80,9 @@ export const updateUserThunk = createAsyncThunk(
         formData
       );
       dispatch(sessionSlice.actions.setUser(updatedUser));
-    } catch (error) {
-      if (error instanceof Error) {
-        const errorResponse: ServerError = error;
-        return errorResponse;
-      }
-      throw error;
+    } catch (error: any) {
+      const errorResponse: ServerError = error;
+      return errorResponse;
     }
   }
 );
