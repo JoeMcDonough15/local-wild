@@ -1,3 +1,4 @@
+import EditProfileForm from "../EditProfileForm/EditProfileForm";
 import Introduction from "../Introduction";
 import { useRef } from "react";
 
@@ -23,6 +24,7 @@ const Homepage = () => {
         ref={homepageContent}
         id="homepage-content"
       ></div>
+      <EditProfileForm />
     </>
   );
 };

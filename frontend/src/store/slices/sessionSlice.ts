@@ -4,14 +4,9 @@ import {
   type PayloadAction,
 } from "@reduxjs/toolkit";
 
-import type { User, Login, ServerError, Signup, SafeUser } from "../../types";
+import type { User, Login, ServerError, Signup } from "../../types";
 import serverMethods from "../api";
 import { userSlice } from "../slices/userSlice";
-
-const storeSessionUser = (user: User): SafeUser => {
-  const { email, id, username } = user;
-  return { email, id, username };
-};
 
 // thunks
 
@@ -21,8 +16,7 @@ export const restoreUserThunk = createAsyncThunk(
   async (_, { dispatch }) => {
     const sessionUser = await serverMethods.session.restore();
     if (sessionUser) {
-      dispatch(sessionSlice.actions.setUser(storeSessionUser(sessionUser)));
-      dispatch(userSlice.actions.setCurrentUser(sessionUser));
+      dispatch(sessionSlice.actions.setUser(sessionUser));
     }
   }
 );
@@ -39,9 +33,7 @@ export const loginThunk = createAsyncThunk(
       const loggedInUser: User = await serverMethods.session.login(credentials);
 
       // dispatch an action that adds this user to the store
-      dispatch(sessionSlice.actions.setUser(storeSessionUser(loggedInUser)));
-      // dispatch an action to set the currentUser of the userSlice to the logged in user
-      dispatch(userSlice.actions.setCurrentUser(loggedInUser));
+      dispatch(sessionSlice.actions.setUser(loggedInUser));
     } catch (error: any) {
       const errorResponse: ServerError = error;
       return errorResponse;
@@ -68,12 +60,32 @@ export const signupThunk = createAsyncThunk(
   ): Promise<ServerError | undefined> => {
     try {
       const newUser = await serverMethods.session.signUp(userDetails);
-      dispatch(sessionSlice.actions.setUser(storeSessionUser(newUser)));
-      // dispatch an action to set the currentUser of the userSlice to the logged in user
-      dispatch(userSlice.actions.setCurrentUser(newUser));
+      dispatch(sessionSlice.actions.setUser(newUser));
     } catch (error: any) {
       const errorResponse: ServerError = error;
       return errorResponse;
+    }
+  }
+);
+
+// thunk to update a user's profile
+export const updateUserThunk = createAsyncThunk(
+  "user/updateUser",
+  async (
+    formData: FormData,
+    { dispatch }
+  ): Promise<ServerError | undefined> => {
+    try {
+      const updatedUser = await serverMethods.session.updateUserProfile(
+        formData
+      );
+      dispatch(sessionSlice.actions.setUser(updatedUser));
+    } catch (error) {
+      if (error instanceof Error) {
+        const errorResponse: ServerError = error;
+        return errorResponse;
+      }
+      throw error;
     }
   }
 );
@@ -89,7 +101,7 @@ export const deactivateAccountThunk = createAsyncThunk(
 );
 
 interface SessionState {
-  sessionUser: SafeUser | null;
+  sessionUser: User | null;
 }
 
 const initialState: SessionState = {
@@ -101,7 +113,7 @@ export const sessionSlice = createSlice({
   name: "session",
   initialState,
   reducers: {
-    setUser: (state, action: PayloadAction<SafeUser>) => {
+    setUser: (state, action: PayloadAction<User>) => {
       state.sessionUser = action.payload;
     },
 

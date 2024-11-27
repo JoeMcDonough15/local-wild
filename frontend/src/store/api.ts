@@ -58,27 +58,34 @@ async function fetchWithFormData<T>(
 const serverMethods = {
   session: {
     restore: async (): Promise<User | null> => {
-      const response: { user: User | null } = await fetchWithJson("/session");
-      return response?.user;
+      const data: { user: User | null } = await fetchWithJson("/session");
+      return data?.user;
     },
     login: async (loginCredentials: Login): Promise<User> => {
-      const response: { user: User } = await fetchWithJson("/session", {
+      const data: { user: User } = await fetchWithJson("/session", {
         method: "POST",
         body: JSON.stringify(loginCredentials),
       });
-      return response.user;
+      return data.user;
     },
-    logout: async (): Promise<ConfirmationMessage> => {
+    logout: async (): Promise<string> => {
       return fetchWithJson("/session", { method: "DELETE" });
     },
     signUp: async (userDetails: Signup): Promise<User> => {
-      const response: { user: User } = await fetchWithJson("/session/signup", {
+      const data: { user: User } = await fetchWithJson("/session/signup", {
         method: "POST",
         body: JSON.stringify(userDetails),
       });
-      return response.user;
+      return data.user;
     },
-    deleteAccount: async (): Promise<ConfirmationMessage> => {
+    updateUserProfile: async (body: FormData): Promise<User> => {
+      const data: { user: User } = await fetchWithFormData(`/session`, {
+        method: "PUT",
+        body,
+      });
+      return data.user;
+    },
+    deleteAccount: async (): Promise<string> => {
       return fetchWithJson("/session/deactivate", { method: "DELETE" });
     },
   },
