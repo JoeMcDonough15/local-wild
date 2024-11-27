@@ -1,40 +1,10 @@
 import express from "express";
 import bcrypt from "bcryptjs";
-import { check } from "express-validator";
-import handleValidationErrors from "../../utils/validation.js";
+import { validateLogin, validateSignup } from "../../utils/validation.js";
 import { requireAuth, setTokenCookie } from "../../utils/auth.js";
 import { prisma } from "../../db/database_client.js";
 import { singleMulterUpload, singlePublicFileUpload } from "../../aws/index.js";
 const router = express.Router();
-// backend validation for login
-const validateLogin = [
-    check("email")
-        .exists({ checkFalsy: true })
-        .notEmpty()
-        .isEmail()
-        .withMessage("Please provide a valid email."),
-    check("password")
-        .exists({ checkFalsy: true })
-        .withMessage("Please provide a password."),
-    handleValidationErrors,
-];
-//backend validation for signup
-const validateSignup = [
-    check("email")
-        .exists({ checkFalsy: true })
-        .isEmail()
-        .withMessage("Please provide a valid email."),
-    check("username")
-        .exists({ checkFalsy: true })
-        .isLength({ min: 4 })
-        .withMessage("Please provide a username with at least 4 characters."),
-    check("username").not().isEmail().withMessage("Username cannot be an email."),
-    check("password")
-        .exists({ checkFalsy: true })
-        .isLength({ min: 6 })
-        .withMessage("Password must be 6 characters or more."),
-    handleValidationErrors,
-];
 // Get currently logged in user
 router.get("/", (req, res) => {
     const { user } = req;
