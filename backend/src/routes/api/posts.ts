@@ -10,7 +10,7 @@ import {
 
 const router = express.Router();
 
-// * get all posts (for homepage MVP and for user profiles)
+// * get all posts (for Homepage,  UserProfilePage, and MyPostsPage)
 router.get("/", async (req, res, next) => {
   let size = 3;
   let offset = 0;
@@ -45,13 +45,20 @@ router.get("/", async (req, res, next) => {
 
   try {
     let posts;
+    let totalNumPosts;
     if (userId) {
       posts = await prisma.post.findMany({
         ...queryObj,
         where: { photographerId: Number(userId) },
       });
+      const userFeatured = await prisma.user.findUnique({
+        where: { id: Number(userId) },
+        select: { numPosts: true },
+      });
+      totalNumPosts = userFeatured?.numPosts;
     } else {
       posts = await prisma.post.findMany(queryObj);
+      totalNumPosts = await prisma.post.count();
     }
     res.status(200).json({ posts });
   } catch (err) {

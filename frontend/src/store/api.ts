@@ -5,7 +5,7 @@ import type {
   Signup,
   Post,
   PostUpdate,
-  PaginationOptions,
+  GetPostsOptions,
 } from "../types";
 
 const URL_ROOT = "/api";
@@ -110,15 +110,16 @@ const serverMethods = {
     },
   },
   posts: {
-    getBatch: async (paginationDetails: PaginationOptions): Promise<Post[]> => {
-      let data: { posts: Post[] };
-      const { givenSize, slideOrPageNum } = paginationDetails;
-      const url = `/posts?slide=${slideOrPageNum}`;
+    getBatch: async (getPostsOptions: GetPostsOptions): Promise<Post[]> => {
+      const { givenSize, slideOrPageNum, userId } = getPostsOptions;
+      let url = `/posts?slide=${slideOrPageNum}`;
       if (givenSize !== undefined) {
-        data = await fetchWithJson(`${url}&givenSize=${givenSize}`);
-      } else {
-        data = await fetchWithJson(url);
+        url += `&givenSize=${givenSize}`;
       }
+      if (userId) {
+        url += `&userId=${userId}`;
+      }
+      const data: { posts: Post[] } = await fetchWithJson(url);
       return data.posts;
     },
     getOne: async (postId: number): Promise<Post> => {

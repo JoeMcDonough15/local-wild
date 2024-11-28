@@ -7,8 +7,8 @@ import {
 import type {
   ServerError,
   Post,
-  PaginationOptions,
   UpdateOrDeletePostArgs,
+  GetPostsOptions,
 } from "../../types";
 import serverMethods from "../api";
 
@@ -17,11 +17,9 @@ import serverMethods from "../api";
 // thunk to get a paginated batch of posts
 export const getBatchOfPostsThunk = createAsyncThunk(
   "posts/getBatchOfPosts",
-  async (paginationDetails: PaginationOptions, { dispatch }) => {
+  async (getPostsOptions: GetPostsOptions, { dispatch }) => {
     try {
-      const batchOfPosts = await serverMethods.posts.getBatch(
-        paginationDetails
-      );
+      const batchOfPosts = await serverMethods.posts.getBatch(getPostsOptions);
       dispatch(postsSlice.actions.addToAllPosts(batchOfPosts));
     } catch (error: any) {
       const errorResponse: ServerError = error;

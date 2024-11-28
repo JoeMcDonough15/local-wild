@@ -81,7 +81,8 @@ export interface Signup {
   password: string;
 }
 
-export interface PaginationOptions {
+export interface GetPostsOptions {
   givenSize?: number;
   slideOrPageNum: number;
+  userId?: number;
 }
