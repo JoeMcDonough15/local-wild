@@ -92,7 +92,7 @@ router.post("/", requireAuth, singleMulterUpload("image"), validateEntirePost, a
         const imageUrl = await singlePublicFileUpload(imageFile);
         const postObj = {
             title,
-            photographerId: Number(id),
+            photographerId: id,
             imageUrl,
         };
         if (caption) {
@@ -111,7 +111,11 @@ router.post("/", requireAuth, singleMulterUpload("image"), validateEntirePost, a
         if (datePhotographed) {
             postObj.datePhotographed = new Date(datePhotographed);
         }
-        const post = prisma.post.create({ data: postObj });
+        const post = await prisma.post.create({ data: postObj });
+        await prisma.user.update({
+            where: { id },
+            data: { numPosts: { increment: 1 } },
+        });
         res.status(201).json({ post });
     }
     catch (err) {
@@ -172,6 +176,10 @@ router.delete("/:id", requireAuth, async (req, res, next) => {
         await prisma.post.delete({
             // @ts-expect-error: where should be ok??
             where: { AND: [{ id: Number(id) }, { photographerId: userId }] },
+        });
+        await prisma.user.update({
+            where: { id: userId },
+            data: { numPosts: { decrement: 1 } },
         });
         res.status(200).json({ message: "Your post has been deleted." });
     }
