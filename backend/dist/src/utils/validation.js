@@ -45,14 +45,21 @@ export const validateSignup = [
         .withMessage("Password must be 6 characters or more."),
     handleValidationErrors,
 ];
-//backend validation for post creation
-export const validatePost = [
-    check("imageFile")
-        .exists({ checkFalsy: true })
-        .withMessage("You must include an image file for a post."),
+export const validatePostBody = [
     check("title")
         .exists({ checkFalsy: true })
         .notEmpty()
         .withMessage("You must include a title for your post."),
     handleValidationErrors,
 ];
+//backend validation for post creation
+export const validateEntirePost = (req, _res, next) => {
+    if (!req.file) {
+        const err = {
+            title: "File required",
+            message: "You must provide an image file when making a post.",
+        };
+        return next(err);
+    }
+    validatePostBody;
+};

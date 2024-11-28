@@ -9,7 +9,7 @@ export interface User {
   favoriteSubject?: string | null;
   createdAt?: Date;
   updatedAt?: Date;
-  posts?: Post[];
+  posts?: ExistingPost[];
   comments?: CommentOnPost[];
 }
 
@@ -40,8 +40,7 @@ declare global {
   }
 }
 
-export interface Post {
-  id: number;
+export interface NewPost {
   imageUrl: string;
   title: string;
   photographerId: number;
@@ -51,6 +50,10 @@ export interface Post {
   lng?: number;
   partOfDay?: string;
   datePhotographed?: Date;
+}
+
+export interface ExistingPost extends NewPost {
+  id: number;
   createdAt: Date;
   updatedAt: Date;
   comments: CommentOnPost[];

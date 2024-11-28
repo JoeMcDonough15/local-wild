@@ -1,6 +1,8 @@
 import express from "express";
 import { requireAuth } from "../../utils/auth.js";
 import { prisma } from "../../db/database_client.js";
+import { singleMulterUpload, singlePublicFileUpload } from "../../aws/index.js";
+import { validateEntirePost, } from "../../utils/validation.js";
 const router = express.Router();
 // * get all posts (for homepage MVP and for user profiles)
 router.get("/", (req, res, next) => {
@@ -53,27 +55,65 @@ router.get("/:id", requireAuth, (req, res, next) => {
         };
         return next(err);
     }
-    const post = prisma.post.findUnique({
-        where: { id: Number(id) },
-        include: {
-            photographer: { select: { id: true, username: true } },
-            comments: { include: { replies: true } },
-        },
-    });
-    if (!post) {
-        const userNotFound = {
-            message: "This post could not be found",
-            status: 404,
-        };
-        return next(userNotFound);
+    try {
+        const post = prisma.post.findUnique({
+            where: { id: Number(id) },
+            include: {
+                photographer: { select: { id: true, username: true } },
+                comments: { include: { replies: true } },
+            },
+        });
+        if (!post) {
+            const userNotFound = {
+                message: "This post could not be found",
+                status: 404,
+            };
+            return next(userNotFound);
+        }
+        res.status(200).json({ post });
     }
-    res.status(200).json({ post });
+    catch (err) {
+        next(err);
+    }
 });
 // * create a new post
-// * requireAuth
-// 1. do a query to create a new post - create
-// 2. use the req.user to associate the new post with that user
-// 3. implement aws to upload the photo that belongs to the post and use the returned url as the post's imageUrl
+router.post("/", requireAuth, singleMulterUpload("image"), validateEntirePost, async (req, res, next) => {
+    const id = req.user?.id;
+    const imageFile = req.file;
+    const { title, caption, fullDescription, lat, lng, partOfDay, datePhotographed, } = req.body;
+    if (!imageFile || !id || !title) {
+        return; // errors should have already been thrown by this point by requireAuth or validateEntirePost
+    }
+    try {
+        const imageUrl = await singlePublicFileUpload(imageFile);
+        const postObj = {
+            title,
+            photographerId: Number(id),
+            imageUrl,
+        };
+        if (caption) {
+            postObj.caption = caption;
+        }
+        if (fullDescription) {
+            postObj.fullDescription = fullDescription;
+        }
+        if (lat && lng) {
+            postObj.lat = lat;
+            postObj.lng = lng;
+        }
+        if (partOfDay) {
+            postObj.partOfDay = partOfDay;
+        }
+        if (datePhotographed) {
+            postObj.datePhotographed = new Date(datePhotographed);
+        }
+        const post = prisma.post.create({ data: postObj });
+        res.status(201).json({ post });
+    }
+    catch (err) {
+        next(err);
+    }
+});
 // * update a post (not changing the image)
 // * requireAuth and requireAuthorization
 // 1. similar to the update user route

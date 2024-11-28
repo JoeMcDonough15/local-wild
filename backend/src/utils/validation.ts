@@ -57,15 +57,27 @@ export const validateSignup = [
   handleValidationErrors,
 ];
 
-//backend validation for post creation
-export const validatePost = [
-  check("imageFile")
-    .exists({ checkFalsy: true })
-    .withMessage("You must include an image file for a post."),
-
+export const validatePostBody = [
   check("title")
     .exists({ checkFalsy: true })
     .notEmpty()
     .withMessage("You must include a title for your post."),
   handleValidationErrors,
 ];
+
+//backend validation for post creation
+export const validateEntirePost = (
+  req: Request,
+  _res: Response,
+  next: NextFunction
+) => {
+  if (!req.file) {
+    const err: ApiError = {
+      title: "File required",
+      message: "You must provide an image file when making a post.",
+    };
+    return next(err);
+  }
+
+  validatePostBody;
+};
