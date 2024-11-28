@@ -37,12 +37,19 @@ export interface PostUpdate {
 
 export interface Post extends PostUpdate {
   id: number;
-  photographer: { username: string; id: number };
-  photographerId: number;
   imageUrl: string;
-  comments: CommentOnPost[];
+  photographer?: { username: string; id: number };
+  photographerId: number;
+  comments?: CommentOnPost[];
   createdAt: Date;
   updatedAt: Date;
+  key?: number;
+}
+
+export interface UpdateOrDeletePostArgs {
+  postId: number;
+  postDetails?: PostUpdate;
+  key?: number;
 }
 
 export interface CommentOnPost {
@@ -72,4 +79,9 @@ export interface Signup {
   username: string;
   email: string;
   password: string;
+}
+
+export interface PaginationOptions {
+  givenSize?: number;
+  slideOrPageNum: number;
 }

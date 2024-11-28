@@ -1,5 +1,12 @@
 import Cookies from "js-cookie";
-import type { Login, User, Signup, Post, PostUpdate } from "../types";
+import type {
+  Login,
+  User,
+  Signup,
+  Post,
+  PostUpdate,
+  PaginationOptions,
+} from "../types";
 
 const URL_ROOT = "/api";
 
@@ -103,8 +110,15 @@ const serverMethods = {
     },
   },
   posts: {
-    getAll: async (): Promise<Post[]> => {
-      const data: { posts: Post[] } = await fetchWithJson("/posts");
+    getBatch: async (paginationDetails: PaginationOptions): Promise<Post[]> => {
+      let data: { posts: Post[] };
+      const { givenSize, slideOrPageNum } = paginationDetails;
+      const url = `/posts?slide=${slideOrPageNum}`;
+      if (givenSize !== undefined) {
+        data = await fetchWithJson(`${url}&givenSize=${givenSize}`);
+      } else {
+        data = await fetchWithJson(url);
+      }
       return data.posts;
     },
     getOne: async (postId: number): Promise<Post> => {

@@ -12,12 +12,13 @@ const router = express.Router();
 
 // * get all posts (for homepage MVP and for user profiles)
 router.get("/", async (req, res, next) => {
-  const size = 3;
+  let size = 3;
   let offset = 0;
 
-  const { slide, userId } = req.query;
+  const { givenSize, slide, userId } = req.query;
   if (
     (slide && isNaN(Math.floor(Number(slide)))) ||
+    (givenSize && isNaN(Math.floor(Number(givenSize)))) ||
     (userId && isNaN(Math.floor(Number(userId))))
   ) {
     const err: ApiError = {
@@ -26,6 +27,10 @@ router.get("/", async (req, res, next) => {
       status: 400,
     };
     return next(err);
+  }
+
+  if (givenSize) {
+    size = Number(givenSize);
   }
   if (slide) {
     offset = (Number(slide) - 1) * size;
@@ -181,6 +186,7 @@ router.put(
           lat: lat !== undefined && lng !== undefined ? lat : null,
           lng: lng !== undefined && lat !== undefined ? lng : null,
           fullDescription: fullDescription ?? null,
+          updatedAt: new Date(),
         },
       });
       res.status(200).json({ postToUpdate });
