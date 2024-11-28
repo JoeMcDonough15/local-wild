@@ -19,6 +19,7 @@ model User {
     username String @unique @db.VarChar(255)
     email String @unique
     password String @db.VarChar(255)
+    numPosts Int @default(0)
     profileImageUrl String?
     location String? @db.VarChar(255)
     numYearsExperience Int?
