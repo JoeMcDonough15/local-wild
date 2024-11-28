@@ -11,7 +11,7 @@ import {
 const router = express.Router();
 
 // * get all posts (for homepage MVP and for user profiles)
-router.get("/", (req, res, next) => {
+router.get("/", async (req, res, next) => {
   const size = 3;
   let offset = 0;
 
@@ -41,12 +41,12 @@ router.get("/", (req, res, next) => {
   try {
     let posts;
     if (userId) {
-      posts = prisma.post.findMany({
+      posts = await prisma.post.findMany({
         ...queryObj,
         where: { photographerId: Number(userId) },
       });
     } else {
-      posts = prisma.post.findMany(queryObj);
+      posts = await prisma.post.findMany(queryObj);
     }
     res.status(200).json({ posts });
   } catch (err) {
@@ -55,7 +55,7 @@ router.get("/", (req, res, next) => {
 });
 
 // * get a single post's details by id
-router.get("/:id", requireAuth, (req, res, next) => {
+router.get("/:id", requireAuth, async (req, res, next) => {
   const { id } = req.params;
   if (isNaN(Math.floor(Number(id)))) {
     const err: ApiError = {
@@ -66,7 +66,7 @@ router.get("/:id", requireAuth, (req, res, next) => {
     return next(err);
   }
   try {
-    const post = prisma.post.findUnique({
+    const post = await prisma.post.findUnique({
       where: { id: Number(id) },
       include: {
         photographer: { select: { id: true, username: true } },
@@ -146,7 +146,7 @@ router.put(
   "/:id",
   requireAuth,
   validatePostBody,
-  (req: Request, res: Response, next: NextFunction) => {
+  async (req: Request, res: Response, next: NextFunction) => {
     const userId = req.user?.id;
     const { id } = req.params;
     if (!userId || !id) {
@@ -155,42 +155,58 @@ router.put(
 
     const { caption, fullDescription, lat, lng, partOfDay, datePhotographed } =
       req.body;
-
-    const postToUpdate = prisma.post.update({
-      // @ts-expect-error: where should be ok??
-      where: {
-        AND: [
-          {
-            id: {
-              equals: Number(id),
+    try {
+      const postToUpdate = await prisma.post.update({
+        // @ts-expect-error: where should be ok??
+        where: {
+          AND: [
+            {
+              id: {
+                equals: Number(id),
+              },
             },
-          },
-          {
-            photographerId: {
-              equals: userId,
+            {
+              photographerId: {
+                equals: userId,
+              },
             },
-          },
-        ],
-      },
-      data: {
-        caption: caption ?? null,
-        partOfDay: partOfDay ?? null,
-        datePhotographed: datePhotographed ? new Date(datePhotographed) : null,
-        lat: lat !== undefined && lng !== undefined ? lat : null,
-        lng: lng !== undefined && lat !== undefined ? lng : null,
-        fullDescription: fullDescription ?? null,
-      },
-    });
-    res.status(200).json({ postToUpdate });
+          ],
+        },
+        data: {
+          caption: caption ?? null,
+          partOfDay: partOfDay ?? null,
+          datePhotographed: datePhotographed
+            ? new Date(datePhotographed)
+            : null,
+          lat: lat !== undefined && lng !== undefined ? lat : null,
+          lng: lng !== undefined && lat !== undefined ? lng : null,
+          fullDescription: fullDescription ?? null,
+        },
+      });
+      res.status(200).json({ postToUpdate });
+    } catch (err) {
+      next(err);
+    }
   }
 );
 
 // * delete a post
-// * requireAuth and requireAuthorization
-// 1. do a query to delete the post - delete
-//
-//
-//
+router.delete("/:id", requireAuth, async (req, res, next) => {
+  const userId = req.user?.id;
+  const { id } = req.params;
+  if (!userId || !id) {
+    return;
+  }
+  try {
+    const deletedPost = await prisma.post.delete({
+      // @ts-expect-error: where should be ok??
+      where: { AND: [{ id: Number(id) }, { photographerId: userId }] },
+    });
+    res.status(200).json({ message: "Your post has been deleted." });
+  } catch (err) {
+    next(err);
+  }
+});
 
 export default router;
 
