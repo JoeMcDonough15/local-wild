@@ -1,6 +1,6 @@
 import express, { Request, Response, NextFunction } from "express";
 import { requireAuth } from "../../utils/auth.js";
-import type { ApiError, ExistingPost, NewPost } from "../../types/index.js";
+import type { ApiError, NewPost } from "../../types/index.js";
 import { prisma } from "../../db/database_client.js";
 import { singleMulterUpload, singlePublicFileUpload } from "../../aws/index.js";
 import {
@@ -198,7 +198,7 @@ router.delete("/:id", requireAuth, async (req, res, next) => {
     return;
   }
   try {
-    const deletedPost = await prisma.post.delete({
+    await prisma.post.delete({
       // @ts-expect-error: where should be ok??
       where: { AND: [{ id: Number(id) }, { photographerId: userId }] },
     });

@@ -5,10 +5,6 @@ export interface ServerError {
   status?: number;
 }
 
-export interface ConfirmationMessage {
-  message: string;
-}
-
 export interface User {
   id: number;
   username: string;
@@ -29,20 +25,24 @@ export interface SafeUser {
   username: string;
 }
 
-export interface Post {
-  id: number;
-  imageUrl: string;
+export interface PostUpdate {
   title: string;
-  photographerId: number;
   caption?: string;
   fullDescription?: string;
   lat?: number;
   lng?: number;
   partOfDay?: string;
   datePhotographed?: Date;
+}
+
+export interface Post extends PostUpdate {
+  id: number;
+  photographer: { username: string; id: number };
+  photographerId: number;
+  imageUrl: string;
+  comments: CommentOnPost[];
   createdAt: Date;
   updatedAt: Date;
-  comments: CommentOnPost[];
 }
 
 export interface CommentOnPost {

@@ -164,7 +164,7 @@ router.delete("/:id", requireAuth, async (req, res, next) => {
         return;
     }
     try {
-        const deletedPost = await prisma.post.delete({
+        await prisma.post.delete({
             // @ts-expect-error: where should be ok??
             where: { AND: [{ id: Number(id) }, { photographerId: userId }] },
         });
