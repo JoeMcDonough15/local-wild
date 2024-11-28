@@ -1,13 +1,12 @@
 import express, { Request, Response, NextFunction } from "express";
 import { requireAuth } from "../../utils/auth.js";
-import type { ApiError, NewPost } from "../../types/index.js";
+import type { ApiError, ExistingPost, NewPost } from "../../types/index.js";
 import { prisma } from "../../db/database_client.js";
 import { singleMulterUpload, singlePublicFileUpload } from "../../aws/index.js";
 import {
   validatePostBody,
   validateEntirePost,
 } from "../../utils/validation.js";
-import { Post } from "@prisma/client";
 
 const router = express.Router();
 
@@ -123,7 +122,7 @@ router.post(
       if (fullDescription) {
         postObj.fullDescription = fullDescription;
       }
-      if (lat && lng) {
+      if (lat !== undefined && lng !== undefined) {
         postObj.lat = lat;
         postObj.lng = lng;
       }
@@ -143,8 +142,48 @@ router.post(
 );
 
 // * update a post (not changing the image)
-// * requireAuth and requireAuthorization
-// 1. similar to the update user route
+router.put(
+  "/:id",
+  requireAuth,
+  validatePostBody,
+  (req: Request, res: Response, next: NextFunction) => {
+    const userId = req.user?.id;
+    const { id } = req.params;
+    if (!userId || !id) {
+      return;
+    }
+
+    const { caption, fullDescription, lat, lng, partOfDay, datePhotographed } =
+      req.body;
+
+    const postToUpdate = prisma.post.update({
+      // @ts-expect-error: where should be ok??
+      where: {
+        AND: [
+          {
+            id: {
+              equals: Number(id),
+            },
+          },
+          {
+            photographerId: {
+              equals: userId,
+            },
+          },
+        ],
+      },
+      data: {
+        caption: caption ?? null,
+        partOfDay: partOfDay ?? null,
+        datePhotographed: datePhotographed ? new Date(datePhotographed) : null,
+        lat: lat !== undefined && lng !== undefined ? lat : null,
+        lng: lng !== undefined && lat !== undefined ? lng : null,
+        fullDescription: fullDescription ?? null,
+      },
+    });
+    res.status(200).json({ postToUpdate });
+  }
+);
 
 // * delete a post
 // * requireAuth and requireAuthorization

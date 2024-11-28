@@ -2,7 +2,7 @@ import express from "express";
 import { requireAuth } from "../../utils/auth.js";
 import { prisma } from "../../db/database_client.js";
 import { singleMulterUpload, singlePublicFileUpload } from "../../aws/index.js";
-import { validateEntirePost, } from "../../utils/validation.js";
+import { validatePostBody, validateEntirePost, } from "../../utils/validation.js";
 const router = express.Router();
 // * get all posts (for homepage MVP and for user profiles)
 router.get("/", (req, res, next) => {
@@ -97,7 +97,7 @@ router.post("/", requireAuth, singleMulterUpload("image"), validateEntirePost, a
         if (fullDescription) {
             postObj.fullDescription = fullDescription;
         }
-        if (lat && lng) {
+        if (lat !== undefined && lng !== undefined) {
             postObj.lat = lat;
             postObj.lng = lng;
         }
@@ -115,8 +115,40 @@ router.post("/", requireAuth, singleMulterUpload("image"), validateEntirePost, a
     }
 });
 // * update a post (not changing the image)
-// * requireAuth and requireAuthorization
-// 1. similar to the update user route
+router.put("/:id", requireAuth, validatePostBody, (req, res, next) => {
+    const userId = req.user?.id;
+    const { id } = req.params;
+    if (!userId || !id) {
+        return;
+    }
+    const { caption, fullDescription, lat, lng, partOfDay, datePhotographed } = req.body;
+    const postToUpdate = prisma.post.update({
+        // @ts-expect-error: where should be ok??
+        where: {
+            AND: [
+                {
+                    id: {
+                        equals: Number(id),
+                    },
+                },
+                {
+                    photographerId: {
+                        equals: userId,
+                    },
+                },
+            ],
+        },
+        data: {
+            caption: caption ?? null,
+            partOfDay: partOfDay ?? null,
+            datePhotographed: datePhotographed ? new Date(datePhotographed) : null,
+            lat: lat !== undefined && lng !== undefined ? lat : null,
+            lng: lng !== undefined && lat !== undefined ? lng : null,
+            fullDescription: fullDescription ?? null,
+        },
+    });
+    res.status(200).json({ postToUpdate });
+});
 // * delete a post
 // * requireAuth and requireAuthorization
 // 1. do a query to delete the post - delete
