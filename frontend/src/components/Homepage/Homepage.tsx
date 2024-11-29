@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import Introduction from "../Introduction";
-// import DisplayPostsCarousel from "../DisplayPostsCarousel";
+import DisplayPosts from "../DisplayPosts";
 
 const Homepage = () => {
   const homepageContent = useRef<HTMLDivElement | null>(null);
@@ -23,7 +23,9 @@ const Homepage = () => {
         style={{ marginTop: "200vh" }}
         ref={homepageContent}
         id="homepage-content"
-      ></div>
+      >
+        <DisplayPosts listOrCarousel="carousel" postsPerPageOrSlide={3} />
+      </div>
     </>
   );
 };

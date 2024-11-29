@@ -5,23 +5,23 @@ import {
   getBatchOfPostsThunk,
 } from "../../store/slices/postsSlice";
 import { GetPostsOptions } from "../../types";
-import OpenModalButton from "../OpenModalButton/OpenModalButton";
+import PostsCarousel from "../PostsCarousel";
+// import OpenModalButton from "../OpenModalButton/OpenModalButton";
 
 interface DisplayPostsProps {
-  numPostsPerSlideOrPage?: number;
+  postsPerPageOrSlide: number;
   listOrCarousel: string;
 }
 
 const DisplayPosts = ({
-  numPostsPerSlideOrPage,
+  postsPerPageOrSlide,
   listOrCarousel,
 }: DisplayPostsProps) => {
-  const POSTS_PER_SLIDE = numPostsPerSlideOrPage || 3;
   const dispatch = useAppDispatch();
   const currentUser = useAppSelector((state) => state.users.currentUser);
   const postsSoFar = useAppSelector((state) => state.posts.allPosts);
   const totalNumPosts = useAppSelector((state) => state.posts.totalNumPosts);
-  const [slideNum, setSlideNum] = useState(1);
+  const [slideOrPageNum, setSlideOrPageNum] = useState(1);
   const [highestKey, setHighestKey] = useState(3);
   const [needMorePosts, setNeedMorePosts] = useState(false);
 
@@ -34,23 +34,29 @@ const DisplayPosts = ({
   // run this useEffect hook when component first mounts and then
   // anytime the slideNum changes, to reset the highest key to what we need for the current slide
   useEffect(() => {
-    const newHighestKey = slideNum * POSTS_PER_SLIDE;
+    const newHighestKey = slideOrPageNum * postsPerPageOrSlide;
     setHighestKey(newHighestKey);
-  }, [slideNum, POSTS_PER_SLIDE, setHighestKey]);
+  }, [slideOrPageNum, postsPerPageOrSlide, setHighestKey]);
 
   // run this useEffect when component first mounts and then again
   // anytime that we need to get another batch of paginated posts
   useEffect(() => {
     if (!needMorePosts) return;
 
-    const getPostsOptions: GetPostsOptions = { slideOrPageNum: slideNum };
+    const getPostsOptions: GetPostsOptions = { slideOrPageNum: slideOrPageNum };
     // if we're using this inside a UserProfilePage component
     if (currentUser) {
       getPostsOptions.userId = currentUser.id;
     }
 
     dispatch(getBatchOfPostsThunk(getPostsOptions)); // will update postsSoFar, so that now the highestKey should be defined and we can render the carousel
-  }, [currentUser, slideNum, needMorePosts, getBatchOfPostsThunk, dispatch]);
+  }, [
+    currentUser,
+    slideOrPageNum,
+    needMorePosts,
+    getBatchOfPostsThunk,
+    dispatch,
+  ]);
 
   if (!postsSoFar[highestKey]) {
     setNeedMorePosts(true);
@@ -59,58 +65,26 @@ const DisplayPosts = ({
     setNeedMorePosts(false);
   }
 
-  const postsToRender = [
-    postsSoFar[highestKey - 2],
-    postsSoFar[highestKey - 1],
-    postsSoFar[highestKey],
-  ];
+  const postsToRender = [];
+
+  for (let i = postsPerPageOrSlide - 1; i >= 0; i--) {
+    postsToRender.push(postsSoFar[highestKey - i]);
+  }
 
   if (listOrCarousel === "carousel") {
     return (
-      // <PostsAsCarousel />
-      <section className="carousel flex-row">
-        {slideNum > 1 && (
-          <button
-            onClick={() => {
-              setSlideNum(() => slideNum - 1);
-            }}
-            type="button"
-            className="carousel-button button-back"
-          >
-            {" "}
-            ⬅
-          </button>
-        )}
-        <div className="gallery flex-row">
-          {postsToRender.map((eachPost, index) => {
-            return (
-              eachPost && (
-                <img
-                  key={index + 1}
-                  src={eachPost.imageUrl}
-                  alt={eachPost.title}
-                />
-              )
-            );
-          })}
-        </div>
-        {highestKey < totalNumPosts && (
-          <button
-            onClick={() => {
-              setSlideNum(() => slideNum + 1);
-            }}
-            type="button"
-            className="carousel-button button-forward"
-          >
-            ➡️
-          </button>
-        )}
-      </section>
+      <PostsCarousel
+        postsToRender={postsToRender}
+        totalNumPosts={totalNumPosts}
+        highestKey={highestKey}
+        slideNum={slideOrPageNum}
+        setSlideNum={setSlideOrPageNum}
+      />
     );
   } else {
     return (
-      // <PostsAsList />
-      <section className="posts-list">
+      // <PostsAsList posts={postsToRender} totalNumPosts={totalNumPosts} postsPerPage={postsPerSlideOrPage} pageNum={slideOrPageNum}, setPageNum={setSlideOrPageNum} />
+      <section className="posts-list flex-col">
         {postsToRender.map((eachPost, index) => {
           return (
             eachPost && (
@@ -138,6 +112,7 @@ const DisplayPosts = ({
             )
           );
         })}
+        <ul className="page-buttons flex-row"></ul>
       </section>
     );
   }
