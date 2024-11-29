@@ -49,7 +49,7 @@ export interface Post extends PostUpdate {
 export interface UpdateOrDeletePostArgs {
   postId: number;
   postDetails?: PostUpdate;
-  key?: number;
+  keyForStore?: number;
 }
 
 export interface BatchOfPosts {

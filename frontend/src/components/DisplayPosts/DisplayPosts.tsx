@@ -22,7 +22,7 @@ const DisplayPosts = ({
   const postsSoFar = useAppSelector((state) => state.posts.allPosts);
   const totalNumPosts = useAppSelector((state) => state.posts.totalNumPosts);
   const [slideOrPageNum, setSlideOrPageNum] = useState(1);
-  const [highestKey, setHighestKey] = useState(postsPerPageOrSlide);
+  const [highestKey, setHighestKey] = useState<number | null>(null);
   const [gettingMorePosts, setGettingMorePosts] = useState(false);
 
   // run this useEffect only once, when the component first mounts, to clean up any leftover state from whichever component used it last (Homepage or UserProfilePage)
@@ -83,9 +83,11 @@ const DisplayPosts = ({
   const postsToRender: Post[] = [];
 
   for (let i = postsPerPageOrSlide - 1; i >= 0; i--) {
-    const nextPost = postsSoFar[highestKey - i];
-    if (nextPost) {
-      postsToRender.push(nextPost);
+    if (highestKey) {
+      const nextPost = postsSoFar[highestKey - i];
+      if (nextPost) {
+        postsToRender.push(nextPost);
+      }
     }
   }
 

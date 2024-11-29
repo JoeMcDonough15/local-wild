@@ -41,13 +41,19 @@ const PostsList = ({
                 <OpenModalButton
                   buttonText="Edit"
                   modalComponent={
-                    <EditPostFormModal postId={eachPost.id} key={index + 1} />
+                    <EditPostFormModal
+                      postId={eachPost.id}
+                      keyForStore={index + 1}
+                    />
                   }
                 />
                 <OpenModalButton
                   buttonText="Delete"
                   modalComponent={
-                    <ConfirmDeleteModal postId={eachPost.id} key={index + 1} />
+                    <ConfirmDeleteModal
+                      postId={eachPost.id}
+                      keyForStore={index + 1}
+                    />
                   }
                 />
               </div>

@@ -8,7 +8,7 @@ import {
 } from "../../store/slices/postsSlice";
 import { PostUpdate, UpdateOrDeletePostArgs, LoadingState } from "../../types";
 
-const EditPostFormModal = ({ postId, key }: UpdateOrDeletePostArgs) => {
+const EditPostFormModal = ({ postId, keyForStore }: UpdateOrDeletePostArgs) => {
   const dispatch = useAppDispatch();
   const currentPost = useAppSelector((state) => state.posts.currentPost);
   const { closeModal } = useModal();
@@ -100,7 +100,11 @@ const EditPostFormModal = ({ postId, key }: UpdateOrDeletePostArgs) => {
       postDetails.partOfDay = partOfDay;
     }
 
-    const editArgs: UpdateOrDeletePostArgs = { postId, key, postDetails };
+    const editArgs: UpdateOrDeletePostArgs = {
+      postId,
+      keyForStore,
+      postDetails,
+    };
 
     const serverResponse: PayloadAction<any> = await dispatch(
       updatePostThunk(editArgs)

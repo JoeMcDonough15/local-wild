@@ -26,7 +26,6 @@ router.get("/", async (req, res, next) => {
         offset = (Number(slide) - 1) * size;
     }
     const queryObj = {
-        select: { imageUrl: true, title: true },
         orderBy: [{ createdAt: "desc" }],
         skip: offset,
         take: size,
@@ -49,6 +48,7 @@ router.get("/", async (req, res, next) => {
             posts = await prisma.post.findMany(queryObj);
             totalNumPosts = await prisma.post.count();
         }
+        console.log("total number of posts from prisma: ", totalNumPosts);
         res.status(200).json({ posts, totalNumPosts });
     }
     catch (err) {
@@ -136,25 +136,15 @@ router.put("/:id", requireAuth, validatePostBody, async (req, res, next) => {
     if (!userId || !id) {
         return;
     }
-    const { caption, fullDescription, lat, lng, partOfDay, datePhotographed } = req.body;
+    const { title, caption, fullDescription, lat, lng, partOfDay, datePhotographed, } = req.body;
     try {
         const postToUpdate = await prisma.post.update({
-            // @ts-expect-error: where should be ok??
             where: {
-                AND: [
-                    {
-                        id: {
-                            equals: Number(id),
-                        },
-                    },
-                    {
-                        photographerId: {
-                            equals: userId,
-                        },
-                    },
-                ],
+                id: Number(id),
+                photographerId: userId,
             },
             data: {
+                title,
                 caption: caption ?? null,
                 partOfDay: partOfDay ?? null,
                 datePhotographed: datePhotographed
@@ -166,7 +156,7 @@ router.put("/:id", requireAuth, validatePostBody, async (req, res, next) => {
                 updatedAt: new Date(),
             },
         });
-        res.status(200).json({ postToUpdate });
+        res.status(200).json({ post: postToUpdate });
     }
     catch (err) {
         next(err);
@@ -181,8 +171,7 @@ router.delete("/:id", requireAuth, async (req, res, next) => {
     }
     try {
         await prisma.post.delete({
-            // @ts-expect-error: where should be ok??
-            where: { AND: [{ id: Number(id) }, { photographerId: userId }] },
+            where: { id: Number(id), photographerId: userId },
         });
         await prisma.user.update({
             where: { id: userId },

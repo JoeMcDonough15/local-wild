@@ -20,8 +20,8 @@ export const getBatchOfPostsThunk = createAsyncThunk(
   async (getPostsOptions: GetPostsOptions, { dispatch }) => {
     try {
       const batchOfPosts = await serverMethods.posts.getBatch(getPostsOptions);
-      dispatch(postsSlice.actions.addToAllPosts(batchOfPosts.posts));
       dispatch(postsSlice.actions.setTotalNumPosts(batchOfPosts.totalNumPosts));
+      dispatch(postsSlice.actions.addToAllPosts(batchOfPosts.posts));
     } catch (error: any) {
       const errorResponse: ServerError = error;
       return errorResponse;
@@ -63,14 +63,15 @@ export const updatePostThunk = createAsyncThunk(
   "posts/updatePost",
   async (postDetailsArgs: UpdateOrDeletePostArgs, { dispatch }) => {
     try {
-      const { postId, postDetails, key } = postDetailsArgs;
+      const { postId, postDetails, keyForStore } = postDetailsArgs;
       if (!postDetails) {
         throw new Error("You must provide post details if updating a post");
       }
       const updatedPost = await serverMethods.posts.update(postId, postDetails);
-      if (key) {
+      if (keyForStore) {
         // if there's a key, that means we're updating this post from the My Posts page
-        updatedPost.key = key;
+        updatedPost.key = keyForStore;
+
         dispatch(postsSlice.actions.updateOneOfAllPosts(updatedPost));
       } else {
         // if there's no key, we're updating this post from a Post Details page modal
@@ -88,10 +89,10 @@ export const deletePostThunk = createAsyncThunk(
   "posts/deletePost",
   async (deleteDetails: UpdateOrDeletePostArgs, { dispatch }) => {
     try {
-      const { postId, key } = deleteDetails;
+      const { postId, keyForStore } = deleteDetails;
       const deleteSuccessful = await serverMethods.posts.delete(postId);
-      if (deleteSuccessful && key) {
-        dispatch(postsSlice.actions.removeFromAllPosts(key));
+      if (deleteSuccessful && keyForStore) {
+        dispatch(postsSlice.actions.removeFromAllPosts(keyForStore));
       } else if (deleteSuccessful) {
         dispatch(postsSlice.actions.clearCurrentPost());
       }
@@ -125,6 +126,7 @@ export const postsSlice = createSlice({
     addToAllPosts: (state, action: PayloadAction<Post[]>) => {
       // this should add a batch of x posts to the object when the thunk is dispatched to getBatchOfPosts
       const nextKey = Object.keys(state.allPosts).length + 1;
+      if (nextKey > state.totalNumPosts) return;
       const newObj: Record<number, Post> = {};
       const arrOfPosts = action.payload;
       arrOfPosts.map((post, index) => {
