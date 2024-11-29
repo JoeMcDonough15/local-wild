@@ -7,7 +7,6 @@ import {
 import { GetPostsOptions } from "../../types";
 import PostsCarousel from "../PostsCarousel";
 import PostsList from "../PostsList";
-// import OpenModalButton from "../OpenModalButton/OpenModalButton";
 
 interface DisplayPostsProps {
   postsPerPageOrSlide: number;
@@ -50,7 +49,7 @@ const DisplayPosts = ({
       getPostsOptions.userId = currentUser.id;
     }
 
-    dispatch(getBatchOfPostsThunk(getPostsOptions)); // will update postsSoFar, so that now the highestKey should be defined and we can render the carousel
+    dispatch(getBatchOfPostsThunk(getPostsOptions)); // will update postsSoFar, so that now the postsSoFar[highestKey] should be truthy and we can render the return component
   }, [
     currentUser,
     slideOrPageNum,
@@ -82,16 +81,15 @@ const DisplayPosts = ({
         setSlideNum={setSlideOrPageNum}
       />
     );
-  } else {
-    return (
-      <PostsList
-        postsToRender={postsToRender}
-        totalNumPosts={totalNumPosts}
-        postsPerPage={postsPerPageOrSlide}
-        setPageNum={setSlideOrPageNum}
-      />
-    );
   }
+  return (
+    <PostsList
+      postsToRender={postsToRender}
+      totalNumPosts={totalNumPosts}
+      postsPerPage={postsPerPageOrSlide}
+      setPageNum={setSlideOrPageNum}
+    />
+  );
 };
 
 export default DisplayPosts;

@@ -91,3 +91,5 @@ export interface GetPostsOptions {
   slideOrPageNum: number;
   userId?: number;
 }
+
+export type LoadingState = "no" | "loading" | "response" | "finished";
