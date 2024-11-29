@@ -4,7 +4,7 @@ import {
   postsSlice,
   getBatchOfPostsThunk,
 } from "../../store/slices/postsSlice";
-import { GetPostsOptions } from "../../types";
+import { GetPostsOptions, Post } from "../../types";
 import PostsCarousel from "../PostsCarousel";
 import PostsList from "../PostsList";
 
@@ -65,10 +65,13 @@ const DisplayPosts = ({
     setNeedMorePosts(false);
   }
 
-  const postsToRender = [];
+  const postsToRender: Post[] = [];
 
   for (let i = postsPerPageOrSlide - 1; i >= 0; i--) {
-    postsToRender.push(postsSoFar[highestKey - i]);
+    const nextPost = postsSoFar[highestKey - i];
+    if (nextPost) {
+      postsToRender.push(nextPost);
+    }
   }
 
   if (listOrCarousel === "carousel") {

@@ -1,5 +1,7 @@
+import { Post } from "../../types";
+
 interface CarouselProps {
-  postsToRender: any[];
+  postsToRender: Post[];
   totalNumPosts: number;
   highestKey: number;
   slideNum: number;

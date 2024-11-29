@@ -1,9 +1,10 @@
-// import OpenModalButton from "../OpenModalButton/OpenModalButton";
-// import EditPostFormModal from "../EditPostFormModal";
+import OpenModalButton from "../OpenModalButton/OpenModalButton";
+import EditPostFormModal from "../EditPostFormModal";
+import { Post } from "../../types";
 // import DeleteConfirmationModal from "../DeleteConfirmationModal"
 
 interface PostsListProps {
-  postsToRender: any[];
+  postsToRender: Post[];
   totalNumPosts: number;
   postsPerPage: number;
   setPageNum: (num: number) => void;
@@ -36,16 +37,16 @@ const PostsList = ({
               {eachPost.datePhotographed && (
                 <p>{eachPost.datePhotographed.toString()}</p>
               )}
-              {/* <div className="post-control-buttons">
-                  <OpenModalButton
-                    buttonText="Edit"
-                    modalComponent={<EditPostModal />}
-                  />
-                  <OpenModalButton
-                    buttonText="Delete"
-                    modalComponent={<DeleteConfirmationModal />}
-                  />
-                </div> */}
+              <div className="post-control-buttons">
+                <OpenModalButton
+                  buttonText="Edit"
+                  modalComponent={<EditPostFormModal postId={eachPost.id} />}
+                />
+                {/* <OpenModalButton
+                  buttonText="Delete"
+                  modalComponent={<DeleteConfirmationModal />}
+                /> */}
+              </div>
             </div>
           )
         );
