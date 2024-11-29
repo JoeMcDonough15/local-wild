@@ -102,12 +102,10 @@ const EditPostFormModal = ({ postId, key }: UpdateOrDeletePostArgs) => {
       postDetails.partOfDay = partOfDay;
     }
 
+    const editArgs: UpdateOrDeletePostArgs = { postId, key, postDetails };
+
     const serverResponse: PayloadAction<any> = await dispatch(
-      updatePostThunk({
-        postId,
-        key,
-        postDetails,
-      })
+      updatePostThunk(editArgs)
     );
 
     if (serverResponse.payload) {

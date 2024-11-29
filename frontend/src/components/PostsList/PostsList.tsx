@@ -1,6 +1,7 @@
 import OpenModalButton from "../OpenModalButton/OpenModalButton";
 import EditPostFormModal from "../EditPostFormModal";
 import { Post } from "../../types";
+import ConfirmDeleteModal from "../ConfirmDeleteModal";
 // import DeleteConfirmationModal from "../DeleteConfirmationModal"
 
 interface PostsListProps {
@@ -40,12 +41,16 @@ const PostsList = ({
               <div className="post-control-buttons">
                 <OpenModalButton
                   buttonText="Edit"
-                  modalComponent={<EditPostFormModal postId={eachPost.id} />}
+                  modalComponent={
+                    <EditPostFormModal postId={eachPost.id} key={index + 1} />
+                  }
                 />
-                {/* <OpenModalButton
+                <OpenModalButton
                   buttonText="Delete"
-                  modalComponent={<DeleteConfirmationModal />}
-                /> */}
+                  modalComponent={
+                    <ConfirmDeleteModal postId={eachPost.id} key={index + 1} />
+                  }
+                />
               </div>
             </div>
           )
