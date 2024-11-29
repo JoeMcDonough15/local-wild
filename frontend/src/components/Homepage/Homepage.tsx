@@ -1,13 +1,20 @@
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import Introduction from "../Introduction";
 import DisplayPosts from "../DisplayPosts";
+import { useAppDispatch } from "../../store";
+import { userSlice } from "../../store/slices/userSlice";
 
 const Homepage = () => {
   const homepageContent = useRef<HTMLDivElement | null>(null);
+  const dispatch = useAppDispatch();
 
   const scrollContentIntoView = () => {
     homepageContent?.current?.scrollIntoView({ behavior: "smooth" });
   };
+
+  useEffect(() => {
+    dispatch(userSlice.actions.removeCurrentUser());
+  }, [dispatch]);
 
   return (
     <>

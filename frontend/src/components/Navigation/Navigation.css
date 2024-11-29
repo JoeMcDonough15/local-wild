@@ -1,7 +1,7 @@
 .nav-bar {
   background-color: black;
   color: white;
-  height: 75px;
+  height: var(--header-height);
   justify-content: space-between;
   position: fixed;
   top: 0;

@@ -4,7 +4,7 @@ import DisplayPosts from "../DisplayPosts";
 import { useEffect } from "react";
 import { userSlice } from "../../store/slices/userSlice";
 
-const MyPostsPage = () => {
+const MyPostsPage = (): JSX.Element => {
   const sessionUser = useAppSelector((state) => state.session.sessionUser);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -14,11 +14,14 @@ const MyPostsPage = () => {
     dispatch(userSlice.actions.setCurrentUser(sessionUser));
   }, [dispatch, sessionUser]);
 
-  if (!sessionUser) return navigate("/");
+  if (!sessionUser) {
+    navigate("/");
+    return <></>;
+  }
   return (
-    <>
+    <section>
       <DisplayPosts listOrCarousel="list" postsPerPageOrSlide={10} />;
-    </>
+    </section>
   );
 };
 
