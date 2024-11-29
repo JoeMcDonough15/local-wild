@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useModal } from "../../context/useModal";
 import { useAppDispatch, useAppSelector } from "../../store";
 import { PayloadAction } from "@reduxjs/toolkit";
@@ -28,38 +28,36 @@ const EditPostFormModal = ({ postId, key }: UpdateOrDeletePostArgs) => {
     }
   );
 
-  useEffect(() => {
-    if (originalPostLoaded === "no") {
-      setOriginalPostLoaded("loading");
-    } else if (originalPostLoaded === "loading") {
-      dispatch(getSinglePostThunk(postId)).then(() => {
-        setOriginalPostLoaded("response");
-      });
-    } else if (originalPostLoaded === "response") {
-      // we should now have a currentPost
-      if (currentPost) {
-        setTitle(currentPost.title);
-      }
-      if (currentPost?.caption) {
-        setCaption(currentPost.caption);
-      }
-      if (currentPost?.fullDescription) {
-        setFullDescription(currentPost.fullDescription);
-      }
-      if (currentPost?.lat && currentPost?.lng) {
-        setLat(currentPost.lat);
-        setLng(currentPost.lng);
-      }
-      if (currentPost?.datePhotographed) {
-        setDatePhotographed(currentPost.datePhotographed);
-      }
-      if (currentPost?.partOfDay) {
-        setPartOfDay(currentPost.partOfDay);
-      }
-
-      setOriginalPostLoaded("finished");
+  if (originalPostLoaded === "no") {
+    setOriginalPostLoaded("loading");
+  } else if (originalPostLoaded === "loading") {
+    dispatch(getSinglePostThunk(postId)).then(() => {
+      setOriginalPostLoaded("response");
+    });
+  } else if (originalPostLoaded === "response") {
+    // we should now have a currentPost
+    if (currentPost) {
+      setTitle(currentPost.title);
     }
-  }, [dispatch, getSinglePostThunk]);
+    if (currentPost?.caption) {
+      setCaption(currentPost.caption);
+    }
+    if (currentPost?.fullDescription) {
+      setFullDescription(currentPost.fullDescription);
+    }
+    if (currentPost?.lat && currentPost?.lng) {
+      setLat(currentPost.lat);
+      setLng(currentPost.lng);
+    }
+    if (currentPost?.datePhotographed) {
+      setDatePhotographed(currentPost.datePhotographed);
+    }
+    if (currentPost?.partOfDay) {
+      setPartOfDay(currentPost.partOfDay);
+    }
+
+    setOriginalPostLoaded("finished");
+  }
 
   const handleClientSideErrors = () => {
     const clientErrors = {} as { latLngError?: string };

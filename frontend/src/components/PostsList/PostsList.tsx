@@ -2,7 +2,6 @@ import OpenModalButton from "../OpenModalButton/OpenModalButton";
 import EditPostFormModal from "../EditPostFormModal";
 import { Post } from "../../types";
 import ConfirmDeleteModal from "../ConfirmDeleteModal";
-// import DeleteConfirmationModal from "../DeleteConfirmationModal"
 
 interface PostsListProps {
   postsToRender: Post[];

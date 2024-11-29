@@ -2,7 +2,7 @@ import { useState } from "react";
 import { UpdateOrDeletePostArgs } from "../../types";
 import { useModal } from "../../context/useModal";
 import { useAppDispatch } from "../../store";
-import "./ConfirmDelete.css";
+// import "./ConfirmDelete.css";
 import { deletePostThunk } from "../../store/slices/postsSlice";
 import { PayloadAction } from "@reduxjs/toolkit";
 

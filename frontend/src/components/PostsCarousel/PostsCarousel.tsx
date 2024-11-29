@@ -3,16 +3,16 @@ import { Post } from "../../types";
 interface CarouselProps {
   postsToRender: Post[];
   totalNumPosts: number;
-  highestKey: number;
   slideNum: number;
+  postsPerSlide: number;
   setSlideNum: (num: number) => void;
 }
 
 const PostsCarousel = ({
   postsToRender,
   totalNumPosts,
-  highestKey,
   slideNum,
+  postsPerSlide,
   setSlideNum,
 }: CarouselProps) => {
   return (
@@ -43,7 +43,7 @@ const PostsCarousel = ({
           );
         })}
       </div>
-      {highestKey < totalNumPosts && (
+      {totalNumPosts > slideNum * postsPerSlide && (
         <button
           onClick={() => {
             const newSlideNum = slideNum + 1;

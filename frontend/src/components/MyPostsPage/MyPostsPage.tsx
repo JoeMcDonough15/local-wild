@@ -12,7 +12,7 @@ const MyPostsPage = () => {
   useEffect(() => {
     if (!sessionUser) return;
     dispatch(userSlice.actions.setCurrentUser(sessionUser));
-  }, [dispatch]);
+  }, [dispatch, sessionUser]);
 
   if (!sessionUser) return navigate("/");
   return (

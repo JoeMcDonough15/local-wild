@@ -21,7 +21,7 @@ export const getBatchOfPostsThunk = createAsyncThunk(
     try {
       const batchOfPosts = await serverMethods.posts.getBatch(getPostsOptions);
       dispatch(postsSlice.actions.addToAllPosts(batchOfPosts.posts));
-      // dispatch(postsSlice.actions)
+      dispatch(postsSlice.actions.setTotalNumPosts(batchOfPosts.totalNumPosts));
     } catch (error: any) {
       const errorResponse: ServerError = error;
       return errorResponse;
