@@ -1,6 +1,6 @@
-import EditProfileForm from "../EditProfileForm/EditProfileForm";
-import Introduction from "../Introduction";
 import { useRef } from "react";
+import Introduction from "../Introduction";
+// import DisplayPostsCarousel from "../DisplayPostsCarousel";
 
 const Homepage = () => {
   const homepageContent = useRef<HTMLDivElement | null>(null);
@@ -24,7 +24,6 @@ const Homepage = () => {
         ref={homepageContent}
         id="homepage-content"
       ></div>
-      <EditProfileForm />
     </>
   );
 };

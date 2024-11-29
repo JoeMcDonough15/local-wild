@@ -2,13 +2,14 @@ import { configureStore } from "@reduxjs/toolkit";
 import { useDispatch, useSelector } from "react-redux";
 import sessionReducer from "./slices/sessionSlice";
 import usersReducer from "./slices/userSlice";
-// import postsReducer from ".slices//postSlice";
+import postsReducer from "./slices/postsSlice";
 // import commentsReducer from "./slices/commentsSlice";
 
 export const store = configureStore({
   reducer: {
     session: sessionReducer,
     users: usersReducer,
+    posts: postsReducer,
   },
 });
 

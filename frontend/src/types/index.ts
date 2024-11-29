@@ -52,6 +52,11 @@ export interface UpdateOrDeletePostArgs {
   key?: number;
 }
 
+export interface BatchOfPosts {
+  posts: Post[];
+  totalNumPosts: number;
+}
+
 export interface CommentOnPost {
   id: number;
   commentText: string;

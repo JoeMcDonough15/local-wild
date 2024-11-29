@@ -20,7 +20,8 @@ export const getBatchOfPostsThunk = createAsyncThunk(
   async (getPostsOptions: GetPostsOptions, { dispatch }) => {
     try {
       const batchOfPosts = await serverMethods.posts.getBatch(getPostsOptions);
-      dispatch(postsSlice.actions.addToAllPosts(batchOfPosts));
+      dispatch(postsSlice.actions.addToAllPosts(batchOfPosts.posts));
+      // dispatch(postsSlice.actions)
     } catch (error: any) {
       const errorResponse: ServerError = error;
       return errorResponse;
@@ -102,19 +103,25 @@ export const deletePostThunk = createAsyncThunk(
 );
 
 interface PostsState {
+  totalNumPosts: number;
   allPosts: Record<number, Post>;
   currentPost: Post | null;
 }
 
 const initialState: PostsState = {
+  totalNumPosts: 0,
   allPosts: {},
   currentPost: null,
 };
 
+// reducer
 export const postsSlice = createSlice({
-  name: "postsSlice",
+  name: "posts",
   initialState,
   reducers: {
+    setTotalNumPosts: (state, action: PayloadAction<number>) => {
+      state.totalNumPosts = action.payload;
+    },
     addToAllPosts: (state, action: PayloadAction<Post[]>) => {
       // this should add a batch of x posts to the object when the thunk is dispatched to getBatchOfPosts
       const nextKey = Object.keys(state.allPosts).length + 1;

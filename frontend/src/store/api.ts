@@ -6,6 +6,7 @@ import type {
   Post,
   PostUpdate,
   GetPostsOptions,
+  BatchOfPosts,
 } from "../types";
 
 const URL_ROOT = "/api";
@@ -110,7 +111,9 @@ const serverMethods = {
     },
   },
   posts: {
-    getBatch: async (getPostsOptions: GetPostsOptions): Promise<Post[]> => {
+    getBatch: async (
+      getPostsOptions: GetPostsOptions
+    ): Promise<BatchOfPosts> => {
       const { givenSize, slideOrPageNum, userId } = getPostsOptions;
       let url = `/posts?slide=${slideOrPageNum}`;
       if (givenSize !== undefined) {
@@ -119,8 +122,8 @@ const serverMethods = {
       if (userId) {
         url += `&userId=${userId}`;
       }
-      const data: { posts: Post[] } = await fetchWithJson(url);
-      return data.posts;
+      const data: BatchOfPosts = await fetchWithJson(url);
+      return data;
     },
     getOne: async (postId: number): Promise<Post> => {
       const data: { post: Post } = await fetchWithJson(`/posts/${postId}`);

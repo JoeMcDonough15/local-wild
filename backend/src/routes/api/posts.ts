@@ -60,7 +60,7 @@ router.get("/", async (req, res, next) => {
       posts = await prisma.post.findMany(queryObj);
       totalNumPosts = await prisma.post.count();
     }
-    res.status(200).json({ posts });
+    res.status(200).json({ posts, totalNumPosts });
   } catch (err) {
     next(err);
   }
