@@ -6,6 +6,7 @@ import {
 } from "../../store/slices/postsSlice";
 import { GetPostsOptions } from "../../types";
 import PostsCarousel from "../PostsCarousel";
+import PostsList from "../PostsList";
 // import OpenModalButton from "../OpenModalButton/OpenModalButton";
 
 interface DisplayPostsProps {
@@ -83,37 +84,12 @@ const DisplayPosts = ({
     );
   } else {
     return (
-      // <PostsAsList posts={postsToRender} totalNumPosts={totalNumPosts} postsPerPage={postsPerSlideOrPage} pageNum={slideOrPageNum}, setPageNum={setSlideOrPageNum} />
-      <section className="posts-list flex-col">
-        {postsToRender.map((eachPost, index) => {
-          return (
-            eachPost && (
-              <div key={index + 1} className="post-row flex-row">
-                <img
-                  className="post-thumbnail"
-                  src={eachPost.imageUrl}
-                  alt={eachPost.title}
-                />
-                <h3>{eachPost.title}</h3>
-                {eachPost.datePhotographed && (
-                  <p>{eachPost.datePhotographed.toString()}</p>
-                )}
-                {/* <div className="post-control-buttons">
-                  <OpenModalButton
-                    buttonText="Edit"
-                    modalComponent={<EditPostModal />}
-                  />
-                  <OpenModalButton
-                    buttonText="Delete"
-                    modalComponent={<DeleteConfirmationModal />}
-                  />
-                </div> */}
-              </div>
-            )
-          );
-        })}
-        <ul className="page-buttons flex-row"></ul>
-      </section>
+      <PostsList
+        postsToRender={postsToRender}
+        totalNumPosts={totalNumPosts}
+        postsPerPage={postsPerPageOrSlide}
+        setPageNum={setSlideOrPageNum}
+      />
     );
   }
 };
