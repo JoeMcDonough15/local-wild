@@ -5,7 +5,6 @@ import { useAppSelector, useAppDispatch } from "../../store";
 const EditProfileForm = () => {
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.session.sessionUser);
-
   //image url to send to aws
   const [imgFile, setImgFile] = useState<File | null>(null);
   //telling us if we should show the image

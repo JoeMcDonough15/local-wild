@@ -53,13 +53,14 @@ export const validatePostBody = [
     handleValidationErrors,
 ];
 //backend validation for post creation
-export const validateEntirePost = (req, _res, next) => {
+export const checkForImage = (req, _res, next) => {
     if (!req.file) {
         const err = {
             title: "File required",
             message: "You must provide an image file when making a post.",
+            status: 400,
         };
         return next(err);
     }
-    validatePostBody;
+    next();
 };

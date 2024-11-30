@@ -2,7 +2,7 @@ import express from "express";
 import { requireAuth } from "../../utils/auth.js";
 import { prisma } from "../../db/database_client.js";
 import { singleMulterUpload, singlePublicFileUpload } from "../../aws/index.js";
-import { validatePostBody, validateEntirePost, } from "../../utils/validation.js";
+import { validatePostBody, checkForImage } from "../../utils/validation.js";
 const router = express.Router();
 // * get all posts (for Homepage,  UserProfilePage, and MyPostsPage)
 router.get("/", async (req, res, next) => {
@@ -87,12 +87,12 @@ router.get("/:id", requireAuth, async (req, res, next) => {
     }
 });
 // * create a new post
-router.post("/", requireAuth, singleMulterUpload("image"), validateEntirePost, async (req, res, next) => {
+router.post("/", requireAuth, singleMulterUpload("image"), checkForImage, validatePostBody, async (req, res, next) => {
     const id = req.user?.id;
     const imageFile = req.file;
     const { title, caption, fullDescription, lat, lng, partOfDay, datePhotographed, } = req.body;
     if (!imageFile || !id || !title) {
-        return; // errors should have already been thrown by this point by requireAuth or validateEntirePost
+        return; // errors should have already been thrown by this point by middlewares
     }
     try {
         const imageUrl = await singlePublicFileUpload(imageFile);

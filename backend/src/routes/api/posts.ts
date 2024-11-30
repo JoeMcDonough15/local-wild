@@ -3,10 +3,7 @@ import { requireAuth } from "../../utils/auth.js";
 import type { ApiError, NewPost } from "../../types/index.js";
 import { prisma } from "../../db/database_client.js";
 import { singleMulterUpload, singlePublicFileUpload } from "../../aws/index.js";
-import {
-  validatePostBody,
-  validateEntirePost,
-} from "../../utils/validation.js";
+import { validatePostBody, checkForImage } from "../../utils/validation.js";
 
 const router = express.Router();
 
@@ -104,8 +101,9 @@ router.post(
   "/",
   requireAuth,
   singleMulterUpload("image"),
-  validateEntirePost,
-  async (req, res, next) => {
+  checkForImage,
+  validatePostBody,
+  async (req: Request, res: Response, next: NextFunction) => {
     const id = req.user?.id;
     const imageFile = req.file;
     const {
@@ -118,7 +116,7 @@ router.post(
       datePhotographed,
     } = req.body;
     if (!imageFile || !id || !title) {
-      return; // errors should have already been thrown by this point by requireAuth or validateEntirePost
+      return; // errors should have already been thrown by this point by middlewares
     }
     try {
       const imageUrl = await singlePublicFileUpload(imageFile);

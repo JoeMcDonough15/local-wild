@@ -46,10 +46,6 @@ app.use(
 
 app.use(routes);
 
-// app.get("/", (_req, res, _next) => {
-//   res.status(200).json({ message: "TEST" });
-// });
-
 // Catch unhandled requests and forward to error handler.
 app.use((_req, _res, next) => {
   const err: ApiError = {
@@ -67,7 +63,7 @@ app.use((_req, _res, next) => {
 // Error formatter
 app.use((err: ApiError, _req: Request, res: Response, _next: NextFunction) => {
   res.status(err.status || 500);
-  // console.error('error in the error formatter: ', err);
+  console.error("error in the error formatter: ", err);
   res.json({
     title: err.title || "Server Error",
     message: err.message,

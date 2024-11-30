@@ -1,0 +1,17 @@
+.carousel.flex-row {
+  position: fixed;
+  left: 30vh;
+  top: 30vh;
+  z-index: -999;
+}
+
+.carousel-img-container {
+  height: 200px;
+  width: 200px;
+}
+
+.carousel-img {
+  object-fit: contain;
+  height: 100%;
+  width: 100%;
+}
