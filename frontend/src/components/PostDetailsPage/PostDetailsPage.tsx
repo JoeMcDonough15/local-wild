@@ -1,52 +1,105 @@
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useAppSelector, useAppDispatch } from "../../store";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { getSinglePostThunk } from "../../store/slices/postsSlice";
 import PostImageAndCaption from "../PostImageAndCaption";
+import PostTitleAndDetails from "../PostTitleAndDetails";
+import FullScreenImage from "../FullScreenImage";
+import OpenModalButton from "../OpenModalButton/OpenModalButton";
+import EditPostFormModal from "../EditPostFormModal";
+import ConfirmDeleteModal from "../ConfirmDeleteModal";
+import SignupFormModal from "../SignupFormModal/SignupFormModal";
+import LoginFormModal from "../LoginFormModal/LoginFormModal";
 
 const PostDetailsPage = () => {
   const sessionUser = useAppSelector((state) => state.session.sessionUser);
   const currentPost = useAppSelector((state) => state.posts.currentPost);
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
   const { id } = useParams();
-  // * in a useEffect:
-  //    take the id from the params to then dispatch a thunk that will go get all the details for that post
+  const [userOwnsPost, setUserOwnsPost] = useState(false);
+  const [imageFullScreen, setImageFullScreen] = useState(false);
+
   useEffect(() => {
     if (!sessionUser || !id) {
       return;
     }
     dispatch(getSinglePostThunk(Number(id)));
-  }, [dispatch, id, sessionUser]);
-  // if there is no sessionUser, redirect the user home and return <></>
+  }, [sessionUser, id, dispatch]);
+
   if (!sessionUser) {
-    navigate("/");
-    // maybe instead of automatically navigating back home, you display login/signup/go-back-home buttons
-    // and a message that says they must be signed in to view a post's details
-    return <></>;
+    return (
+      <>
+        <h3>Please log in or make an account to view a post up close!</h3>
+        <>
+          <OpenModalButton
+            buttonText="Sign Up"
+            modalComponent={<SignupFormModal />}
+          />
+          <OpenModalButton
+            buttonText="Login"
+            modalComponent={<LoginFormModal />}
+          />
+        </>
+        <Link to="/home#skip-intro">Go Back Home</Link>
+      </>
+    );
   }
 
-  // if there is no currentPost, return a message that says This Post Couldn't Be Found
   if (!currentPost) {
     return <h1>Post Couldn't Be Found</h1>;
   }
 
-  // otherwise, return...
+  if (!userOwnsPost && sessionUser.id === currentPost.photographerId) {
+    setUserOwnsPost(true);
+  }
+
   return (
-    <section className="post-details-page">
-      <div className="post-details-first-row flex-row">
-        <PostImageAndCaption
-          imageUrl={currentPost?.imageUrl}
-          imageText={currentPost?.caption ? currentPost.caption : ""}
-          // plus classes for the container, image, and caption styles
+    <>
+      {imageFullScreen ? (
+        <FullScreenImage
+          setFullScreen={setImageFullScreen}
+          imageUrl={currentPost.imageUrl}
+          imageAltText={currentPost.title}
         />
-        {/* <PostTitleAndDetails /> */}
-      </div>
-      <div className="post-details-second-row flex-row">
-        {/* <CommentsSection /> */}
-        {/* <PostLocationMap /> */}
-      </div>
-    </section>
+      ) : (
+        <section className="post-details-page">
+          <div className="post-details-first-row flex-row">
+            <button
+              onClick={() => {
+                setImageFullScreen(true);
+              }}
+              className="full-screen-button"
+              type="button"
+            >
+              View Full Screen
+            </button>
+
+            <PostImageAndCaption
+              imageUrl={currentPost?.imageUrl}
+              imageText={currentPost?.caption ? currentPost.caption : ""}
+              // plus classes for the container, image, and caption styles
+            />
+            <PostTitleAndDetails />
+          </div>
+          <div className="post-details-second-row flex-row">
+            {/* <CommentsSection /> */}
+            {/* <PostLocationMap /> */}
+          </div>
+          {userOwnsPost && (
+            <div className="post-control-buttons flex-row">
+              <OpenModalButton
+                buttonText="Edit"
+                modalComponent={<EditPostFormModal postId={currentPost.id} />}
+              />
+              <OpenModalButton
+                buttonText="Delete"
+                modalComponent={<ConfirmDeleteModal postId={currentPost.id} />}
+              />
+            </div>
+          )}
+        </section>
+      )}
+    </>
   );
 };
 

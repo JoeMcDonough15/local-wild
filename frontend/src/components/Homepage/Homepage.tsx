@@ -28,7 +28,11 @@ const Homepage = () => {
       >
         down
       </button>
-      <div style={{ marginTop: "200vh" }} ref={beginHomepageContent}></div>
+      <div
+        id="skip-intro"
+        style={{ marginTop: "200vh" }}
+        ref={beginHomepageContent}
+      ></div>
       <section className="homepage-content flex-col">
         <DisplayPosts listOrCarousel="carousel" postsPerPageOrSlide={3} />
         <OurMission />
