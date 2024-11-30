@@ -6,6 +6,9 @@ import { makeNewPostThunk } from "../../store/slices/postsSlice";
 const CreatePostForm = (): JSX.Element => {
   const dispatch = useAppDispatch();
   const sessionUser = useAppSelector((state) => state.session.sessionUser);
+  const [imgFile, setImgFile] = useState<File | null>(null);
+  const [showUpload, setShowUpload] = useState(true);
+  const [previewUrl, setPreviewUrl] = useState<string>("");
   const [title, setTitle] = useState("");
   const [caption, setCaption] = useState("");
   const [fullDescription, setFullDescription] = useState("");
@@ -21,6 +24,21 @@ const CreatePostForm = (): JSX.Element => {
   );
 
   if (!sessionUser) return <></>;
+
+  const updateImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target?.files?.[0];
+    const reader = new FileReader();
+    if (file) {
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        if (reader.result) {
+          setPreviewUrl(reader.result.toString());
+        }
+      };
+      setImgFile(file);
+      setShowUpload(false);
+    }
+  };
 
   const handleClientSideErrors = () => {
     const clientErrors = {} as { latLngError?: string };
@@ -45,6 +63,13 @@ const CreatePostForm = (): JSX.Element => {
     setErrors({});
 
     const postDetails = new FormData();
+
+    if (!imgFile || !title) {
+      return;
+    }
+
+    postDetails.append("image", imgFile);
+    postDetails.append("title", title);
 
     if (caption) {
       postDetails.append("caption", caption);
@@ -78,7 +103,32 @@ const CreatePostForm = (): JSX.Element => {
     <>
       <h1 className="update-post-header">Create A Post</h1>
       {errors.serverError && <p className="error-text">{errors.serverError}</p>}
-      <form className="form-container flex-col" onSubmit={handleSubmit}>
+      <form
+        encType="multipart/form-data"
+        className="form-container flex-col"
+        onSubmit={handleSubmit}
+      >
+        <div>
+          <button type="button">
+            <label htmlFor="file-upload">
+              {" "}
+              {showUpload ? "Choose Image" : "Change Image"}
+              <input
+                hidden
+                type="file"
+                id="file-upload"
+                name="img_url"
+                onChange={updateImage}
+                accept=".jpg, .jpeg, .png, .gif"
+              />
+            </label>
+          </button>
+          {!showUpload && (
+            <div>
+              <img src={previewUrl} alt="preview" />
+            </div>
+          )}
+        </div>
         <label>
           Title
           <input

@@ -23,6 +23,7 @@ const handleValidationErrors = (
     err.title = "Bad request.";
     next(err);
   }
+
   next();
 };
 
@@ -66,7 +67,7 @@ export const validatePostBody = [
 ];
 
 //backend validation for post creation
-export const validateEntirePost = (
+export const checkForImage = (
   req: Request,
   _res: Response,
   next: NextFunction
@@ -75,9 +76,10 @@ export const validateEntirePost = (
     const err: ApiError = {
       title: "File required",
       message: "You must provide an image file when making a post.",
+      status: 400,
     };
     return next(err);
   }
 
-  validatePostBody;
+  next();
 };

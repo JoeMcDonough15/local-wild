@@ -50,15 +50,16 @@ async function fetchWithFormData<T>(
       .then((data) => data.json())
       .then((tokenObject) => tokenObject.token));
   if (!xsrfToken) throw new Error("No xsrf-token");
-  const response = await fetch(`${URL_ROOT}${url}`, {
-    ...options,
-    headers: { "XSRF-Token": xsrfToken },
-  });
+  const requestOptions = { ...options, headers: { "XSRF-Token": xsrfToken } };
+  console.log("request options: ", requestOptions);
+  const response = await fetch(`${URL_ROOT}${url}`, requestOptions);
 
   if (response.status >= 400) {
-    const error = await response.json();
-    throw error;
+    console.log("error response: ", response);
+    throw response;
   }
+
+  console.log("response: ", response);
 
   return await response.json();
 }
@@ -129,11 +130,12 @@ const serverMethods = {
       const data: { post: Post } = await fetchWithJson(`/posts/${postId}`);
       return data.post;
     },
-    create: async (newPost: FormData): Promise<Post> => {
+    create: async (formData: FormData): Promise<Post> => {
       const data: { post: Post } = await fetchWithFormData("/posts", {
         method: "POST",
-        body: newPost,
+        body: formData,
       });
+      console.log("data from server: ", data);
       return data.post;
     },
     update: async (postId: number, newPostData: PostUpdate): Promise<Post> => {

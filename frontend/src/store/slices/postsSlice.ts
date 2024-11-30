@@ -46,9 +46,9 @@ export const getSinglePostThunk = createAsyncThunk(
 // thunk to create a post
 export const makeNewPostThunk = createAsyncThunk(
   "posts/createNewPost",
-  async (postDetails: FormData, { dispatch }) => {
+  async (formData: FormData, { dispatch }) => {
     try {
-      const newPost = await serverMethods.posts.create(postDetails);
+      const newPost = await serverMethods.posts.create(formData);
       dispatch(postsSlice.actions.setCurrentPost(newPost));
     } catch (error: any) {
       const errorResponse: ServerError = error;

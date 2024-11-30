@@ -14,6 +14,7 @@ import { restoreUserThunk } from "./store/slices/sessionSlice";
 import { useAppDispatch } from "./store";
 import Footer from "./components/Footer";
 import MyPostsPage from "./components/MyPostsPage";
+import CreatePostForm from "./components/CreatePostForm";
 
 function ErrorBoundary() {
   const error = useRouteError();
@@ -86,6 +87,11 @@ const router = createBrowserRouter([
       {
         path: "/my-posts",
         element: <MyPostsPage />,
+        errorElement: <ErrorBoundary />,
+      },
+      {
+        path: "/posts/new",
+        element: <CreatePostForm />,
         errorElement: <ErrorBoundary />,
       },
     ],
