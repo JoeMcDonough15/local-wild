@@ -1,0 +1,21 @@
+.our-mission-container {
+  position: relative;
+  width: 100vw;
+}
+
+.our-mission-img,
+.our-mission-text {
+  position: absolute;
+}
+
+.our-mission-img {
+  object-fit: cover;
+  width: 100%;
+}
+
+.our-mission-text {
+  color: white;
+  right: 30px;
+  text-align: right;
+  top: 270px;
+}

@@ -13,8 +13,14 @@ a {
   text-decoration: none;
 }
 
-.main-content {
-  margin-top: var(--header-height);
+.header,
+.footer {
+  background-color: black;
+  color: white;
+}
+
+.main-container {
+  padding: 0 2vw;
 }
 
 .flex-row,

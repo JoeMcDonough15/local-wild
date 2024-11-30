@@ -1,0 +1,15 @@
+.homepage-content {
+  gap: 100px;
+  height: 80vh;
+  left: 0;
+  padding-top: 125px;
+  position: fixed;
+  overflow: scroll;
+  right: 0;
+  top: 0;
+  z-index: -999;
+}
+
+.homepage-content > .carousel.flex-row {
+  height: 100%;
+}

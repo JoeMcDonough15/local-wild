@@ -3,6 +3,8 @@ import Introduction from "../Introduction";
 import DisplayPosts from "../DisplayPosts";
 import { useAppDispatch } from "../../store";
 import { userSlice } from "../../store/slices/userSlice";
+import "./Homepage.css";
+import OurMission from "../OurMission";
 
 const Homepage = () => {
   const beginHomepageContent = useRef<HTMLDivElement | null>(null);
@@ -27,7 +29,10 @@ const Homepage = () => {
         down
       </button>
       <div style={{ marginTop: "200vh" }} ref={beginHomepageContent}></div>
-      <DisplayPosts listOrCarousel="carousel" postsPerPageOrSlide={3} />
+      <section className="homepage-content flex-col">
+        <DisplayPosts listOrCarousel="carousel" postsPerPageOrSlide={3} />
+        <OurMission />
+      </section>
     </>
   );
 };

@@ -14,7 +14,7 @@ const Navigation = () => {
     await dispatch(logoutThunk());
   };
   return (
-    <nav className="nav-bar flex-row">
+    <nav className="nav-bar flex-row main-container">
       <div className="nav-left">
         <Link to="/">localWild Logo</Link>
       </div>
