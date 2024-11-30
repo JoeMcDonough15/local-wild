@@ -8,14 +8,20 @@ const Introduction = () => {
   const [introImage, setIntroImage] = useState<string>(introImageLandscape);
 
   useEffect(() => {
-    window.addEventListener("resize", () => {
+    const determineImage = () => {
       if (window.innerWidth < 500) {
         setIntroImage(introImagePortrait);
       } else {
         setIntroImage(introImageLandscape);
       }
-    });
-  }, [introImage]);
+    };
+
+    determineImage();
+
+    window.addEventListener("resize", determineImage);
+
+    return () => window.removeEventListener("resize", determineImage);
+  }, [setIntroImage]);
 
   return (
     <>

@@ -5,10 +5,6 @@ export interface ServerError {
   status?: number;
 }
 
-export interface ConfirmationMessage {
-  message: string;
-}
-
 export interface User {
   id: number;
   username: string;
@@ -29,20 +25,36 @@ export interface SafeUser {
   username: string;
 }
 
-export interface Post {
-  id: number;
-  imageUrl: string;
+export interface PostUpdate {
   title: string;
-  photographerId: number;
   caption?: string;
   fullDescription?: string;
   lat?: number;
   lng?: number;
   partOfDay?: string;
   datePhotographed?: Date;
+}
+
+export interface Post extends PostUpdate {
+  id: number;
+  imageUrl: string;
+  photographer?: { username: string; id: number };
+  photographerId: number;
+  comments?: CommentOnPost[];
   createdAt: Date;
   updatedAt: Date;
-  comments: CommentOnPost[];
+  key?: number;
+}
+
+export interface UpdateOrDeletePostArgs {
+  postId: number;
+  postDetails?: PostUpdate;
+  keyForStore?: number;
+}
+
+export interface BatchOfPosts {
+  posts: Post[];
+  totalNumPosts: number;
 }
 
 export interface CommentOnPost {
@@ -73,3 +85,11 @@ export interface Signup {
   email: string;
   password: string;
 }
+
+export interface GetPostsOptions {
+  givenSize?: number;
+  slideOrPageNum: number;
+  userId?: number;
+}
+
+export type LoadingState = "no" | "loading" | "response" | "finished";

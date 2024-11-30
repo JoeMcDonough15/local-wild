@@ -23,7 +23,13 @@ export const singlePublicFileUpload = async (file: Express.Multer.File) => {
     },
   }).done();
 
-  return (await client).Location;
+  const imageUrl = (await client).Location;
+
+  if (!imageUrl) {
+    throw new Error("failed to upload image");
+  }
+
+  return imageUrl;
 };
 
 const storage = multer.memoryStorage();

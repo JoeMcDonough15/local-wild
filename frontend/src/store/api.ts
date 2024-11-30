@@ -1,5 +1,13 @@
 import Cookies from "js-cookie";
-import type { Login, ConfirmationMessage, User, Signup } from "../types";
+import type {
+  Login,
+  User,
+  Signup,
+  Post,
+  PostUpdate,
+  GetPostsOptions,
+  BatchOfPosts,
+} from "../types";
 
 const URL_ROOT = "/api";
 
@@ -59,7 +67,7 @@ const serverMethods = {
   session: {
     restore: async (): Promise<User | null> => {
       const data: { user: User | null } = await fetchWithJson("/session");
-      return data?.user;
+      return data.user;
     },
     login: async (loginCredentials: Login): Promise<User> => {
       const data: { user: User } = await fetchWithJson("/session", {
@@ -69,7 +77,10 @@ const serverMethods = {
       return data.user;
     },
     logout: async (): Promise<string> => {
-      return fetchWithJson("/session", { method: "DELETE" });
+      const data: { message: string } = await fetchWithJson("/session", {
+        method: "DELETE",
+      });
+      return data.message;
     },
     signUp: async (userDetails: Signup): Promise<User> => {
       const data: { user: User } = await fetchWithJson("/session/signup", {
@@ -86,12 +97,58 @@ const serverMethods = {
       return data.user;
     },
     deleteAccount: async (): Promise<string> => {
-      return fetchWithJson("/session/deactivate", { method: "DELETE" });
+      const data: { message: string } = await fetchWithJson(
+        "/session/deactivate",
+        { method: "DELETE" }
+      );
+      return data.message;
     },
   },
   users: {
     getUser: async (userId: number): Promise<User> => {
-      return fetchWithJson(`/users/${userId}`);
+      const data: { user: User } = await fetchWithJson(`/users/${userId}`);
+      return data.user;
+    },
+  },
+  posts: {
+    getBatch: async (
+      getPostsOptions: GetPostsOptions
+    ): Promise<BatchOfPosts> => {
+      const { givenSize, slideOrPageNum, userId } = getPostsOptions;
+      let url = `/posts?slide=${slideOrPageNum}`;
+      if (givenSize !== undefined) {
+        url += `&givenSize=${givenSize}`;
+      }
+      if (userId) {
+        url += `&userId=${userId}`;
+      }
+      const data: BatchOfPosts = await fetchWithJson(url);
+      return data;
+    },
+    getOne: async (postId: number): Promise<Post> => {
+      const data: { post: Post } = await fetchWithJson(`/posts/${postId}`);
+      return data.post;
+    },
+    create: async (newPost: FormData): Promise<Post> => {
+      const data: { post: Post } = await fetchWithFormData("/posts", {
+        method: "POST",
+        body: newPost,
+      });
+      return data.post;
+    },
+    update: async (postId: number, newPostData: PostUpdate): Promise<Post> => {
+      const data: { post: Post } = await fetchWithJson(`/posts/${postId}`, {
+        method: "PUT",
+        body: JSON.stringify(newPostData),
+      });
+      return data.post;
+    },
+    delete: async (postId: number): Promise<string> => {
+      const data: { message: string } = await fetchWithJson(
+        `/posts/${postId}`,
+        { method: "DELETE" }
+      );
+      return data.message;
     },
   },
 };

@@ -13,6 +13,7 @@ import Homepage from "./components/Homepage";
 import { restoreUserThunk } from "./store/slices/sessionSlice";
 import { useAppDispatch } from "./store";
 import Footer from "./components/Footer";
+import MyPostsPage from "./components/MyPostsPage";
 
 function ErrorBoundary() {
   const error = useRouteError();
@@ -55,8 +56,12 @@ function Layout() {
   return (
     <ModalProvider>
       <ScrollRestoration />
-      <Navigation />
-      <Outlet />
+      <header>
+        <Navigation />
+      </header>
+      <main className="main-content">
+        <Outlet />{" "}
+      </main>
       <Footer />
       <Modal />
     </ModalProvider>
@@ -76,6 +81,11 @@ const router = createBrowserRouter([
       {
         path: "/home",
         element: <Homepage />,
+        errorElement: <ErrorBoundary />,
+      },
+      {
+        path: "/my-posts",
+        element: <MyPostsPage />,
         errorElement: <ErrorBoundary />,
       },
     ],

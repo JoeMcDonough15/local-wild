@@ -1,13 +1,20 @@
-import EditProfileForm from "../EditProfileForm/EditProfileForm";
+import { useRef, useEffect } from "react";
 import Introduction from "../Introduction";
-import { useRef } from "react";
+import DisplayPosts from "../DisplayPosts";
+import { useAppDispatch } from "../../store";
+import { userSlice } from "../../store/slices/userSlice";
 
 const Homepage = () => {
   const homepageContent = useRef<HTMLDivElement | null>(null);
+  const dispatch = useAppDispatch();
 
   const scrollContentIntoView = () => {
     homepageContent?.current?.scrollIntoView({ behavior: "smooth" });
   };
+
+  useEffect(() => {
+    dispatch(userSlice.actions.removeCurrentUser());
+  }, [dispatch]);
 
   return (
     <>
@@ -23,8 +30,9 @@ const Homepage = () => {
         style={{ marginTop: "200vh" }}
         ref={homepageContent}
         id="homepage-content"
-      ></div>
-      <EditProfileForm />
+      >
+        <DisplayPosts listOrCarousel="carousel" postsPerPageOrSlide={3} />
+      </div>
     </>
   );
 };

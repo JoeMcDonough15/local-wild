@@ -12,6 +12,7 @@ async function main() {
             profileImageUrl: "sammple/image.png",
             location: "Philadelphia",
             numYearsExperience: 4,
+            numPosts: 1,
             favoriteSubject: "birds",
             posts: {
                 create: {

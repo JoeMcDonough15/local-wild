@@ -1,44 +1,12 @@
 import express from "express";
 import type { Request, Response, NextFunction } from "express";
 import bcrypt from "bcryptjs";
-import { check } from "express-validator";
-import handleValidationErrors from "../../utils/validation.js";
+import { validateLogin, validateSignup } from "../../utils/validation.js";
 import { requireAuth, setTokenCookie } from "../../utils/auth.js";
-import type { ApiError, NewUser, SafeUser } from "../../types/index.js";
+import type { ApiError } from "../../types/index.js";
 import { prisma } from "../../db/database_client.js";
 import { singleMulterUpload, singlePublicFileUpload } from "../../aws/index.js";
 const router = express.Router();
-
-// backend validation for login
-const validateLogin = [
-  check("email")
-    .exists({ checkFalsy: true })
-    .notEmpty()
-    .isEmail()
-    .withMessage("Please provide a valid email."),
-  check("password")
-    .exists({ checkFalsy: true })
-    .withMessage("Please provide a password."),
-  handleValidationErrors,
-];
-
-//backend validation for signup
-const validateSignup = [
-  check("email")
-    .exists({ checkFalsy: true })
-    .isEmail()
-    .withMessage("Please provide a valid email."),
-  check("username")
-    .exists({ checkFalsy: true })
-    .isLength({ min: 4 })
-    .withMessage("Please provide a username with at least 4 characters."),
-  check("username").not().isEmail().withMessage("Username cannot be an email."),
-  check("password")
-    .exists({ checkFalsy: true })
-    .isLength({ min: 6 })
-    .withMessage("Password must be 6 characters or more."),
-  handleValidationErrors,
-];
 
 // Get currently logged in user
 router.get("/", (req, res) => {
@@ -66,10 +34,11 @@ router.post(
     if (!user || !bcrypt.compareSync(password, user.password)) {
       const err: ApiError = {
         message: "The provided credentials were invalid.",
+        status: 401,
+        title: "Login failed",
+        errors: { "Login failed": "The provided credentials were invalid" },
       };
-      err.status = 401;
-      err.title = "Login failed";
-      err.errors = { "Login failed": "The provided credentials were invalid" };
+
       return next(err);
     }
 
@@ -187,9 +156,8 @@ router.put(
 
       if (!userToUpdate) {
         const userNotFound: ApiError = {
-          message: "User not found",
+          message: "This user could not be found",
           status: 404,
-          errors: { userNotFoundError: "This user could not be found" },
         };
         return next(userNotFound);
       }

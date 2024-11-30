@@ -1,4 +1,4 @@
-import { validationResult } from "express-validator";
+import { validationResult, check } from "express-validator";
 import type { NextFunction, Request, Response } from "express";
 import type { ApiError } from "../types/index.js";
 
@@ -26,4 +26,58 @@ const handleValidationErrors = (
   next();
 };
 
-export default handleValidationErrors;
+// backend validation for login
+export const validateLogin = [
+  check("email")
+    .exists({ checkFalsy: true })
+    .notEmpty()
+    .isEmail()
+    .withMessage("Please provide a valid email."),
+  check("password")
+    .exists({ checkFalsy: true })
+    .withMessage("Please provide a password."),
+  handleValidationErrors,
+];
+
+//backend validation for signup
+export const validateSignup = [
+  check("email")
+    .exists({ checkFalsy: true })
+    .isEmail()
+    .withMessage("Please provide a valid email."),
+  check("username")
+    .exists({ checkFalsy: true })
+    .isLength({ min: 4 })
+    .withMessage("Please provide a username with at least 4 characters."),
+  check("username").not().isEmail().withMessage("Username cannot be an email."),
+  check("password")
+    .exists({ checkFalsy: true })
+    .isLength({ min: 6 })
+    .withMessage("Password must be 6 characters or more."),
+  handleValidationErrors,
+];
+
+export const validatePostBody = [
+  check("title")
+    .exists({ checkFalsy: true })
+    .notEmpty()
+    .withMessage("You must include a title for your post."),
+  handleValidationErrors,
+];
+
+//backend validation for post creation
+export const validateEntirePost = (
+  req: Request,
+  _res: Response,
+  next: NextFunction
+) => {
+  if (!req.file) {
+    const err: ApiError = {
+      title: "File required",
+      message: "You must provide an image file when making a post.",
+    };
+    return next(err);
+  }
+
+  validatePostBody;
+};

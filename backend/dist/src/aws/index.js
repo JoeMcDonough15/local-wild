@@ -19,7 +19,11 @@ export const singlePublicFileUpload = async (file) => {
             ACL: "public-read",
         },
     }).done();
-    return (await client).Location;
+    const imageUrl = (await client).Location;
+    if (!imageUrl) {
+        throw new Error("failed to upload image");
+    }
+    return imageUrl;
 };
 const storage = multer.memoryStorage();
 export const singleMulterUpload = (nameOfKey //'image' comes in, from the form field's name attribute
