@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useAppSelector, useAppDispatch } from "../../store";
 import { useParams, useNavigate } from "react-router-dom";
 import { getSinglePostThunk } from "../../store/slices/postsSlice";
+import PostImageAndCaption from "../PostImageAndCaption";
 
 const PostDetailsPage = () => {
   const sessionUser = useAppSelector((state) => state.session.sessionUser);
@@ -34,7 +35,11 @@ const PostDetailsPage = () => {
   return (
     <section className="post-details-page">
       <div className="post-details-first-row flex-row">
-        {/* <PostImageWithCaption imageUrl={imageUrl} caption={caption} /> */}
+        <PostImageAndCaption
+          imageUrl={currentPost?.imageUrl}
+          imageText={currentPost?.caption ? currentPost.caption : ""}
+          // plus classes for the container, image, and caption styles
+        />
         {/* <PostTitleAndDetails /> */}
       </div>
       <div className="post-details-second-row flex-row">
