@@ -139,7 +139,9 @@ export const postsSlice = createSlice({
       // for use when a user deletes one of their posts from the My Posts page
       // we want to see that single post removed from the posts that are being used as state for that user's individual posts page
       // number in the PayloadAction refers to the key we're removing from state.allPosts, not the id of the post that was just deleted.
+      // ! delete requires refresh, so it's not working; also test decrementing the totalNumPosts
       delete state.allPosts[action.payload];
+      state.totalNumPosts--;
     },
     updateOneOfAllPosts: (state, action: PayloadAction<Post>) => {
       // for use when editing a post from the My Posts page.  A list of all the posts I've made are displayed
