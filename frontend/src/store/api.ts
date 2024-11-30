@@ -51,15 +51,12 @@ async function fetchWithFormData<T>(
       .then((tokenObject) => tokenObject.token));
   if (!xsrfToken) throw new Error("No xsrf-token");
   const requestOptions = { ...options, headers: { "XSRF-Token": xsrfToken } };
-  console.log("request options: ", requestOptions);
+
   const response = await fetch(`${URL_ROOT}${url}`, requestOptions);
 
   if (response.status >= 400) {
-    console.log("error response: ", response);
     throw response;
   }
-
-  console.log("response: ", response);
 
   return await response.json();
 }
@@ -135,7 +132,7 @@ const serverMethods = {
         method: "POST",
         body: formData,
       });
-      console.log("data from server: ", data);
+
       return data.post;
     },
     update: async (postId: number, newPostData: PostUpdate): Promise<Post> => {

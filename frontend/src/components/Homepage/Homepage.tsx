@@ -5,11 +5,11 @@ import { useAppDispatch } from "../../store";
 import { userSlice } from "../../store/slices/userSlice";
 
 const Homepage = () => {
-  const homepageContent = useRef<HTMLDivElement | null>(null);
+  const beginHomepageContent = useRef<HTMLDivElement | null>(null);
   const dispatch = useAppDispatch();
 
   const scrollContentIntoView = () => {
-    homepageContent?.current?.scrollIntoView({ behavior: "smooth" });
+    beginHomepageContent?.current?.scrollIntoView({ behavior: "smooth" });
   };
 
   useEffect(() => {
@@ -26,13 +26,8 @@ const Homepage = () => {
       >
         down
       </button>
-      <div
-        style={{ marginTop: "200vh" }}
-        ref={homepageContent}
-        id="homepage-content"
-      >
-        <DisplayPosts listOrCarousel="carousel" postsPerPageOrSlide={3} />
-      </div>
+      <div style={{ marginTop: "200vh" }} ref={beginHomepageContent}></div>
+      <DisplayPosts listOrCarousel="carousel" postsPerPageOrSlide={3} />
     </>
   );
 };

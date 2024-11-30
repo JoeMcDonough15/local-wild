@@ -1,4 +1,5 @@
 import { Post } from "../../types";
+import "./PostsCarousel.css";
 
 interface CarouselProps {
   postsToRender: Post[];
@@ -34,11 +35,14 @@ const PostsCarousel = ({
         {postsToRender.map((eachPost, index) => {
           return (
             eachPost && (
-              <img
-                key={index + 1}
-                src={eachPost.imageUrl}
-                alt={eachPost.title}
-              />
+              <div key={index + 1} className="carousel-img-container">
+                {" "}
+                <img
+                  className="carousel-img"
+                  src={eachPost.imageUrl}
+                  alt={eachPost.title}
+                />
+              </div>
             )
           );
         })}
