@@ -57,13 +57,15 @@ function Layout() {
   return (
     <ModalProvider>
       <ScrollRestoration />
-      <header>
+      <header className="header">
         <Navigation />
       </header>
       <main className="main-content">
         <Outlet />{" "}
       </main>
-      <Footer />
+      <footer className="footer">
+        <Footer />
+      </footer>
       <Modal />
     </ModalProvider>
   );

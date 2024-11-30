@@ -1,4 +1,7 @@
 import LinkTrio from "./LinkTrio";
+import "./Footer.css";
+import { ImInstagram, ImFacebook } from "react-icons/im";
+import { FaXTwitter } from "react-icons/fa6";
 
 const getYear = () => {
   const date = new Date();
@@ -7,7 +10,7 @@ const getYear = () => {
 
 const Footer = () => {
   return (
-    <section className="footer flex-col">
+    <footer className="footer flex-col">
       <div className="helpful-links flex-row">
         <LinkTrio
           linkNames={[
@@ -17,31 +20,34 @@ const Footer = () => {
           ]}
           linkDestinations={["", "", ""]}
           headerName="Conservation"
-          flexDirection="col"
         />
         <LinkTrio
           linkNames={["Nikon", "Canon", "Panasonic"]}
           linkDestinations={["", "", ""]}
           headerName="Equipment"
-          flexDirection="col"
         />
         <LinkTrio
           linkNames={["Back Country", "Moose Jaw", "Sierra"]}
           linkDestinations={["", "", ""]}
           headerName="Supplies"
-          flexDirection="col"
         />
       </div>
 
-      <div className="copyright-and-socials flex-row">
+      <div className="copyright-and-socials flex-row main-container">
         <p className="copyright">&copy;{` ${getYear()}`}</p>
-        <LinkTrio
-          linkNames={["X", "Instagram", "Facebook"]}
-          linkDestinations={["", "", ""]}
-          flexDirection="row"
-        />
+        <div className="flex-row icon-row">
+          <a>
+            <ImInstagram />
+          </a>
+          <a>
+            <ImFacebook />
+          </a>
+          <a>
+            <FaXTwitter />
+          </a>
+        </div>
       </div>
-    </section>
+    </footer>
   );
 };
 
