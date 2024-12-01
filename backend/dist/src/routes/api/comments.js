@@ -71,7 +71,14 @@ router.put("/:id", requireAuth, async (req, res, next) => {
                 where: { id: Number(id), commenterId: userId },
                 data: { commentText },
             });
-            console.log("updated comment: ", comment);
+            if (!comment) {
+                const err = {
+                    title: "Not Found or Unauthorized",
+                    message: "This comment either does not exist or you are not authorized to modify it.",
+                    status: 400,
+                };
+                return next(err);
+            }
             res.status(200).json({ comment });
         }
     }
@@ -80,4 +87,37 @@ router.put("/:id", requireAuth, async (req, res, next) => {
     }
 });
 // route to delete a comment by id
+router.delete("/:id", requireAuth, async (req, res, next) => {
+    const { id } = req.params;
+    const userId = req.user?.id;
+    if (id && isNaN(Math.floor(Number(id)))) {
+        const err = {
+            title: "Bad Request",
+            message: "comment id must be a digit.",
+            status: 400,
+        };
+        return next(err);
+    }
+    try {
+        if (id && userId) {
+            const comment = await prisma.commentOnPost.delete({
+                where: { id: Number(id), commenterId: userId },
+            });
+            if (!comment) {
+                const err = {
+                    title: "Not Found or Unauthorized",
+                    message: "This comment either does not exist or you are not authorized to modify it.",
+                    status: 400,
+                };
+                return next(err);
+            }
+            res
+                .status(200)
+                .json({ message: "Your comment has been successfully deleted." });
+        }
+    }
+    catch (err) {
+        return next(err);
+    }
+});
 export default router;
