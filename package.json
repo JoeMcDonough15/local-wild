@@ -4,7 +4,7 @@
   "description": "## DB Schema",
   "main": "index.js",
   "scripts": {
-    "install": "npm --prefix backend install backend",
+    "install": "npm --prefix backend install backend && npm --prefix frontend install frontend",
     "build": "npm run --prefix backend build && npm run --prefix frontend build",
     "start": "npm start --prefix backend"
   },
