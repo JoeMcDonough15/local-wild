@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { updateUserThunk } from "../../store/slices/sessionSlice";
-import { useAppSelector, useAppDispatch } from "../../store";
+import { useAppDispatch } from "../../store";
+import { PayloadAction } from "@reduxjs/toolkit";
+import { useModal } from "../../context/useModal";
 
 const EditProfileForm = () => {
   const dispatch = useAppDispatch();
-  const user = useAppSelector((state) => state.session.sessionUser);
   //image url to send to aws
   const [imgFile, setImgFile] = useState<File | null>(null);
   //telling us if we should show the image
@@ -14,6 +15,8 @@ const EditProfileForm = () => {
   const [numYearsExperience, setNumYearsExperience] = useState<string>("");
   const [location, setLocation] = useState<string>("");
   const [favoriteSubject, setFavoriteSubject] = useState<string>("");
+  const [errors, setErrors] = useState({} as { serverError: string });
+  const { closeModal } = useModal();
 
   //function to get image from local
 
@@ -42,17 +45,24 @@ const EditProfileForm = () => {
     formData.append("numYearsExperience", numYearsExperience);
     formData.append("location", location);
     formData.append("favoriteSubject", favoriteSubject);
-    const updatedUser = await dispatch(updateUserThunk(formData));
-    // handle error if returned
-    // convert this to a modal
-    // close modal on successful update
-    // when modal closes, user sees updated profile information on the my profile page
+    const updatedUser: PayloadAction<any> = await dispatch(
+      updateUserThunk(formData)
+    );
+
+    if (updatedUser.payload) {
+      setErrors({ serverError: updatedUser.payload.message });
+    } else {
+      closeModal();
+    }
   };
 
   return (
     <div>
       <h1>Edit Your Profile</h1>
       <form onSubmit={handleSubmit}>
+        {errors.serverError && (
+          <p className="error-text">{errors.serverError}</p>
+        )}
         <div>
           {showUpload && (
             <label htmlFor="file-upload">

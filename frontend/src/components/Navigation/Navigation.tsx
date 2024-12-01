@@ -20,8 +20,8 @@ const Navigation = () => {
       </div>
       {sessionUser && (
         <div className="nav-center">
-          <NavLink to="/my-favorites">My Favorites</NavLink>
-          <NavLink to="/my-profile">My Profile</NavLink>
+          {/* <NavLink to="/my-favorites">My Favorites</NavLink> */}
+          <NavLink to={`/users/${sessionUser.id}`}>My Profile</NavLink>
           <NavLink to="/my-posts">My Posts</NavLink>
         </div>
       )}
