@@ -7,6 +7,9 @@ import type {
   PostUpdate,
   GetPostsOptions,
   BatchOfPosts,
+  NewComment,
+  UpdateComment,
+  CommentOnPost,
 } from "../types";
 
 const URL_ROOT = "/api";
@@ -123,6 +126,7 @@ const serverMethods = {
       const data: BatchOfPosts = await fetchWithJson(url);
       return data;
     },
+    // getOne associates comments so it handles reading for that feature
     getOne: async (postId: number): Promise<Post> => {
       const data: { post: Post } = await fetchWithJson(`/posts/${postId}`);
       return data.post;
@@ -145,6 +149,29 @@ const serverMethods = {
     delete: async (postId: number): Promise<string> => {
       const data: { message: string } = await fetchWithJson(
         `/posts/${postId}`,
+        { method: "DELETE" }
+      );
+      return data.message;
+    },
+  },
+  comments: {
+    create: async (newComment: NewComment): Promise<CommentOnPost> => {
+      const data: { comment: CommentOnPost } = await fetchWithJson(
+        "/comments",
+        { method: "POST", body: JSON.stringify(newComment) }
+      );
+      return data.comment;
+    },
+    update: async (commentToUpdate: UpdateComment): Promise<CommentOnPost> => {
+      const data: { comment: CommentOnPost } = await fetchWithJson(
+        `/comments/${commentToUpdate.commentId}`,
+        { method: "PUT", body: JSON.stringify(commentToUpdate) }
+      );
+      return data.comment;
+    },
+    delete: async (commentId: number): Promise<string> => {
+      const data: { message: string } = await fetchWithJson(
+        `/comments/${commentId}`,
         { method: "DELETE" }
       );
       return data.message;

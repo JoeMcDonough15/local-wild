@@ -1,14 +1,15 @@
-import express, { type Request, type Response } from "express";
-const router = express.Router();
+import express from "express";
 import sessionRouter from "./session.js";
 import usersRouter from "./users.js";
 import postsRouter from "./posts.js";
+import commentsRouter from "./comments.js";
 import { restoreUser } from "../../utils/auth.js";
+const router = express.Router();
 
 router.use(restoreUser);
-
 router.use("/session", sessionRouter);
 router.use("/users", usersRouter);
 router.use("/posts", postsRouter);
+router.use("/comments", commentsRouter);
 
 export default router;
