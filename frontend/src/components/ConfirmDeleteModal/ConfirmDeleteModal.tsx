@@ -8,7 +8,7 @@ import { PayloadAction } from "@reduxjs/toolkit";
 
 const ConfirmDeleteModal = ({
   postId,
-  key,
+  keyForStore,
 }: UpdateOrDeletePostArgs): JSX.Element => {
   const dispatch = useAppDispatch();
   const { closeModal } = useModal();
@@ -19,7 +19,7 @@ const ConfirmDeleteModal = ({
   );
 
   const deletePost = async () => {
-    const deleteArgs: UpdateOrDeletePostArgs = { postId, key };
+    const deleteArgs: UpdateOrDeletePostArgs = { postId, keyForStore };
     const serverResponse: PayloadAction<any> = await dispatch(
       deletePostThunk(deleteArgs)
     );

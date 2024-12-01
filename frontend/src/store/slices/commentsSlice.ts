@@ -9,7 +9,7 @@ import serverMethods from "../api";
 
 // thunks
 
-const createCommentThunk = createAsyncThunk(
+export const createCommentThunk = createAsyncThunk(
   "comments/create",
   async (newComment: NewComment, { dispatch }) => {
     try {
@@ -22,7 +22,7 @@ const createCommentThunk = createAsyncThunk(
   }
 );
 
-const updateCommentThunk = createAsyncThunk(
+export const updateCommentThunk = createAsyncThunk(
   "comments/update",
   async (comment: UpdateComment, { dispatch }) => {
     try {
@@ -35,7 +35,7 @@ const updateCommentThunk = createAsyncThunk(
   }
 );
 
-const deleteCommentThunk = createAsyncThunk(
+export const deleteCommentThunk = createAsyncThunk(
   "comments/delete",
   async (commentId: number, { dispatch }) => {
     try {
