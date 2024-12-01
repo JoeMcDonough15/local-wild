@@ -8,7 +8,7 @@
     "db:generate": "npx prisma generate",
     "db:migrate": "npx prisma migrate dev --name local_wild_db",
     "db:reset": "npx prisma migrate reset --schema=./prisma/schema.prisma --force",
-    "build": "npm run db:generate && npm run db:reset && npx prisma db seed && tsc",
+    "build": "npm run db:generate && npm run db:reset && tsc",
     "start": "per-env",
     "start:development": "npx dotenv-cli -- nodemon",
     "start:production": "npx dotenv-cli -- node dist/src/app.js"

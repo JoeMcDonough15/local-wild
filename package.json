@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "install": "npm --prefix backend install backend",
-    "build": "npm run --prefix backend build",
+    "build": "npm run --prefix backend build && npm run --prefix frontend build",
     "start": "npm start --prefix backend"
   },
   "keywords": [],
