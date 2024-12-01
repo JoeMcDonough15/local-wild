@@ -24,47 +24,47 @@ model User {
     location String? @db.VarChar(255)
     numYearsExperience Int?
     favoriteSubject String? @db.VarChar(255)
-    createdAt DateTime @default(now())
-    updatedAt DateTime @default(now())
+    createdAt DateTime @default(now()) @db.Timestamp()
+    updatedAt DateTime @default(now()) @db.Timestamp()
     posts Post[]
     comments CommentOnPost[]
 }
 
 model Post {
     id Int @id @default(autoincrement())
-    imageUrl String
-    title String @db.VarChar(255)
+    imageUrl String @db.VarChar(500)
+    title String @db.VarChar(50)
     photographer User @relation(fields: [photographerId], references: [id], onDelete: Cascade )
     photographerId Int 
-    caption String? @db.VarChar(255)
-    fullDescription String? @db.VarChar(500)
+    caption String? @db.VarChar(75)
+    fullDescription String? @db.VarChar(2000)
     lat Decimal? @db.Decimal(100, 98)
     lng Decimal? @db.Decimal(100, 97)
-    partOfDay String? @db.VarChar(255)
+    partOfDay String? @db.VarChar(50)
     datePhotographed DateTime?
     createdAt DateTime @default(now()) @db.Timestamp()
-    updatedAt DateTime @default(now())
+    updatedAt DateTime @default(now()) @db.Timestamp()
     comments CommentOnPost[]
 }
 
 model CommentOnPost {
     id Int @id @default(autoincrement())
-    commentText String @db.VarChar(255)
+    commentText String @db.VarChar(500)
     post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
     postId Int 
     commenter User @relation(fields: [commenterId], references: [id], onDelete: Cascade)
     commenterId Int
-    createdAt DateTime @default(now())
-    updatedAt DateTime @default(now())
+    createdAt DateTime @default(now()) @db.Timestamp()
+    updatedAt DateTime @default(now()) @db.Timestamp()
     replies CommentReply[]
 }
 
 model CommentReply {
     id Int @id @default(autoincrement())
-    replyText String @db.VarChar(255)
+    replyText String @db.VarChar(500)
     comment CommentOnPost @relation(fields: [replyingTo], references: [id], onDelete: Cascade)
     replyingTo Int
-    createdAt DateTime @default(now())
-    updatedAt DateTime @default(now())
+    createdAt DateTime @default(now()) @db.Timestamp()
+    updatedAt DateTime @default(now()) @db.Timestamp()
 }
 

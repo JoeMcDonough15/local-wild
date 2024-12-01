@@ -9,8 +9,8 @@ CREATE TABLE "User" (
     "location" VARCHAR(255),
     "numYearsExperience" INTEGER,
     "favoriteSubject" VARCHAR(255),
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "createdAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
@@ -18,17 +18,17 @@ CREATE TABLE "User" (
 -- CreateTable
 CREATE TABLE "Post" (
     "id" SERIAL NOT NULL,
-    "imageUrl" TEXT NOT NULL,
-    "title" VARCHAR(255) NOT NULL,
+    "imageUrl" VARCHAR(500) NOT NULL,
+    "title" VARCHAR(50) NOT NULL,
     "photographerId" INTEGER NOT NULL,
-    "caption" VARCHAR(255),
-    "fullDescription" VARCHAR(500),
+    "caption" VARCHAR(75),
+    "fullDescription" VARCHAR(2000),
     "lat" DECIMAL(100,98),
     "lng" DECIMAL(100,97),
-    "partOfDay" VARCHAR(255),
+    "partOfDay" VARCHAR(50),
     "datePhotographed" TIMESTAMP(3),
     "createdAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "Post_pkey" PRIMARY KEY ("id")
 );
@@ -36,11 +36,11 @@ CREATE TABLE "Post" (
 -- CreateTable
 CREATE TABLE "CommentOnPost" (
     "id" SERIAL NOT NULL,
-    "commentText" VARCHAR(255) NOT NULL,
+    "commentText" VARCHAR(500) NOT NULL,
     "postId" INTEGER NOT NULL,
     "commenterId" INTEGER NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "createdAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "CommentOnPost_pkey" PRIMARY KEY ("id")
 );
@@ -48,10 +48,10 @@ CREATE TABLE "CommentOnPost" (
 -- CreateTable
 CREATE TABLE "CommentReply" (
     "id" SERIAL NOT NULL,
-    "replyText" VARCHAR(255) NOT NULL,
+    "replyText" VARCHAR(500) NOT NULL,
     "replyingTo" INTEGER NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "createdAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "CommentReply_pkey" PRIMARY KEY ("id")
 );
