@@ -1,6 +1,10 @@
 .footer {
+  bottom: 0;
   height: 20vh;
   justify-content: space-between;
+  position: fixed;
+  width: 100vw;
+  z-index: -9999;
 }
 
 .footer a:hover {

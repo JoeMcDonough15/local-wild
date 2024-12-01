@@ -3,7 +3,6 @@
   color: white;
   height: var(--header-height);
   justify-content: space-between;
-  margin-bottom: var(--header-height);
   position: fixed;
   top: 0;
   width: 100%;

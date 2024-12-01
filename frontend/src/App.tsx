@@ -15,6 +15,7 @@ import { useAppDispatch } from "./store";
 import Footer from "./components/Footer";
 import MyPostsPage from "./components/MyPostsPage";
 import CreatePostForm from "./components/CreatePostForm";
+import PostDetailsPage from "./components/PostDetailsPage";
 
 function ErrorBoundary() {
   const error = useRouteError();
@@ -94,6 +95,11 @@ const router = createBrowserRouter([
       {
         path: "/posts/new",
         element: <CreatePostForm />,
+        errorElement: <ErrorBoundary />,
+      },
+      {
+        path: "/posts/:id",
+        element: <PostDetailsPage />,
         errorElement: <ErrorBoundary />,
       },
     ],

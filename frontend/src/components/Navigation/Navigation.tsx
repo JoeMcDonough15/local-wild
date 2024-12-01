@@ -16,7 +16,7 @@ const Navigation = () => {
   return (
     <nav className="nav-bar flex-row main-container">
       <div className="nav-left">
-        <Link to="/">localWild Logo</Link>
+        <Link to="/#skip-intro">localWild Logo</Link>
       </div>
       {sessionUser && (
         <div className="nav-center">
