@@ -70,7 +70,7 @@ router.get("/:id", requireAuth, async (req, res, next) => {
             where: { id: Number(id) },
             include: {
                 photographer: { select: { id: true, username: true } },
-                comments: { include: { replies: true } },
+                comments: { include: { replies: true, commenter: true } },
             },
         });
         if (!post) {

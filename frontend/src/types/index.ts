@@ -92,4 +92,14 @@ export interface GetPostsOptions {
   userId?: number;
 }
 
+export interface NewComment {
+  commentText: string;
+  postId: number;
+}
+
+export interface UpdateComment {
+  commentId: number;
+  commentText: string;
+}
+
 export type LoadingState = "no" | "loading" | "response" | "finished";

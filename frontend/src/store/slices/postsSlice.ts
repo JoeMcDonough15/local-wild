@@ -11,6 +11,7 @@ import type {
   GetPostsOptions,
 } from "../../types";
 import serverMethods from "../api";
+import { commentsSlice } from "./commentsSlice";
 
 // thunks
 
@@ -36,6 +37,9 @@ export const getSinglePostThunk = createAsyncThunk(
     try {
       const singlePost = await serverMethods.posts.getOne(postId);
       dispatch(postsSlice.actions.setCurrentPost(singlePost));
+      if (singlePost.comments) {
+        dispatch(commentsSlice.actions.setComments(singlePost.comments));
+      }
     } catch (error: any) {
       const errorResponse: ServerError = error;
       return errorResponse;

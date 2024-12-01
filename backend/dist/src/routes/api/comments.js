@@ -69,7 +69,7 @@ router.put("/:id", requireAuth, async (req, res, next) => {
         if (id && userId && commentText) {
             const comment = await prisma.commentOnPost.update({
                 where: { id: Number(id), commenterId: userId },
-                data: { commentText },
+                data: { commentText, updatedAt: new Date() },
             });
             if (!comment) {
                 const err = {
