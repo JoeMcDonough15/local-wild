@@ -53,12 +53,14 @@ export const restoreUser = (req, res, next) => {
 export const requireAuth = (req, _res, next) => {
     if (req.user)
         return next();
-    const err = new Error("Authentication required");
-    err.title = "Authentication required";
-    err.errors = {
-        name: "Authentication Error",
+    const err = {
+        name: "Authentication Required",
         message: "Authentication required",
+        errors: {
+            name: "Authentication Error",
+            message: "Authentication required",
+        },
+        status: 401,
     };
-    err.status = 401;
     return next(err);
 };

@@ -25,9 +25,9 @@ router.post("/", validateLogin, async (req, res, next) => {
     });
     if (!user || !bcrypt.compareSync(password, user.password)) {
         const err = {
+            name: "Login failed",
             message: "The provided credentials were invalid.",
             status: 401,
-            title: "Login failed",
             errors: { "Login failed": "The provided credentials were invalid" },
         };
         return next(err);
@@ -123,6 +123,7 @@ router.put("/", requireAuth, singleMulterUpload("image"), async (req, res, next)
         });
         if (!userToUpdate) {
             const userNotFound = {
+                name: "User Not Found Error",
                 message: "This user could not be found",
                 status: 404,
             };

@@ -18,6 +18,7 @@ router.post("/", requireAuth, async (req, res, next) => {
 
   if (!postToCommentOn) {
     const postNotFound: ApiError = {
+      name: "Not Found Error",
       message: "Post not found.",
       status: 404,
       errors: { postNotFoundError: "This post could not be found" },
@@ -27,6 +28,7 @@ router.post("/", requireAuth, async (req, res, next) => {
 
   if (postToCommentOn.photographerId === commenterId) {
     const notAllowedToComment: ApiError = {
+      name: "Unauthorized Comment Error",
       message: "You cannot comment on a post you created.",
       status: 400,
     };
@@ -35,6 +37,7 @@ router.post("/", requireAuth, async (req, res, next) => {
 
   if (commentText.length > 150) {
     const commentTooLong: ApiError = {
+      name: "Comment Too Long Error",
       message: "Comments must be 150 characters or less.",
       status: 400,
     };
@@ -59,7 +62,7 @@ router.put("/:id", requireAuth, async (req, res, next) => {
   const userId = req.user?.id;
   if (id && isNaN(Math.floor(Number(id)))) {
     const err: ApiError = {
-      title: "Bad Request",
+      name: "Bad Request",
       message: "comment id must be a digit.",
       status: 400,
     };
@@ -67,6 +70,7 @@ router.put("/:id", requireAuth, async (req, res, next) => {
   }
   if (commentText.length > 150) {
     const commentTooLong: ApiError = {
+      name: "Comment Too Long Error",
       message: "Comments must be 150 characters or less.",
       status: 400,
     };
@@ -86,7 +90,7 @@ router.put("/:id", requireAuth, async (req, res, next) => {
 
       if (!comment) {
         const err: ApiError = {
-          title: "Not Found or Unauthorized",
+          name: "Not Found or Unauthorized",
           message:
             "This comment either does not exist or you are not authorized to modify it.",
           status: 400,
@@ -107,7 +111,7 @@ router.delete("/:id", requireAuth, async (req, res, next) => {
   const userId = req.user?.id;
   if (id && isNaN(Math.floor(Number(id)))) {
     const err: ApiError = {
-      title: "Bad Request",
+      name: "Bad Request",
       message: "comment id must be a digit.",
       status: 400,
     };
@@ -122,7 +126,7 @@ router.delete("/:id", requireAuth, async (req, res, next) => {
 
       if (!comment) {
         const err: ApiError = {
-          title: "Not Found or Unauthorized",
+          name: "Not Found or Unauthorized",
           message:
             "This comment either does not exist or you are not authorized to modify it.",
           status: 400,

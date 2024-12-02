@@ -8,10 +8,12 @@ const handleValidationErrors = (req, _res, next) => {
         for (const error of validationErrors.array()) {
             errors[error.param] = error.msg;
         }
-        const err = Error("Bad request.");
-        err.errors = errors;
-        err.status = 400;
-        err.title = "Bad request.";
+        const err = {
+            name: "Bad Request",
+            message: "Invalid input",
+            errors: errors,
+            status: 400,
+        };
         next(err);
     }
     next();
@@ -56,7 +58,7 @@ export const validatePostBody = [
 export const checkForImage = (req, _res, next) => {
     if (!req.file) {
         const err = {
-            title: "File required",
+            name: "File Required Error",
             message: "You must provide an image file when making a post.",
             status: 400,
         };

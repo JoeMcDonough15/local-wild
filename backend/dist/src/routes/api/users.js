@@ -14,6 +14,7 @@ router.get("/:id", async (req, res, next) => {
     });
     if (!user) {
         const userNotFound = {
+            name: "Not Found Error",
             message: "User not found.",
             status: 404,
             errors: { userNotFoundError: "This user could not be found." },
