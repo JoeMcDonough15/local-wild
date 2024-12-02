@@ -28,6 +28,7 @@ model User {
     updatedAt DateTime @default(now()) @db.Timestamp()
     posts Post[]
     comments CommentOnPost[]
+    replies CommentReply[]
 }
 
 model Post {
@@ -62,8 +63,10 @@ model CommentOnPost {
 model CommentReply {
     id Int @id @default(autoincrement())
     replyText String @db.VarChar(500)
-    comment CommentOnPost @relation(fields: [replyingTo], references: [id], onDelete: Cascade)
+    originalComment CommentOnPost @relation(fields: [replyingTo], references: [id], onDelete: Cascade)
     replyingTo Int
+    replyer User @relation(fields: [replyerId], references: [id], onDelete: Cascade)
+    replyerId Int
     createdAt DateTime @default(now()) @db.Timestamp()
     updatedAt DateTime @default(now()) @db.Timestamp()
 }

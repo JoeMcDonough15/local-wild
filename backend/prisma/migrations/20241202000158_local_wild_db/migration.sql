@@ -50,6 +50,7 @@ CREATE TABLE "CommentReply" (
     "id" SERIAL NOT NULL,
     "replyText" VARCHAR(500) NOT NULL,
     "replyingTo" INTEGER NOT NULL,
+    "replyerId" INTEGER NOT NULL,
     "createdAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
@@ -73,3 +74,6 @@ ALTER TABLE "CommentOnPost" ADD CONSTRAINT "CommentOnPost_commenterId_fkey" FORE
 
 -- AddForeignKey
 ALTER TABLE "CommentReply" ADD CONSTRAINT "CommentReply_replyingTo_fkey" FOREIGN KEY ("replyingTo") REFERENCES "CommentOnPost"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "CommentReply" ADD CONSTRAINT "CommentReply_replyerId_fkey" FOREIGN KEY ("replyerId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;

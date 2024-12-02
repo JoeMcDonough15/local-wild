@@ -66,6 +66,9 @@ async function main() {
               "I had been snapping some shots of this Blue Jay through the leaves of a tree.  It was hard to get good focus and a clear shot through the foliage.  Then, when I was about to settle on what I had, the bird landed down in the grass and I was able to get the best shot of that day!  It must have a nest nearby because I've been spotting it regularly when I go out for pictures.",
             partOfDay: "Mid morning",
             datePhotographed: new Date(2024, 4, 8),
+            comments: {
+              create: { commentText: "Absolutely beautiful!", commenterId: 1 },
+            },
           },
           {
             imageUrl:
@@ -104,6 +107,21 @@ async function main() {
               "I had been sitting quietly at the edge of the marsh for what felt like hours, waiting for something to unfold. The morning mist still clung to the water, and the only sounds were the faint rustle of reeds swaying in the breeze and the occasional splash of a fish breaking the surface. Patience is a virtue when it comes to wildlife photography, and I had learned long ago that the perfect shot doesn't come on demand—it arrives in its own time.  Then, as if summoned by the silence itself, a blue heron appeared. Its long, slender neck curved gracefully as it stalked through the shallow waters, eyes fixed intently on the rippling surface below. I held my breath, fingers hovering over the camera, ready to capture the elegance of the bird. The light was soft, filtered through the early morning fog, casting a gentle glow over the heron’s silvery feathers.  I adjusted the lens for the close-up, every instinct telling me this was the moment I had been waiting for. The heron froze, its entire body tensed with a silent focus, as if time itself had slowed down. Its legs, seemingly suspended in mid-step, gave no hint of movement, and then, without warning, the heron darted forward. The speed was breathtaking—its beak sliced through the water like a needle through fabric.  For an instant, I saw the flash of silver as the fish was caught, held firmly in the heron’s long, sharp bill. The bird lifted its head with precise, almost ritualistic care, the fish wriggling helplessly. The water droplets hung in the air like diamonds, suspended in the perfect moment between life and capture. My camera clicked, the shutter sound barely audible over the soft lapping of the water.",
             partOfDay: "Early morning",
             datePhotographed: new Date(2024, 9, 11),
+            comments: {
+              create: [
+                { commentText: "Incredible!", commenterId: 1 },
+                {
+                  commentText: "Sooooo cool!!!",
+                  commenterId: 2,
+                  replies: {
+                    create: {
+                      replyText: "I still can't believe I got this!",
+                      replyerId: 3,
+                    },
+                  },
+                },
+              ],
+            },
           },
           {
             imageUrl:
@@ -171,6 +189,25 @@ async function main() {
               "I captured an intense moment of focus as this rabbit sat in the heart of a sunlit meadow. After patiently waiting for the perfect opportunity, I noticed the rabbit emerging from the underbrush, its ears perked and eyes wide with alertness. The soft breeze stirred the grasses around it as the rabbit paused, seemingly aware of every movement in its surroundings. With a quick yet steady shot, I froze the moment, highlighting the rabbit’s sharp instincts and the serene beauty of the meadow. I think this image perfectly conveys the delicate balance between calm and vigilance in the life of a wild rabbit.",
             partOfDay: "Early afternoon",
             datePhotographed: new Date(2023, 5, 5),
+            comments: {
+              create: [
+                { commentText: "What a great shot!", commenterId: 2 },
+                {
+                  commentText: "Amazing photograph!  What luck!!",
+                  commenterId: 3,
+                  replies: {
+                    create: [
+                      { replyText: "I know, right??", replyerId: 4 },
+                      {
+                        replyText: "I hope to get a shot like this soon!",
+                        replyerId: 2,
+                      },
+                    ],
+                  },
+                },
+                { commentText: "Wow!!!", commenterId: 1 },
+              ],
+            },
           },
         ],
       },
