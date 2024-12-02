@@ -77,8 +77,7 @@ export const commentsSlice = createSlice({
     },
     addComment: (state, action: PayloadAction<CommentOnPost>) => {
       const commentToAdd = action.payload;
-      const nextKey = Object.keys(state.allComments).length + 1;
-      state.allComments[nextKey] = commentToAdd;
+      state.allComments[commentToAdd.id] = commentToAdd;
       state.totalNumComments++;
     },
     updateComment: (state, action: PayloadAction<CommentOnPost>) => {

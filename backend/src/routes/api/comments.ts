@@ -44,6 +44,7 @@ router.post("/", requireAuth, async (req, res, next) => {
   try {
     const comment = await prisma.commentOnPost.create({
       data: { ...req.body, commenterId },
+      include: { commenter: true },
     });
     res.status(201).json({ comment });
   } catch (err) {

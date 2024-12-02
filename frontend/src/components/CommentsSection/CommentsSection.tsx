@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../store";
 import { useState } from "react";
 import {
+  createCommentThunk,
   deleteCommentThunk,
   updateCommentThunk,
 } from "../../store/slices/commentsSlice";
@@ -133,6 +134,18 @@ const Comment = ({ comment }: CommentProps) => {
 
 const CommentsSection = () => {
   const allComments = useAppSelector((state) => state.comments.allComments);
+  const sessionUser = useAppSelector((state) => state.session.sessionUser);
+  const currentPost = useAppSelector((state) => state.posts.currentPost);
+  const dispatch = useAppDispatch();
+  const [createCommentMode, setCreateCommentMode] = useState(false);
+  const [newComment, setNewComment] = useState("");
+  const [errors, setErrors] = useState(
+    {} as {
+      emptyComment?: string;
+      commentTooLong?: string;
+      serverError?: string;
+    }
+  );
 
   const sortedCommentsArray = Object.values(allComments).toSorted(
     (commentA, commentB) => {
@@ -143,13 +156,90 @@ const CommentsSection = () => {
     }
   );
 
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const value = e.target.value;
+    setNewComment(value);
+    if (value.length === 0) {
+      setErrors({ emptyComment: "Comment cannot be empty" });
+      return;
+    }
+
+    if (value.length > 500) {
+      setErrors({
+        commentTooLong: "Comment must be less than 500 characters",
+      });
+      return;
+    }
+
+    setErrors({});
+  };
+
+  const handleSubmit = async (e: React.SyntheticEvent) => {
+    e.preventDefault();
+
+    if (Object.keys(errors).length > 0) {
+      return;
+    }
+
+    if (currentPost) {
+      const serverResponse: PayloadAction<any> = await dispatch(
+        createCommentThunk({
+          commentText: newComment,
+          postId: currentPost?.id,
+        })
+      );
+
+      if (serverResponse.payload?.message) {
+        setErrors({ serverError: serverResponse.payload.message });
+      } else {
+        setCreateCommentMode(false);
+      }
+    }
+  };
+
   return (
-    <div className="commentsSection">
-      <h2>Comments</h2>
-      {sortedCommentsArray.map((comment) => {
-        return <Comment key={comment.id} comment={comment} />;
-      })}
-    </div>
+    <>
+      {createCommentMode ? (
+        <form onSubmit={handleSubmit}>
+          {errors.emptyComment && (
+            <p className="error-text">{errors.emptyComment}</p>
+          )}
+          {errors.commentTooLong && (
+            <p className="error-text">{errors.commentTooLong}</p>
+          )}
+          <textarea onChange={handleChange}></textarea>
+          <button type="submit">Submit Comment</button>
+          <button
+            onClick={() => {
+              setCreateCommentMode(false);
+            }}
+            type="button"
+          >
+            Cancel
+          </button>
+        </form>
+      ) : (
+        <div className="commentsSection">
+          <div className="title-and-create-button">
+            <h2>Comments</h2>
+            {sessionUser?.id !== currentPost?.photographerId && (
+              <button
+                onClick={() => {
+                  setCreateCommentMode(true);
+                }}
+                type="button"
+              >
+                Leave a comment
+              </button>
+            )}
+          </div>
+
+          {sortedCommentsArray.map((comment) => {
+            return <Comment key={comment.id} comment={comment} />;
+          })}
+        </div>
+      )}
+    </>
   );
 };
 
