@@ -18,7 +18,7 @@ function LoginFormModal() {
     );
 
     if (serverResponse.payload) {
-      setErrors({ credential: serverResponse?.payload?.message });
+      setErrors({ credential: serverResponse.payload.message });
     } else {
       closeModal();
     }

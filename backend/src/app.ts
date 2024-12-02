@@ -86,7 +86,7 @@ app.use((err: ApiError, _req: Request, res: Response, _next: NextFunction) => {
   res.status(err.status || 500);
   console.error("error in the error formatter: ", err);
   res.json({
-    title: err.name || "Server Error",
+    name: err.name || "Server Error",
     message: err.message || "Server Error",
     errors: err.errors,
     status: err.status || 500,
