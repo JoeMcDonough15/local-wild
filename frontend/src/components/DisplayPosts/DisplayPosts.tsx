@@ -44,20 +44,23 @@ const DisplayPosts = ({
   useEffect(() => {
     if (!gettingMorePosts) return;
 
-    const getPostsOptions: GetPostsOptions = { slideOrPageNum: slideOrPageNum };
-    // if we're using this inside a UserProfilePage component
+    const getPostsOptions: GetPostsOptions = {
+      slideOrPageNum: slideOrPageNum,
+      givenSize: postsPerPageOrSlide,
+    };
+    // if we're using this inside a UserProfilePage component or MyPostsPage
     if (currentUser) {
       getPostsOptions.userId = currentUser.id;
     }
 
     dispatch(getBatchOfPostsThunk(getPostsOptions)); // will update postsSoFar, so that now the postsSoFar[highestKey] should be truthy and we can render the return component
-  }, [currentUser, slideOrPageNum, gettingMorePosts, dispatch]);
-
-  // console.log("total num posts: ", totalNumPosts);
-  // console.log("get more posts: ", gettingMorePosts);
-  // console.log("posts so far: ", postsSoFar);
-  // console.log("highestKey: ", highestKey);
-  // console.log("postsSoFar[highestKey]", postsSoFar[highestKey]);
+  }, [
+    currentUser,
+    slideOrPageNum,
+    postsPerPageOrSlide,
+    gettingMorePosts,
+    dispatch,
+  ]);
 
   const needMorePosts = () => {
     const amountOfPostsSoFar = Object.keys(postsSoFar).length;

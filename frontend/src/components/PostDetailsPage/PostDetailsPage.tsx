@@ -10,6 +10,7 @@ import EditPostFormModal from "../EditPostFormModal";
 import ConfirmDeleteModal from "../ConfirmDeleteModal";
 import SignupFormModal from "../SignupFormModal/SignupFormModal";
 import LoginFormModal from "../LoginFormModal/LoginFormModal";
+import CommentsSection from "../CommentsSection/CommentsSection";
 
 const PostDetailsPage = () => {
   const sessionUser = useAppSelector((state) => state.session.sessionUser);
@@ -82,7 +83,7 @@ const PostDetailsPage = () => {
             <PostTitleAndDetails />
           </div>
           <div className="post-details-second-row flex-row">
-            {/* <CommentsSection /> */}
+            <CommentsSection />
             {/* <PostLocationMap /> */}
           </div>
           {userOwnsPost && (

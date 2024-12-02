@@ -9,7 +9,7 @@ const router = express.Router();
 
 // * get all posts (for Homepage,  UserProfilePage, and MyPostsPage)
 router.get("/", async (req, res, next) => {
-  let size = 3;
+  let size = 6;
   let offset = 0;
 
   const { givenSize, slide, userId } = req.query;
@@ -78,7 +78,13 @@ router.get("/:id", requireAuth, async (req, res, next) => {
       where: { id: Number(id) },
       include: {
         photographer: { select: { id: true, username: true } },
-        comments: { include: { replies: true, commenter: true } },
+        comments: {
+          orderBy: { createdAt: "asc" },
+          include: {
+            replies: { orderBy: { createdAt: "asc" } },
+            commenter: { select: { username: true, id: true } },
+          },
+        },
       },
     });
 

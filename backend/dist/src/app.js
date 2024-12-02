@@ -52,7 +52,7 @@ app.use((err, _req, res, _next) => {
     console.error("error in the error formatter: ", err);
     res.json({
         title: err.title || "Server Error",
-        message: err.message,
+        message: err.message || "Server Error",
         errors: err.errors,
     });
 });

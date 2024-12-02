@@ -38,6 +38,7 @@ router.post("/", requireAuth, async (req, res, next) => {
     try {
         const comment = await prisma.commentOnPost.create({
             data: { ...req.body, commenterId },
+            include: { commenter: true },
         });
         res.status(201).json({ comment });
     }
@@ -70,6 +71,10 @@ router.put("/:id", requireAuth, async (req, res, next) => {
             const comment = await prisma.commentOnPost.update({
                 where: { id: Number(id), commenterId: userId },
                 data: { commentText, updatedAt: new Date() },
+                include: {
+                    replies: { orderBy: { createdAt: "asc" } },
+                    commenter: { select: { username: true, id: true } },
+                },
             });
             if (!comment) {
                 const err = {

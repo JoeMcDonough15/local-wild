@@ -66,7 +66,7 @@ app.use((err: ApiError, _req: Request, res: Response, _next: NextFunction) => {
   console.error("error in the error formatter: ", err);
   res.json({
     title: err.title || "Server Error",
-    message: err.message,
+    message: err.message || "Server Error",
     errors: err.errors,
   });
 });

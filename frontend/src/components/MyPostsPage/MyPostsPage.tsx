@@ -6,6 +6,7 @@ import { userSlice } from "../../store/slices/userSlice";
 
 const MyPostsPage = (): JSX.Element => {
   const sessionUser = useAppSelector((state) => state.session.sessionUser);
+  const currentUser = useAppSelector((state) => state.users.currentUser);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -18,6 +19,11 @@ const MyPostsPage = (): JSX.Element => {
     navigate("/");
     return <></>;
   }
+
+  if (!currentUser) {
+    return <></>;
+  }
+
   return (
     <section>
       <DisplayPosts listOrCarousel="list" postsPerPageOrSlide={10} />;
