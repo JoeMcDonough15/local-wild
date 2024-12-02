@@ -1,4 +1,7 @@
+import { useNavigate } from "react-router-dom";
+
 interface ImageAndCaptionProps {
+  postId: number;
   imageUrl: string;
   imageText: string;
   containerClasses?: string;
@@ -7,15 +10,25 @@ interface ImageAndCaptionProps {
 }
 
 const PostImageAndCaption = ({
+  postId,
   imageUrl,
   imageText,
   containerClasses = "",
   imgClasses = "",
   imageTextClasses = "",
 }: ImageAndCaptionProps) => {
+  const navigate = useNavigate();
   return (
-    <div className={containerClasses}>
-      <img className={imgClasses} src={imageUrl} alt={imageText} />
+    <div
+      style={{ cursor: "pointer" }}
+      onClick={() => {
+        navigate(`/posts/${postId}`);
+      }}
+      className={containerClasses}
+    >
+      <div className="img-container">
+        <img className={imgClasses} src={imageUrl} alt={imageText} />
+      </div>
       <p className={imageTextClasses}>{imageText}</p>
     </div>
   );

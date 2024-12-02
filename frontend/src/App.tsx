@@ -34,8 +34,8 @@ function ErrorBoundary() {
 
   return (
     <div className="error-container">
-      <h1>Oops!</h1>
-      <p>Something went wrong</p>
+      <h1>Sorry!</h1>
+      <p>This page must not exist yet</p>
       <button onClick={() => window.history.back()} className="back-button">
         Go Back
       </button>

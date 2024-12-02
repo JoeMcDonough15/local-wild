@@ -1,5 +1,7 @@
 import { useAppSelector } from "../../store";
 import { Link } from "react-router-dom";
+import "./PostTitleAndDetails.css";
+
 const PostTitleAndDetails = () => {
   const currentPost = useAppSelector((state) => state.posts.currentPost);
 
@@ -7,8 +9,19 @@ const PostTitleAndDetails = () => {
     return <></>;
   }
 
+  let formattedDate;
+
+  if (currentPost.datePhotographed) {
+    formattedDate = currentPost.datePhotographed.toString().split("T")[0];
+
+    if (formattedDate) {
+      formattedDate = new Date(formattedDate);
+      formattedDate = formattedDate.toDateString();
+    }
+  }
+
   return (
-    <div className="post-title-and-details-container flex-col">
+    <>
       <h1 className="post-title">{currentPost.title}</h1>
       <div className="post-details-container flex-col">
         <p className="post-credit-and-date">
@@ -17,9 +30,7 @@ const PostTitleAndDetails = () => {
             {" "}
             {currentPost?.photographer?.username}
           </Link>{" "}
-          {currentPost.datePhotographed && (
-            <span> on {currentPost.datePhotographed.toString()}</span>
-          )}
+          {formattedDate && <span> on {formattedDate}</span>}
         </p>
         {currentPost.fullDescription && (
           <p className="description">{currentPost.fullDescription}</p>
@@ -30,7 +41,7 @@ const PostTitleAndDetails = () => {
           </p>
         )}
       </div>
-    </div>
+    </>
   );
 };
 

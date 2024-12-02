@@ -16,7 +16,9 @@ const Navigation = () => {
   return (
     <nav className="nav-bar flex-row main-container">
       <div className="nav-left">
-        <Link to="/#skip-intro">localWild Logo</Link>
+        <Link className="logo-text" to="/#skip-intro">
+          localWild
+        </Link>
       </div>
       {sessionUser && (
         <div className="nav-center">
@@ -40,6 +42,9 @@ const Navigation = () => {
           </>
         ) : (
           <>
+            <Link className="new-post-button" to="/posts/new">
+              Post
+            </Link>
             <button onClick={handleLogOut}>Log Out</button>
           </>
         )}

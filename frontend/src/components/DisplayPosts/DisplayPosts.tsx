@@ -46,7 +46,7 @@ const DisplayPosts = ({
 
     const getPostsOptions: GetPostsOptions = {
       slideOrPageNum: slideOrPageNum,
-      givenSize: postsPerPageOrSlide,
+      givenSize: postsPerPageOrSlide * 2,
     };
     // if we're using this inside a UserProfilePage component or MyPostsPage
     if (currentUser) {
