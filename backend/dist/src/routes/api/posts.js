@@ -94,9 +94,20 @@ router.get("/:id", requireAuth, async (req, res, next) => {
 });
 // * create a new post
 router.post("/", requireAuth, singleMulterUpload("image"), checkForImage, validatePostBody, async (req, res, next) => {
+    console.log("do we get here?");
     const id = req.user?.id;
+    console.log("user id: ", id);
     const imageFile = req.file;
     const { title, caption, fullDescription, lat, lng, partOfDay, datePhotographed, } = req.body;
+    console.log("\n\nin the server:");
+    console.log("title: ", title);
+    console.log("caption: ", caption);
+    console.log("full description: ", fullDescription);
+    console.log("lat: ", lat);
+    console.log("lng: ", lng);
+    console.log("part of day: ", partOfDay);
+    console.log("date photographed: ", datePhotographed);
+    console.log("\n\n");
     if (!imageFile || !id || !title) {
         return; // errors should have already been thrown by this point by middlewares
     }
@@ -123,6 +134,7 @@ router.post("/", requireAuth, singleMulterUpload("image"), checkForImage, valida
         if (datePhotographed) {
             postObj.datePhotographed = new Date(datePhotographed);
         }
+        console.log("post object right before we create it: ", postObj);
         const post = await prisma.post.create({ data: postObj });
         await prisma.user.update({
             where: { id },
@@ -131,6 +143,7 @@ router.post("/", requireAuth, singleMulterUpload("image"), checkForImage, valida
         res.status(201).json({ post });
     }
     catch (err) {
+        console.log("error thrown: ", err);
         next(err);
     }
 });

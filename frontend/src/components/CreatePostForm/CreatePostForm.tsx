@@ -88,11 +88,17 @@ const CreatePostForm = (): JSX.Element => {
       postDetails.append("partOfDay", partOfDay);
     }
 
+    console.log("\n\n In form before sending: ");
+    console.log("post details: ", postDetails);
+
     const serverResponse: PayloadAction<any> = await dispatch(
       makeNewPostThunk(postDetails)
     );
 
+    console.log("\n\nnserver response back in component: ", serverResponse);
+
     if (serverResponse.payload) {
+      console.log("server responses payload: ", serverResponse.payload, "\n\n");
       setErrors({ serverError: serverResponse?.payload?.message });
     } else {
       // redirect user to new post details page on successful creation

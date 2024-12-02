@@ -55,6 +55,7 @@ export const makeNewPostThunk = createAsyncThunk(
       const newPost = await serverMethods.posts.create(formData);
       dispatch(postsSlice.actions.setCurrentPost(newPost));
     } catch (error: any) {
+      console.log("\n\nerror in the thunk: ", error, "\n\n");
       const errorResponse: ServerError = error;
       return errorResponse;
     }
