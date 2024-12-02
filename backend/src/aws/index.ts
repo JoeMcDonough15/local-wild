@@ -11,6 +11,7 @@ const NAME_OF_BUCKET = process.env.AWS_BUCKET_NAME;
 
 export const singlePublicFileUpload = async (file: Express.Multer.File) => {
   const { originalname, buffer } = file;
+  console.log("\n\nIn aws: file inside singlePublicFileUpload: ", file, "\n\n");
   const Key = new Date().getTime().toString() + path.extname(originalname);
 
   const client = new Upload({
@@ -24,6 +25,8 @@ export const singlePublicFileUpload = async (file: Express.Multer.File) => {
   }).done();
 
   const imageUrl = (await client).Location;
+
+  console.log("image url after upload to aws: ", imageUrl, "\n\n");
 
   if (!imageUrl) {
     throw new Error("failed to upload image");
