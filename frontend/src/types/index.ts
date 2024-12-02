@@ -3,14 +3,6 @@ export interface ServerError extends Error {
   status?: number;
 }
 
-declare global {
-  namespace PayloadAction {
-    interface PayloadAction {
-      error?: ServerError;
-    }
-  }
-}
-
 export interface User {
   id: number;
   username: string;
