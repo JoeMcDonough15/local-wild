@@ -1,7 +1,10 @@
 import { Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../store";
 import { useState } from "react";
-import { updateCommentThunk } from "../../store/slices/commentsSlice";
+import {
+  deleteCommentThunk,
+  updateCommentThunk,
+} from "../../store/slices/commentsSlice";
 import { PayloadAction } from "@reduxjs/toolkit";
 import { CommentOnPost } from "../../types";
 
@@ -28,6 +31,10 @@ const Comment = ({ comment }: CommentProps) => {
       serverError?: string;
     }
   );
+
+  const deleteComment = () => {
+    dispatch(deleteCommentThunk(id));
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const value = e.target.value;
@@ -107,7 +114,14 @@ const Comment = ({ comment }: CommentProps) => {
                 >
                   Edit
                 </button>
-                <button className="delete-comment-button">Delete</button>
+                <button
+                  onClick={() => {
+                    deleteComment();
+                  }}
+                  className="delete-comment-button"
+                >
+                  Delete
+                </button>
               </div>
             )}
           </div>
