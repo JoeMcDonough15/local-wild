@@ -4,14 +4,8 @@ import path from "path";
 import multer from "multer";
 const NAME_OF_BUCKET = process.env.AWS_BUCKET_NAME;
 
-//  make sure to set environment variables in production for:
-//  AWS_ACCESS_KEY_ID
-//  AWS_SECRET_ACCESS_KEY
-//  and aws will automatically use those environment variables
-
 export const singlePublicFileUpload = async (file: Express.Multer.File) => {
   const { originalname, buffer } = file;
-  console.log("\n\nIn aws: file inside singlePublicFileUpload: ", file, "\n\n");
   const Key = new Date().getTime().toString() + path.extname(originalname);
 
   const client = new Upload({
@@ -25,8 +19,6 @@ export const singlePublicFileUpload = async (file: Express.Multer.File) => {
   }).done();
 
   const imageUrl = (await client).Location;
-
-  console.log("image url after upload to aws: ", imageUrl, "\n\n");
 
   if (!imageUrl) {
     throw new Error("failed to upload image");

@@ -1,8 +1,14 @@
-export interface ServerError {
-  title?: string;
+export interface ServerError extends Error {
   errors?: Record<string, string>;
-  message?: string;
   status?: number;
+}
+
+declare global {
+  namespace PayloadAction {
+    interface PayloadAction {
+      error?: ServerError;
+    }
+  }
 }
 
 export interface User {

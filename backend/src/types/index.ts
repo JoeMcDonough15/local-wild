@@ -25,11 +25,9 @@ export interface NewUser {
   password: string;
 }
 
-export interface ApiError {
-  title?: string;
+export interface ApiError extends Error {
   errors?: Record<string, string>;
   status?: number;
-  message?: string;
 }
 
 declare global {

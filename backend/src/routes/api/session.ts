@@ -33,9 +33,9 @@ router.post(
 
     if (!user || !bcrypt.compareSync(password, user.password)) {
       const err: ApiError = {
+        name: "Login failed",
         message: "The provided credentials were invalid.",
         status: 401,
-        title: "Login failed",
         errors: { "Login failed": "The provided credentials were invalid" },
       };
 
@@ -156,6 +156,7 @@ router.put(
 
       if (!userToUpdate) {
         const userNotFound: ApiError = {
+          name: "User Not Found Error",
           message: "This user could not be found",
           status: 404,
         };

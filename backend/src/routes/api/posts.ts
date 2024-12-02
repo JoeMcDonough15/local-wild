@@ -19,7 +19,7 @@ router.get("/", async (req, res, next) => {
     (userId && isNaN(Math.floor(Number(userId))))
   ) {
     const err: ApiError = {
-      title: "Bad Request",
+      name: "Bad Request Error",
       message: "Slide number and userId must both be digits.",
       status: 400,
     };
@@ -67,7 +67,7 @@ router.get("/:id", requireAuth, async (req, res, next) => {
   const { id } = req.params;
   if (isNaN(Math.floor(Number(id)))) {
     const err: ApiError = {
-      title: "Bad Request",
+      name: "Bad Request Error",
       message: "id must be a digit.",
       status: 400,
     };
@@ -89,11 +89,12 @@ router.get("/:id", requireAuth, async (req, res, next) => {
     });
 
     if (!post) {
-      const userNotFound: ApiError = {
+      const postNotFound: ApiError = {
+        name: "Not Found Error",
         message: "This post could not be found",
         status: 404,
       };
-      return next(userNotFound);
+      return next(postNotFound);
     }
 
     res.status(200).json({ post });
@@ -110,9 +111,7 @@ router.post(
   checkForImage,
   validatePostBody,
   async (req: Request, res: Response, next: NextFunction) => {
-    console.log("do we get here?");
     const id = req.user?.id;
-    console.log("user id: ", id);
     const imageFile = req.file;
     const {
       title,
@@ -123,15 +122,7 @@ router.post(
       partOfDay,
       datePhotographed,
     } = req.body;
-    console.log("\n\nin the server:");
-    console.log("title: ", title);
-    console.log("caption: ", caption);
-    console.log("full description: ", fullDescription);
-    console.log("lat: ", lat);
-    console.log("lng: ", lng);
-    console.log("part of day: ", partOfDay);
-    console.log("date photographed: ", datePhotographed);
-    console.log("\n\n");
+
     if (!imageFile || !id || !title) {
       return; // errors should have already been thrown by this point by middlewares
     }
@@ -159,7 +150,6 @@ router.post(
         postObj.datePhotographed = new Date(datePhotographed);
       }
 
-      console.log("post object right before we create it: ", postObj);
       const post = await prisma.post.create({ data: postObj });
       await prisma.user.update({
         where: { id },
@@ -168,7 +158,6 @@ router.post(
 
       res.status(201).json({ post });
     } catch (err) {
-      console.log("error thrown: ", err);
       next(err);
     }
   }

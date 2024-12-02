@@ -17,10 +17,13 @@ const handleValidationErrors = (
       errors[error.param] = error.msg;
     }
 
-    const err: ApiError = Error("Bad request.");
-    err.errors = errors;
-    err.status = 400;
-    err.title = "Bad request.";
+    const err: ApiError = {
+      name: "Bad Request",
+      message: "Invalid input",
+      errors: errors,
+      status: 400,
+    };
+
     next(err);
   }
 
@@ -74,7 +77,7 @@ export const checkForImage = (
 ) => {
   if (!req.file) {
     const err: ApiError = {
-      title: "File required",
+      name: "File Required Error",
       message: "You must provide an image file when making a post.",
       status: 400,
     };

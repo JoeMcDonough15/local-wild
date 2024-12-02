@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../store";
-import { PayloadAction } from "@reduxjs/toolkit";
 import { makeNewPostThunk } from "../../store/slices/postsSlice";
+import { useNavigate } from "react-router-dom";
+import { Post, ServerError } from "../../types";
 
 const CreatePostForm = (): JSX.Element => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const sessionUser = useAppSelector((state) => state.session.sessionUser);
   const [imgFile, setImgFile] = useState<File | null>(null);
   const [showUpload, setShowUpload] = useState(true);
@@ -88,20 +90,16 @@ const CreatePostForm = (): JSX.Element => {
       postDetails.append("partOfDay", partOfDay);
     }
 
-    console.log("\n\n In form before sending: ");
-    console.log("post details: ", postDetails);
-
-    const serverResponse: PayloadAction<any> = await dispatch(
+    const serverResponse: any | Post | ServerError = await dispatch(
       makeNewPostThunk(postDetails)
-    );
+    ).unwrap();
 
-    console.log("\n\nnserver response back in component: ", serverResponse);
-
-    if (serverResponse.payload) {
-      console.log("server responses payload: ", serverResponse.payload, "\n\n");
-      setErrors({ serverError: serverResponse?.payload?.message });
+    if (serverResponse.status >= 400) {
+      setErrors({ serverError: serverResponse.message });
     } else {
       // redirect user to new post details page on successful creation
+      const newPost = serverResponse;
+      navigate(`/posts/${newPost.id}`);
     }
   };
 
