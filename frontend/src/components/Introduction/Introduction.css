@@ -1,12 +1,19 @@
+.introduction-image-container {
+  height: 100vh;
+  width: 100vw;
+}
+
 .introduction-image {
   bottom: 0;
-  height: 100vh;
+  /* height: 100vh; */
+  height: 100%;
   left: 0;
   object-fit: cover;
   position: absolute;
   right: 0;
   top: 0;
-  width: 100vw;
+  /* width: 100vw; */
+  width: 100%;
 }
 
 .scroll-button {

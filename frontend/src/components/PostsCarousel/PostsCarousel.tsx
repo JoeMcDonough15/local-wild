@@ -38,6 +38,7 @@ const PostsCarousel = ({
             eachPost && (
               <PostImageAndCaption
                 key={index + 1}
+                postId={eachPost.id}
                 imageUrl={eachPost.imageUrl}
                 imageText={eachPost.title}
                 containerClasses="carousel-img-container"

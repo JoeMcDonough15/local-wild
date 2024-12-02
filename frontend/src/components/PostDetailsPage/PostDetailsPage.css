@@ -1,0 +1,16 @@
+.post-details-first-row {
+  justify-content: space-between;
+}
+
+.full-screen-button-and-image,
+.post-title-and-details-container {
+  width: 45%;
+}
+
+.full-screen-button-and-image {
+  align-items: center;
+}
+
+.post-details-page-image-container {
+  align-items: center;
+}

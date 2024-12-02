@@ -11,6 +11,7 @@ import ConfirmDeleteModal from "../ConfirmDeleteModal";
 import SignupFormModal from "../SignupFormModal/SignupFormModal";
 import LoginFormModal from "../LoginFormModal/LoginFormModal";
 import CommentsSection from "../CommentsSection/CommentsSection";
+import "./PostDetailsPage.css";
 
 const PostDetailsPage = () => {
   const sessionUser = useAppSelector((state) => state.session.sessionUser);
@@ -65,22 +66,28 @@ const PostDetailsPage = () => {
       ) : (
         <section className="post-details-page">
           <div className="post-details-first-row flex-row">
-            <button
-              onClick={() => {
-                setImageFullScreen(true);
-              }}
-              className="full-screen-button"
-              type="button"
-            >
-              View Full Screen
-            </button>
-
-            <PostImageAndCaption
-              imageUrl={currentPost?.imageUrl}
-              imageText={currentPost?.caption ? currentPost.caption : ""}
-              // plus classes for the container, image, and caption styles
-            />
-            <PostTitleAndDetails />
+            <div className="full-screen-button-and-image flex-col">
+              {" "}
+              <button
+                onClick={() => {
+                  setImageFullScreen(true);
+                }}
+                className="full-screen-button"
+                type="button"
+              >
+                View Full Screen
+              </button>
+              <PostImageAndCaption
+                postId={Number(id)}
+                imageUrl={currentPost?.imageUrl}
+                imageText={currentPost?.caption ? currentPost.caption : ""}
+                containerClasses="post-details-page-image-container flex-col"
+                // plus classes for the container, image, and caption styles
+              />{" "}
+            </div>
+            <div className="post-title-and-details-container flex-col">
+              <PostTitleAndDetails />
+            </div>
           </div>
           <div className="post-details-second-row flex-row">
             <CommentsSection />
