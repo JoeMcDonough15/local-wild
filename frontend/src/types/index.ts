@@ -60,6 +60,7 @@ export interface BatchOfPosts {
 export interface CommentOnPost {
   id: number;
   commentText: string;
+  commenter: User;
   postId: number;
   commenterId: number;
   createdAt: Date;

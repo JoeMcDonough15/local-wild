@@ -77,7 +77,12 @@ router.put("/:id", requireAuth, async (req, res, next) => {
       const comment = await prisma.commentOnPost.update({
         where: { id: Number(id), commenterId: userId },
         data: { commentText, updatedAt: new Date() },
+        include: {
+          replies: { orderBy: { createdAt: "asc" } },
+          commenter: { select: { username: true, id: true } },
+        },
       });
+
       if (!comment) {
         const err: ApiError = {
           title: "Not Found or Unauthorized",

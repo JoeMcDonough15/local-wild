@@ -184,7 +184,7 @@ async function main() {
             imageUrl:
               "https://local-wild-images.s3.us-east-1.amazonaws.com/rabbit.jpg",
             title: "Alert Rabbit",
-            caption: "A Red Fox peeking out",
+            caption: "An alert rabbit in the grass",
             fullDescription:
               "I captured an intense moment of focus as this rabbit sat in the heart of a sunlit meadow. After patiently waiting for the perfect opportunity, I noticed the rabbit emerging from the underbrush, its ears perked and eyes wide with alertness. The soft breeze stirred the grasses around it as the rabbit paused, seemingly aware of every movement in its surroundings. With a quick yet steady shot, I froze the moment, highlighting the rabbit’s sharp instincts and the serene beauty of the meadow. I think this image perfectly conveys the delicate balance between calm and vigilance in the life of a wild rabbit.",
             partOfDay: "Early afternoon",

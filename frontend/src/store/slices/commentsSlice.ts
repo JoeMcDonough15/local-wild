@@ -50,12 +50,16 @@ export const deleteCommentThunk = createAsyncThunk(
   }
 );
 
+// replies thunks
+
 interface CommentsState {
   allComments: Record<number, CommentOnPost>;
+  totalNumComments: number;
 }
 
 const initialState: CommentsState = {
   allComments: {},
+  totalNumComments: 0,
 };
 
 export const commentsSlice = createSlice({
@@ -63,24 +67,28 @@ export const commentsSlice = createSlice({
   initialState,
   reducers: {
     setComments: (state, action: PayloadAction<CommentOnPost[]>) => {
+      state.allComments = {};
+      state.totalNumComments = 0;
       const commentsArray = action.payload;
-      commentsArray.map((comment, index) => {
-        state.allComments[index + 1] = comment;
+      state.totalNumComments = commentsArray.length;
+      commentsArray.map((comment) => {
+        state.allComments[comment.id] = comment;
       });
     },
-    clearComments: (state) => {
-      state.allComments = {};
-    },
     addComment: (state, action: PayloadAction<CommentOnPost>) => {
+      const commentToAdd = action.payload;
       const nextKey = Object.keys(state.allComments).length + 1;
-      state.allComments[nextKey] = action.payload;
+      state.allComments[nextKey] = commentToAdd;
+      state.totalNumComments++;
     },
     updateComment: (state, action: PayloadAction<CommentOnPost>) => {
       const updatedComment = action.payload;
       state.allComments[updatedComment.id] = updatedComment;
     },
     deleteComment: (state, action: PayloadAction<number>) => {
-      delete state.allComments[action.payload];
+      const commentId = action.payload;
+      delete state.allComments[commentId];
+      state.totalNumComments--;
     },
   },
 });

@@ -8,8 +8,8 @@ import type {
   GetPostsOptions,
   BatchOfPosts,
   NewComment,
-  UpdateComment,
   CommentOnPost,
+  UpdateComment,
 } from "../types";
 
 const URL_ROOT = "/api";
