@@ -34,6 +34,8 @@ const Homepage = () => {
         ref={beginHomepageContent}
       ></div>
       <section className="homepage-content flex-col">
+        <h2 className="title-font">Local Wild</h2>
+        <p>Discover the beauty in your own back yard</p>
         <DisplayPosts listOrCarousel="carousel" postsPerPageOrSlide={3} />
         <OurMission />
       </section>

@@ -1,0 +1,27 @@
+.user-profile-page,
+.user-details,
+.name-and-avatar {
+  align-items: center;
+}
+
+.user-profile-page {
+  padding-top: 20px;
+}
+
+.user-details {
+  justify-content: space-between;
+  width: 100%;
+}
+
+.user-avatar-container {
+  border-radius: 50%;
+  height: 80px;
+  width: 80px;
+}
+
+.user-avatar {
+  border-radius: inherit;
+  height: 100%;
+  object-fit: cover;
+  width: 100%;
+}

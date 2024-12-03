@@ -1,0 +1,8 @@
+.title-and-details-container {
+  gap: 10px;
+}
+
+.link-to-photographer {
+  color: dodgerblue;
+  cursor: pointer;
+}

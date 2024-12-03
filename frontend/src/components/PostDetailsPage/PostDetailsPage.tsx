@@ -64,7 +64,7 @@ const PostDetailsPage = () => {
           imageAltText={currentPost.title}
         />
       ) : (
-        <section className="post-details-page">
+        <section className="post-details-page main-container">
           <div className="post-details-first-row flex-row">
             <div className="full-screen-button-and-image flex-col">
               {" "}
@@ -81,7 +81,8 @@ const PostDetailsPage = () => {
                 postId={Number(id)}
                 imageUrl={currentPost?.imageUrl}
                 imageText={currentPost?.caption ? currentPost.caption : ""}
-                containerClasses="post-details-page-image-container flex-col"
+                containerClasses="post-details-page-image-and-caption-container flex-col"
+                imgClasses="post-details-main-image"
                 // plus classes for the container, image, and caption styles
               />{" "}
             </div>
