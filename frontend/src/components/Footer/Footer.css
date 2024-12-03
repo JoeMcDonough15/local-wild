@@ -1,18 +1,24 @@
 .footer {
   bottom: 0;
+  font-size: 0.8rem;
   height: 20vh;
   justify-content: space-between;
+  padding: 20px 0;
   position: fixed;
   width: 100vw;
   z-index: -9999;
 }
 
 .footer a:hover {
-  color: #6fc3d2;
+  color: var(--link-highlight-color);
 }
 
 .helpful-links {
   justify-content: space-around;
+}
+
+.link-trio-header {
+  margin-bottom: 20px;
 }
 
 .copyright-and-socials {

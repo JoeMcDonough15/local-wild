@@ -5,20 +5,22 @@
 
 .introduction-image {
   bottom: 0;
-  /* height: 100vh; */
   height: 100%;
   left: 0;
   object-fit: cover;
   position: absolute;
   right: 0;
   top: 0;
-  /* width: 100vw; */
   width: 100%;
 }
 
 .scroll-button {
-  position: absolute;
+  border-radius: 50%;
+  border: none;
   bottom: 50px;
+  height: 60px;
+  width: 60px;
+  position: absolute;
   right: 50px;
 }
 
