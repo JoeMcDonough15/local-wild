@@ -39,7 +39,7 @@ const Homepage = () => {
         </div>
         <div className="title flex-col">
           <h2 className="title-font">Local Wild</h2>
-          <p>Discover the beauty in your own back yard</p>
+          <p>Discover the beauty in your own backyard...</p>
         </div>
         <DisplayPosts listOrCarousel="carousel" postsPerPageOrSlide={3} />
         <OurMission />

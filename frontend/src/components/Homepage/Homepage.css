@@ -1,6 +1,6 @@
 .homepage-content {
   align-items: center;
-  gap: 100px;
+  gap: 40px;
   height: 80vh;
   left: 0;
   padding-top: 75px;
@@ -24,12 +24,11 @@
 
 .title {
   align-items: center;
-  margin: 400px 0;
   width: 100%;
 }
 
 .homepage-content > .carousel.flex-row {
   height: 100%;
-  margin: 400px 0;
+  margin: 50px 0;
   width: 100%;
 }

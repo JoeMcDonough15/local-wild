@@ -1,6 +1,8 @@
+import { AiOutlineRight, AiOutlineLeft } from "react-icons/ai";
 import { Post } from "../../types";
 import PostImageAndCaption from "../PostImageAndCaption";
 import "./PostsCarousel.css";
+import { BiArrowToRight } from "react-icons/bi";
 
 interface CarouselProps {
   postsToRender: Post[];
@@ -28,8 +30,7 @@ const PostsCarousel = ({
           type="button"
           className="carousel-button button-back"
         >
-          {" "}
-          ⬅
+          <AiOutlineLeft />{" "}
         </button>
       )}
       <div className="gallery flex-row">
@@ -41,7 +42,7 @@ const PostsCarousel = ({
                 postId={eachPost.id}
                 imageUrl={eachPost.imageUrl}
                 imageText={eachPost.title}
-                containerClasses="carousel-img-container"
+                containerClasses="carousel-tile-container flex-col"
                 imgClasses="carousel-img"
               />
             )
@@ -57,7 +58,7 @@ const PostsCarousel = ({
           type="button"
           className="carousel-button button-forward"
         >
-          ➡️
+          <AiOutlineRight />
         </button>
       )}
     </section>

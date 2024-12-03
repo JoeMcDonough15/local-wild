@@ -1,28 +1,18 @@
 .our-mission-container {
-  padding: 250px 0;
+  background-image: url("https://local-wild-images.s3.us-east-1.amazonaws.com/whale.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: bottom center;
+  padding: 300px 0;
   position: relative;
   width: 100vw;
 }
 
-.our-mission-img-container {
-  position: absolute;
-}
-
-.our-mission-img,
 .our-mission-text {
-  bottom: 0;
-  position: absolute;
-}
-
-.our-mission-img {
-  object-fit: cover;
-  width: 100%;
-}
-
-.our-mission-text {
+  bottom: 8%;
   color: white;
   padding-left: 65vw;
-  margin-bottom: 40px;
+  position: absolute;
   right: 30px;
   text-align: right;
 }

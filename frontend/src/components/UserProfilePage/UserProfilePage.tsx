@@ -1,6 +1,6 @@
 import { useAppSelector, useAppDispatch } from "../../store";
 import DisplayPosts from "../DisplayPosts";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
 import { getUserThunk } from "../../store/slices/userSlice";
 import type { LoadingState } from "../../types";
@@ -10,10 +10,16 @@ import "./UserProfilePage.css";
 
 const UserProfilePage = () => {
   const currentUser = useAppSelector((state) => state.users.currentUser);
+  const sessionUser = useAppSelector((state) => state.session.sessionUser);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const { id } = useParams();
   const [errors, setErrors] = useState({} as { serverError: string });
   const [userLoaded, setUserLoaded] = useState<LoadingState>("no");
+
+  if (!sessionUser) {
+    return navigate("/");
+  }
 
   if (userLoaded === "no") {
     setUserLoaded("loading");

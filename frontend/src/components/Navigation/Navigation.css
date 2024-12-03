@@ -7,6 +7,10 @@
   width: 100%;
 }
 
+.header .nav-bar a {
+  transition: color 250ms ease-in-out;
+}
+
 .header .nav-bar a:hover {
   color: var(--link-highlight-color);
 }
@@ -17,20 +21,20 @@
   justify-content: space-between;
 }
 
-.logo-text {
-  font-family: cursive;
+.logo-text.title-font {
+  font-size: 3vw;
 }
 
 .nav-left,
 .nav-center,
 .nav-right {
+  align-items: center;
+  display: flex;
   width: 25%;
 }
 
 .nav-center {
-  align-items: center;
   justify-content: space-between;
-  /* width: 25%; */
 }
 
 .nav-right {
@@ -38,7 +42,9 @@
 }
 
 .new-post-button {
-  margin-right: 15px;
+  align-items: center;
+  display: flex;
+  margin-right: 25px;
 }
 
 .logout-button {
@@ -46,6 +52,7 @@
   border: 2px solid white;
   color: white;
   padding: 0.5em 1em;
+  transition: all 250ms ease-in-out;
 }
 
 .logout-button:hover {

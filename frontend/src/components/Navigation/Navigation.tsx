@@ -17,8 +17,8 @@ const Navigation = () => {
     <header className="header">
       <nav className="nav-bar flex-row main-container">
         <div className="nav-left">
-          <Link className="logo-text" to="/#skip-intro">
-            localWild
+          <Link className="title-font logo-text" to="/#skip-intro">
+            LocalWild
           </Link>
         </div>
         {sessionUser && (
