@@ -18,7 +18,8 @@ const UserProfilePage = () => {
   const [userLoaded, setUserLoaded] = useState<LoadingState>("no");
 
   if (!sessionUser) {
-    return navigate("/");
+    navigate("/");
+    return <></>;
   }
 
   if (userLoaded === "no") {

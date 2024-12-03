@@ -2,7 +2,6 @@ import { AiOutlineRight, AiOutlineLeft } from "react-icons/ai";
 import { Post } from "../../types";
 import PostImageAndCaption from "../PostImageAndCaption";
 import "./PostsCarousel.css";
-import { BiArrowToRight } from "react-icons/bi";
 
 interface CarouselProps {
   postsToRender: Post[];
