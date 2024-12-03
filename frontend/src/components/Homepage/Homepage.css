@@ -1,8 +1,9 @@
 .homepage-content {
+  align-items: center;
   gap: 100px;
   height: 80vh;
   left: 0;
-  padding-top: 125px;
+  padding-top: 75px;
   position: fixed;
   overflow: scroll;
   right: 0;
@@ -10,6 +11,25 @@
   z-index: -999;
 }
 
+.hero-img-container {
+  height: 600px;
+  width: 100%;
+}
+
+.hero-img {
+  height: 100%;
+  object-fit: cover;
+  width: 100%;
+}
+
+.title {
+  align-items: center;
+  margin: 400px 0;
+  width: 100%;
+}
+
 .homepage-content > .carousel.flex-row {
   height: 100%;
+  margin: 400px 0;
+  width: 100%;
 }

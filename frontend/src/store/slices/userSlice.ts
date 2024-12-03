@@ -11,17 +11,13 @@ import serverMethods from "../api";
 // get a user's details (for profile page viewing)
 export const getUserThunk = createAsyncThunk(
   "user/getUser",
-  async (userId: number, { dispatch }): Promise<ServerError | User> => {
+  async (userId: number, { dispatch }) => {
     try {
       const userDetails = await serverMethods.users.getUser(userId);
       dispatch(userSlice.actions.setCurrentUser(userDetails));
-      return userDetails;
-    } catch (error) {
-      if (error instanceof Error) {
-        const errorResponse: ServerError = error;
-        return errorResponse;
-      }
-      throw error;
+    } catch (error: any) {
+      const errorResponse: ServerError = error;
+      return errorResponse;
     }
   }
 );

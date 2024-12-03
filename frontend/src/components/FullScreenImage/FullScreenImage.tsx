@@ -1,3 +1,5 @@
+import "./FullScreenImage.css";
+
 interface FullScreenImageProps {
   imageUrl: string;
   imageAltText: string;
@@ -10,8 +12,11 @@ const FullScreenImage = ({
   setFullScreen,
 }: FullScreenImageProps) => {
   return (
-    <div onClick={() => setFullScreen(false)}>
-      <img src={imageUrl} alt={imageAltText} />
+    <div
+      className="full-screen-img-container"
+      onClick={() => setFullScreen(false)}
+    >
+      <img className="full-screen-img" src={imageUrl} alt={imageAltText} />
     </div>
   );
 };

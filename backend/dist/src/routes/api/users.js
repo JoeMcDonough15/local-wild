@@ -21,6 +21,6 @@ router.get("/:id", async (req, res, next) => {
         };
         return next(userNotFound);
     }
-    res.status(200).json(user);
+    res.status(200).json({ user });
 });
 export default router;

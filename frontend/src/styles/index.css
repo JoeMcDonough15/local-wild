@@ -5,7 +5,23 @@
 }
 
 :root {
+  font-family: "Noto Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+  font-size: 1.2rem;
+  font-variation-settings: "wdth" 100;
+  font-weight: 400;
   --header-height: 75px;
+  --link-highlight-color: #6fc3d2;
+}
+
+.title-font {
+  font-family: "Monsieur La Doulaise", cursive;
+  font-weight: 700;
+  font-size: 8rem;
+  font-style: normal;
+  letter-spacing: 0.05em;
+  text-align: center;
 }
 
 a {
@@ -28,7 +44,7 @@ img {
 }
 
 .main-container {
-  padding: 0 2vw;
+  margin: 0 2vw;
 }
 
 .flex-row,

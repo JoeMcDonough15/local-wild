@@ -16,6 +16,7 @@ import Footer from "./components/Footer";
 import MyPostsPage from "./components/MyPostsPage";
 import CreatePostForm from "./components/CreatePostForm";
 import PostDetailsPage from "./components/PostDetailsPage";
+import UserProfilePage from "./components/UserProfilePage/UserProfilePage";
 
 function ErrorBoundary() {
   const error = useRouteError();
@@ -100,6 +101,11 @@ const router = createBrowserRouter([
       {
         path: "/posts/:id",
         element: <PostDetailsPage />,
+        errorElement: <ErrorBoundary />,
+      },
+      {
+        path: "/users/:id",
+        element: <UserProfilePage />,
         errorElement: <ErrorBoundary />,
       },
     ],

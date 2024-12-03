@@ -26,7 +26,7 @@ const Homepage = () => {
         className="scroll-button"
         onClick={scrollContentIntoView}
       >
-        down
+        Enter
       </button>
       <div
         id="skip-intro"
@@ -34,6 +34,13 @@ const Homepage = () => {
         ref={beginHomepageContent}
       ></div>
       <section className="homepage-content flex-col">
+        <div className="hero-img-container">
+          <img className="hero-img" src="assets/images/bridge.png" alt="" />
+        </div>
+        <div className="title flex-col">
+          <h2 className="title-font">Local Wild</h2>
+          <p>Discover the beauty in your own back yard</p>
+        </div>
         <DisplayPosts listOrCarousel="carousel" postsPerPageOrSlide={3} />
         <OurMission />
       </section>

@@ -21,12 +21,15 @@ const PostTitleAndDetails = () => {
   }
 
   return (
-    <>
+    <div className="title-and-details-container flex-col">
       <h1 className="post-title">{currentPost.title}</h1>
       <div className="post-details-container flex-col">
         <p className="post-credit-and-date">
           Taken by{" "}
-          <Link to={`/users/${currentPost.photographerId}`}>
+          <Link
+            className="link-to-photographer"
+            to={`/users/${currentPost.photographerId}`}
+          >
             {" "}
             {currentPost?.photographer?.username}
           </Link>{" "}
@@ -41,7 +44,7 @@ const PostTitleAndDetails = () => {
           </p>
         )}
       </div>
-    </>
+    </div>
   );
 };
 

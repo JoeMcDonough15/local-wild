@@ -1,3 +1,7 @@
+.post-details-page {
+  padding-top: 20px;
+}
+
 .post-details-first-row {
   justify-content: space-between;
 }
@@ -11,6 +15,13 @@
   align-items: center;
 }
 
-.post-details-page-image-container {
+.full-screen-button {
+  align-self: flex-end;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+.post-details-page-image-and-caption-container {
   align-items: center;
 }

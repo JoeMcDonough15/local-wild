@@ -1,10 +1,16 @@
 .our-mission-container {
+  padding: 250px 0;
   position: relative;
   width: 100vw;
 }
 
+.our-mission-img-container {
+  position: absolute;
+}
+
 .our-mission-img,
 .our-mission-text {
+  bottom: 0;
   position: absolute;
 }
 
@@ -15,7 +21,13 @@
 
 .our-mission-text {
   color: white;
+  padding-left: 65vw;
+  margin-bottom: 40px;
   right: 30px;
   text-align: right;
-  top: 270px;
+}
+
+.our-mission-header {
+  font-size: 2rem;
+  margin-bottom: 0.25em;
 }
