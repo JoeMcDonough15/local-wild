@@ -5,8 +5,8 @@ export interface User {
   password?: string;
   profileImageUrl?: string | null;
   location?: string | null;
-  numYearsExperience?: number | null;
-  favoriteSubject?: string | null;
+  totalNumPosts?: number;
+  aboutMe?: string | null;
   createdAt?: Date;
   updatedAt?: Date;
   posts?: ExistingPost[];

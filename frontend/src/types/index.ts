@@ -9,8 +9,7 @@ export interface User {
   email: string;
   profileImageUrl: string | null;
   location: string | null;
-  numYearsExperience: number | null;
-  favoriteSubject: string | null;
+  aboutMe?: string | null;
   createdAt: Date;
   updatedAt: Date;
   posts: Post[];

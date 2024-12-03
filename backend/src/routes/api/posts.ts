@@ -47,11 +47,9 @@ router.get("/", async (req, res, next) => {
         ...queryObj,
         where: { photographerId: Number(userId) },
       });
-      const userFeatured = await prisma.user.findUnique({
-        where: { id: Number(userId) },
-        select: { numPosts: true },
+      totalNumPosts = await prisma.post.count({
+        where: { photographerId: Number(userId) },
       });
-      totalNumPosts = userFeatured?.numPosts;
     } else {
       posts = await prisma.post.findMany(queryObj);
       totalNumPosts = await prisma.post.count();
@@ -151,10 +149,6 @@ router.post(
       }
 
       const post = await prisma.post.create({ data: postObj });
-      await prisma.user.update({
-        where: { id },
-        data: { numPosts: { increment: 1 } },
-      });
 
       res.status(201).json({ post });
     } catch (err) {
@@ -221,10 +215,7 @@ router.delete("/:id", requireAuth, async (req, res, next) => {
     await prisma.post.delete({
       where: { id: Number(id), photographerId: userId },
     });
-    await prisma.user.update({
-      where: { id: userId },
-      data: { numPosts: { decrement: 1 } },
-    });
+
     res.status(200).json({ message: "Your post has been deleted." });
   } catch (err) {
     next(err);
