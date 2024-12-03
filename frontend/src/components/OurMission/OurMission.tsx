@@ -3,11 +3,11 @@ import "./OurMission.css";
 const OurMission = () => {
   return (
     <section className="our-mission-container">
-      <img
+      {/* <img
         className="our-mission-img"
         src="https://local-wild-images.s3.us-east-1.amazonaws.com/whale.png"
         alt="whale"
-      />
+      /> */}
 
       <div className="our-mission-text">
         <h3 className="our-mission-header">Our Mission</h3>

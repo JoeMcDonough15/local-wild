@@ -1,12 +1,16 @@
 .footer {
   bottom: 0;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   height: 20vh;
-  justify-content: space-between;
-  padding: 20px 0;
+  justify-content: center;
+  padding: 1.5em 0 0.2em;
   position: fixed;
   width: 100vw;
   z-index: -9999;
+}
+
+.footer a {
+  transition: color 250ms ease-in-out;
 }
 
 .footer a:hover {
@@ -18,11 +22,16 @@
 }
 
 .link-trio-header {
-  margin-bottom: 20px;
+  font-size: 0.8rem;
+  margin-bottom: 0.5em;
 }
 
 .copyright-and-socials {
   justify-content: space-between;
+}
+
+.icon-row a:hover {
+  cursor: pointer;
 }
 
 .flex-row.icon-row > a:nth-of-type(2) {

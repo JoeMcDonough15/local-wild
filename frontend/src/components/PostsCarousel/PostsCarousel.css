@@ -1,15 +1,32 @@
 .carousel.flex-row {
   align-items: center;
   justify-content: center;
+  padding: 0 10vw;
+  width: 100%;
 }
 
-.carousel-img-container {
-  height: 200px;
-  width: 200px;
+.gallery.flex-row {
+  align-items: center;
+  gap: 2vw;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.carousel-tile-container {
+  align-items: center;
+  font-size: 0.8rem;
+  height: 30vw;
+  width: 30vw;
 }
 
 .carousel-img {
-  object-fit: contain;
+  object-fit: cover;
   height: 100%;
   width: 100%;
+}
+
+.carousel-button {
+  border: none;
+  background: transparent;
+  font-size: 2.5rem;
 }

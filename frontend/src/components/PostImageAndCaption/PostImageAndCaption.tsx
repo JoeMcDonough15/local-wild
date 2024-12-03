@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import "./PostImageAndCaption.css";
 
 interface ImageAndCaptionProps {
   postId: number;
