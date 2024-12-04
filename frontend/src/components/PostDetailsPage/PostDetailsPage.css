@@ -25,3 +25,8 @@
 .post-details-page-image-and-caption-container {
   align-items: center;
 }
+
+.google-maps-widget {
+  height: 400px;
+  width: 400px;
+}

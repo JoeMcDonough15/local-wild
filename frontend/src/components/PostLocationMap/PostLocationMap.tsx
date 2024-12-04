@@ -1,4 +1,4 @@
-import { GoogleMap, useJsApiLoader } from "@react-google-maps/api";
+import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
 
 interface MapProps {
   lat?: number;
@@ -20,14 +20,15 @@ const PostLocationMap = ({
     lng,
   };
 
-  const containerStyle = {
-    height: "400px",
-    width: "400px",
-  };
-
   return (
     isLoaded && (
-      <GoogleMap center={center} mapContainerStyle={containerStyle} zoom={10} />
+      <GoogleMap
+        center={center}
+        mapContainerClassName="google-maps-widget"
+        zoom={16}
+      >
+        <Marker position={center}></Marker>
+      </GoogleMap>
     )
   );
 };
