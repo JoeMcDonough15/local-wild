@@ -4,6 +4,7 @@ import sessionReducer from "./slices/sessionSlice";
 import usersReducer from "./slices/userSlice";
 import postsReducer from "./slices/postsSlice";
 import commentsReducer from "./slices/commentsSlice";
+import mapsReducer from "./slices/mapsSlice";
 
 export const store = configureStore({
   reducer: {
@@ -11,6 +12,7 @@ export const store = configureStore({
     users: usersReducer,
     posts: postsReducer,
     comments: commentsReducer,
+    maps: mapsReducer,
   },
 });
 

@@ -180,6 +180,15 @@ const serverMethods = {
       return data.message;
     },
   },
+  maps: {
+    retrieveKey: async (): Promise<string> => {
+      const data: { key: string } = await fetchWithJson("/maps/key", {
+        method: "POST",
+      });
+
+      return data.key;
+    },
+  },
 };
 
 export default serverMethods;

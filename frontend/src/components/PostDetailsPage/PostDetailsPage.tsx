@@ -12,6 +12,7 @@ import SignupFormModal from "../SignupFormModal/SignupFormModal";
 import LoginFormModal from "../LoginFormModal/LoginFormModal";
 import CommentsSection from "../CommentsSection/CommentsSection";
 import "./PostDetailsPage.css";
+import MapProvider from "../PostLocationMap/MapProvider";
 
 const PostDetailsPage = () => {
   const sessionUser = useAppSelector((state) => state.session.sessionUser);
@@ -92,7 +93,7 @@ const PostDetailsPage = () => {
           </div>
           <div className="post-details-second-row flex-row">
             <CommentsSection />
-            {/* <PostLocationMap /> */}
+            <MapProvider />
           </div>
           {userOwnsPost && (
             <div className="post-control-buttons flex-row">
