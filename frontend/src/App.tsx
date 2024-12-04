@@ -65,7 +65,7 @@ function Layout() {
       <main className="main-content">
         <Outlet />{" "}
       </main>
-      <footer className="footer">
+      <footer className="footer flex-col">
         <Footer />
       </footer>
       <Modal />

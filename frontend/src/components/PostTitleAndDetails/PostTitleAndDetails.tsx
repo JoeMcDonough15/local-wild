@@ -1,23 +1,13 @@
 import { useAppSelector } from "../../store";
 import { Link } from "react-router-dom";
 import "./PostTitleAndDetails.css";
+import { formattedDate } from "../../utils/formatter";
 
 const PostTitleAndDetails = () => {
   const currentPost = useAppSelector((state) => state.posts.currentPost);
 
   if (!currentPost) {
     return <></>;
-  }
-
-  let formattedDate;
-
-  if (currentPost.datePhotographed) {
-    formattedDate = currentPost.datePhotographed.toString().split("T")[0];
-
-    if (formattedDate) {
-      formattedDate = new Date(formattedDate);
-      formattedDate = formattedDate.toDateString();
-    }
   }
 
   return (
@@ -33,7 +23,9 @@ const PostTitleAndDetails = () => {
             {" "}
             {currentPost?.photographer?.username}
           </Link>{" "}
-          {formattedDate && <span> on {formattedDate}</span>}
+          {currentPost?.datePhotographed && (
+            <span>{formattedDate(currentPost.datePhotographed)}</span>
+          )}
         </p>
         {currentPost.fullDescription && (
           <p className="description">{currentPost.fullDescription}</p>

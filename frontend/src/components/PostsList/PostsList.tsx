@@ -2,6 +2,8 @@ import OpenModalButton from "../OpenModalButton/OpenModalButton";
 import EditPostFormModal from "../EditPostFormModal";
 import { Post } from "../../types";
 import ConfirmDeleteModal from "../ConfirmDeleteModal";
+import "./PostsList.css";
+import { formattedDate } from "../../utils/formatter";
 
 interface PostsListProps {
   postsToRender: Post[];
@@ -33,12 +35,14 @@ const PostsList = ({
                 src={eachPost.imageUrl}
                 alt={eachPost.title}
               />
-              <h3>{eachPost.title}</h3>
-              {eachPost.datePhotographed && (
-                <p>{eachPost.datePhotographed.toString()}</p>
-              )}
-              <div className="post-control-buttons">
+              <h3 className="post-name">{eachPost.title}</h3>
+              <p className="post-upload-date">
+                uploaded on {formattedDate(eachPost.createdAt)}
+              </p>
+
+              <div className="post-control-buttons flex-row">
                 <OpenModalButton
+                  classes="post-control-button"
                   buttonText="Edit"
                   modalComponent={
                     <EditPostFormModal
@@ -48,6 +52,7 @@ const PostsList = ({
                   }
                 />
                 <OpenModalButton
+                  classes="post-control-button"
                   buttonText="Delete"
                   modalComponent={
                     <ConfirmDeleteModal
@@ -61,23 +66,25 @@ const PostsList = ({
           )
         );
       })}
-      <ul className="page-buttons flex-row">
-        {mapArray.map((_, index) => {
-          return (
-            <li className="page-change-button-container" key={index}>
-              <button
-                className="page-change-button"
-                type="button"
-                onClick={(e) => {
-                  setPageNum(Number(e.currentTarget.innerText));
-                }}
-              >
-                {index + 1}
-              </button>
-            </li>
-          );
-        })}
-      </ul>
+      {mapArray.length > 1 && (
+        <ul className="page-buttons flex-row">
+          {mapArray.map((_, index) => {
+            return (
+              <li className="page-change-button-container" key={index}>
+                <button
+                  className="page-change-button"
+                  type="button"
+                  onClick={(e) => {
+                    setPageNum(Number(e.currentTarget.innerText));
+                  }}
+                >
+                  {index + 1}
+                </button>
+              </li>
+            );
+          })}
+        </ul>
+      )}
     </section>
   );
 };

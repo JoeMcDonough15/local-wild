@@ -10,7 +10,7 @@ const getYear = () => {
 
 const Footer = () => {
   return (
-    <footer className="footer flex-col">
+    <>
       <div className="helpful-links flex-row">
         <LinkTrio
           linkNames={[
@@ -47,7 +47,7 @@ const Footer = () => {
           </a>
         </div>
       </div>
-    </footer>
+    </>
   );
 };
 

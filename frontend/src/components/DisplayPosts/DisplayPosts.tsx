@@ -22,22 +22,14 @@ const DisplayPosts = ({
   const postsSoFar = useAppSelector((state) => state.posts.allPosts);
   const totalNumPosts = useAppSelector((state) => state.posts.totalNumPosts);
   const [slideOrPageNum, setSlideOrPageNum] = useState(1);
-  const [highestKey, setHighestKey] = useState<number | null>(null);
   const [gettingMorePosts, setGettingMorePosts] = useState(false);
-
+  const highestKey = slideOrPageNum * postsPerPageOrSlide;
   // run this useEffect only once, when the component first mounts, to clean up any leftover state from whichever component used it last (Homepage or UserProfilePage)
   useEffect(() => {
     dispatch(postsSlice.actions.clearAllPosts());
     dispatch(postsSlice.actions.setTotalNumPosts(0));
     setGettingMorePosts(true);
   }, [dispatch]);
-
-  // run this useEffect hook when component first mounts and then
-  // anytime the slideOrPageNum changes, to reset the highest key to what we need for the new current slide or page
-  useEffect(() => {
-    const newHighestKey = slideOrPageNum * postsPerPageOrSlide;
-    setHighestKey(newHighestKey);
-  }, [slideOrPageNum, postsPerPageOrSlide, setHighestKey]);
 
   // run this useEffect when component first mounts and then again
   // anytime that we need to get another batch of paginated posts
@@ -63,11 +55,19 @@ const DisplayPosts = ({
   ]);
 
   const needMorePosts = () => {
-    const amountOfPostsSoFar = Object.keys(postsSoFar).length;
-    return (
-      amountOfPostsSoFar < slideOrPageNum * postsPerPageOrSlide &&
-      totalNumPosts > amountOfPostsSoFar
-    );
+    if (listOrCarousel === "carousel") {
+      const amountOfPostsSoFar = Object.keys(postsSoFar).length;
+      return (
+        amountOfPostsSoFar < slideOrPageNum * postsPerPageOrSlide &&
+        totalNumPosts > amountOfPostsSoFar
+      );
+    } else {
+      let highestKeyThisPage = highestKey;
+      if (highestKeyThisPage > totalNumPosts) {
+        highestKeyThisPage -= highestKeyThisPage - totalNumPosts;
+      }
+      return !postsSoFar[highestKeyThisPage];
+    }
   };
 
   if (totalNumPosts === 0) {
@@ -76,9 +76,9 @@ const DisplayPosts = ({
 
   if (needMorePosts() && !gettingMorePosts) {
     setGettingMorePosts(true);
-    return <></>; // loading bar?
-  } else if (needMorePosts()) {
     return <></>;
+  } else if (needMorePosts()) {
+    return <h1>Loading...</h1>;
   } else if (!needMorePosts() && gettingMorePosts) {
     setGettingMorePosts(false);
   }
@@ -86,11 +86,9 @@ const DisplayPosts = ({
   const postsToRender: Post[] = [];
 
   for (let i = postsPerPageOrSlide - 1; i >= 0; i--) {
-    if (highestKey) {
-      const nextPost = postsSoFar[highestKey - i];
-      if (nextPost) {
-        postsToRender.push(nextPost);
-      }
+    const nextPost = postsSoFar[highestKey - i];
+    if (nextPost) {
+      postsToRender.push(nextPost);
     }
   }
 

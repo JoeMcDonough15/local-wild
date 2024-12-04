@@ -5,12 +5,18 @@
 }
 
 .user-profile-page {
+  gap: 20px;
   padding-top: 20px;
 }
 
 .user-details {
   justify-content: space-between;
   width: 100%;
+}
+
+.name-and-avatar {
+  justify-content: space-between;
+  width: 15%;
 }
 
 .user-avatar-container {
