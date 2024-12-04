@@ -19,11 +19,9 @@ model User {
     username String @unique @db.VarChar(255)
     email String @unique
     password String @db.VarChar(255)
-    numPosts Int @default(0)
     profileImageUrl String?
     location String? @db.VarChar(255)
-    numYearsExperience Int?
-    favoriteSubject String? @db.VarChar(255)
+    aboutMe String? @db.VarChar(2000)
     createdAt DateTime @default(now()) @db.Timestamp()
     updatedAt DateTime @default(now()) @db.Timestamp()
     posts Post[]

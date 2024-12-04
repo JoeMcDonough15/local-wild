@@ -8,11 +8,14 @@ router.get("/:id", async (req, res, next) => {
   const { id } = req.params;
   if (!id) return;
   const userId = Number(id);
-  const user: User | null = await prisma.user.findUnique({
+  const user: null | User = await prisma.user.findUnique({
     omit: {
       password: true,
     },
     where: { id: userId },
+  });
+  const usersPosts = await prisma.post.count({
+    where: { photographerId: userId },
   });
   if (!user) {
     const userNotFound: ApiError = {
@@ -23,6 +26,7 @@ router.get("/:id", async (req, res, next) => {
     };
     return next(userNotFound);
   }
+  user["totalNumPosts"] = usersPosts;
   res.status(200).json({ user });
 });
 

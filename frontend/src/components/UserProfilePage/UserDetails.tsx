@@ -9,8 +9,7 @@ const UserDetails = () => {
 
   if (!currentUser) return <></>;
 
-  const { username, favoriteSubject, location, numYearsExperience } =
-    currentUser;
+  const { username, location, aboutMe } = currentUser;
 
   return (
     <div className="user-details flex-row">
@@ -27,15 +26,8 @@ const UserDetails = () => {
         )}
       </div>
       <div className="details">
-        {favoriteSubject && (
-          <p>Favorite subject to photograph: {favoriteSubject}</p>
-        )}
-        {location && <p>Where I'm based: {location}</p>}
-        {numYearsExperience && (
-          <p>
-            My number of years as a wildlife photographer: {numYearsExperience}
-          </p>
-        )}
+        {location && <p>{location}</p>}
+        {aboutMe && <p>{aboutMe}</p>}
         {totalNumPostsByUser && (
           <p>
             {username} has posted {totalNumPostsByUser} times!

@@ -147,8 +147,6 @@ router.put(
       const userToUpdate = await prisma.user.update({
         where: { id: userId },
         data: {
-          favoriteSubject: favoriteSubject ?? null,
-          numYearsExperience: parseInt(numYearsExperience) ?? null,
           location: location ?? null,
           profileImageUrl: resourceUrl ?? null,
         },

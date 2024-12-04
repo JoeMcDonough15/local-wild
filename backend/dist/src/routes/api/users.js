@@ -12,6 +12,9 @@ router.get("/:id", async (req, res, next) => {
         },
         where: { id: userId },
     });
+    const usersPosts = await prisma.post.count({
+        where: { photographerId: userId },
+    });
     if (!user) {
         const userNotFound = {
             name: "Not Found Error",
@@ -21,6 +24,7 @@ router.get("/:id", async (req, res, next) => {
         };
         return next(userNotFound);
     }
+    user["totalNumPosts"] = usersPosts;
     res.status(200).json({ user });
 });
 export default router;
