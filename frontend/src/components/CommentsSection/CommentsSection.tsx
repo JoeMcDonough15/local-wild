@@ -9,9 +9,114 @@ import {
 import { PayloadAction } from "@reduxjs/toolkit";
 import { CommentOnPost } from "../../types";
 
+const emptyCommentErrorMessage = "Comment cannot be empty";
+const commentTooLongErrorMessage = "Comment must be less than 500 characters";
+
 interface CommentProps {
   comment: CommentOnPost;
 }
+
+interface CommentFormProps {
+  existingCommentToEdit?: CommentOnPost;
+  setActiveCommentState: (arg: boolean) => void;
+}
+
+const CommentForm = ({
+  existingCommentToEdit,
+  setActiveCommentState,
+}: CommentFormProps) => {
+  const dispatch = useAppDispatch();
+  const currentPost = useAppSelector((state) => state.posts.currentPost);
+  const [commentText, setCommentText] = useState<string>(
+    existingCommentToEdit?.commentText ?? ""
+  );
+  const [errors, setErrors] = useState(
+    {} as {
+      emptyComment?: string;
+      commentTooLong?: string;
+      serverError?: string;
+    }
+  );
+
+  const clientSideErrors = (inputValue: string) => {
+    if (inputValue.length === 0) {
+      setErrors({ emptyComment: emptyCommentErrorMessage });
+      return true;
+    }
+
+    if (inputValue.length > 500) {
+      setErrors({
+        commentTooLong: commentTooLongErrorMessage,
+      });
+      return true;
+    }
+
+    return false;
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const value = e.target.value;
+    setCommentText(value);
+    setErrors({});
+    clientSideErrors(value);
+  };
+
+  const handleSubmit = async (e: React.SyntheticEvent) => {
+    e.preventDefault();
+
+    const userErrors = clientSideErrors(commentText);
+    if (userErrors) {
+      return;
+    }
+
+    let serverResponse: PayloadAction<any> = { payload: {}, type: "" };
+
+    if (commentText && currentPost) {
+      serverResponse = await dispatch(
+        createCommentThunk({
+          commentText,
+          postId: currentPost?.id,
+        })
+      );
+    } else if (commentText && existingCommentToEdit) {
+      serverResponse = await dispatch(
+        updateCommentThunk({
+          commentId: existingCommentToEdit.id,
+          commentText,
+        })
+      );
+    }
+
+    if (serverResponse.payload?.message) {
+      setErrors({ serverError: serverResponse.payload.message });
+    } else {
+      setActiveCommentState(false);
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      {errors.emptyComment && (
+        <p className="error-text">{errors.emptyComment}</p>
+      )}
+      {errors.commentTooLong && (
+        <p className="error-text">{errors.commentTooLong}</p>
+      )}
+      <textarea value={commentText} onChange={handleChange}></textarea>
+      <button type="submit">{`${
+        existingCommentToEdit ? "Update" : "Submit"
+      } Comment`}</button>
+      <button
+        onClick={() => {
+          setActiveCommentState(false);
+        }}
+        type="button"
+      >
+        Cancel
+      </button>
+    </form>
+  );
+};
 
 const Comment = ({ comment }: CommentProps) => {
   const {
@@ -24,77 +129,15 @@ const Comment = ({ comment }: CommentProps) => {
   const dispatch = useAppDispatch();
   const sessionUser = useAppSelector((state) => state.session.sessionUser);
   const [editMode, setEditMode] = useState(false);
-  const [updatedComment, setUpdatedComment] = useState(commentText);
-  const [errors, setErrors] = useState(
-    {} as {
-      emptyComment?: string;
-      commentTooLong?: string;
-      serverError?: string;
-    }
-  );
 
   const deleteComment = () => {
     dispatch(deleteCommentThunk(id));
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const value = e.target.value;
-    setUpdatedComment(value);
-    if (value.length === 0) {
-      setErrors({ emptyComment: "Comment cannot be empty" });
-      return;
-    }
-
-    if (value.length > 500) {
-      setErrors({ commentTooLong: "Comment must be less than 500 characters" });
-      return;
-    }
-
-    setErrors({});
-  };
-
-  const handleSubmit = async (e: React.SyntheticEvent) => {
-    e.preventDefault();
-
-    if (Object.keys(errors).length > 0) {
-      return;
-    }
-
-    const serverResponse: PayloadAction<any> = await dispatch(
-      updateCommentThunk({
-        commentId: id,
-        commentText: updatedComment,
-      })
-    );
-
-    if (serverResponse.payload?.message) {
-      setErrors({ serverError: serverResponse.payload.message });
-    } else {
-      setEditMode(false);
-    }
-  };
-
   return (
     <>
       {editMode ? (
-        <form onSubmit={handleSubmit}>
-          {errors.emptyComment && (
-            <p className="error-text">{errors.emptyComment}</p>
-          )}
-          {errors.commentTooLong && (
-            <p className="error-text">{errors.commentTooLong}</p>
-          )}
-          <textarea value={updatedComment} onChange={handleChange}></textarea>
-          <button type="submit">Update Comment</button>
-          <button
-            onClick={() => {
-              setEditMode(false);
-            }}
-            type="button"
-          >
-            Cancel
-          </button>
-        </form>
+        <CommentForm setActiveCommentState={setEditMode} />
       ) : (
         <div className="comment-container">
           <div className="comment-first-row flex-row">
@@ -136,16 +179,7 @@ const CommentsSection = () => {
   const allComments = useAppSelector((state) => state.comments.allComments);
   const sessionUser = useAppSelector((state) => state.session.sessionUser);
   const currentPost = useAppSelector((state) => state.posts.currentPost);
-  const dispatch = useAppDispatch();
   const [createCommentMode, setCreateCommentMode] = useState(false);
-  const [newComment, setNewComment] = useState("");
-  const [errors, setErrors] = useState(
-    {} as {
-      emptyComment?: string;
-      commentTooLong?: string;
-      serverError?: string;
-    }
-  );
 
   const sortedCommentsArray = Object.values(allComments).toSorted(
     (commentA, commentB) => {
@@ -156,68 +190,10 @@ const CommentsSection = () => {
     }
   );
 
-  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const value = e.target.value;
-    setNewComment(value);
-    if (value.length === 0) {
-      setErrors({ emptyComment: "Comment cannot be empty" });
-      return;
-    }
-
-    if (value.length > 500) {
-      setErrors({
-        commentTooLong: "Comment must be less than 500 characters",
-      });
-      return;
-    }
-
-    setErrors({});
-  };
-
-  const handleSubmit = async (e: React.SyntheticEvent) => {
-    e.preventDefault();
-
-    if (Object.keys(errors).length > 0) {
-      return;
-    }
-
-    if (currentPost) {
-      const serverResponse: PayloadAction<any> = await dispatch(
-        createCommentThunk({
-          commentText: newComment,
-          postId: currentPost?.id,
-        })
-      );
-
-      if (serverResponse.payload?.message) {
-        setErrors({ serverError: serverResponse.payload.message });
-      } else {
-        setCreateCommentMode(false);
-      }
-    }
-  };
-
   return (
     <>
       {createCommentMode ? (
-        <form onSubmit={handleSubmit}>
-          {errors.emptyComment && (
-            <p className="error-text">{errors.emptyComment}</p>
-          )}
-          {errors.commentTooLong && (
-            <p className="error-text">{errors.commentTooLong}</p>
-          )}
-          <textarea onChange={handleChange}></textarea>
-          <button type="submit">Submit Comment</button>
-          <button
-            onClick={() => {
-              setCreateCommentMode(false);
-            }}
-            type="button"
-          >
-            Cancel
-          </button>
-        </form>
+        <CommentForm setActiveCommentState={setCreateCommentMode} />
       ) : (
         <div className="commentsSection">
           <div className="title-and-create-button">
