@@ -11,7 +11,8 @@
   font-size: 1.125rem;
   font-variation-settings: "wdth" 100;
   font-weight: 400;
-  --header-height: 75px;
+  --header-height: 11vh;
+  --footer-height: 20vh;
   --link-highlight-color: #6fc3d2;
 }
 
@@ -29,6 +30,11 @@ a {
   text-decoration: none;
 }
 
+ul,
+li {
+  list-style: none;
+}
+
 img {
   max-width: 100%;
 }
@@ -37,6 +43,34 @@ img {
 .footer {
   background-color: black;
   color: white;
+}
+
+.header {
+  background-color: black;
+  color: white;
+  height: var(--header-height);
+  position: fixed;
+  top: 0;
+  width: 100%;
+}
+
+.footer {
+  bottom: 0;
+  font-size: 0.75rem;
+  height: var(--footer-height);
+  justify-content: center;
+  padding: 1.5em 0 0.2em;
+  position: fixed;
+  width: 100vw;
+  z-index: -9999;
+}
+
+.footer a {
+  transition: color 250ms ease-in-out;
+}
+
+.footer a:hover {
+  color: var(--link-highlight-color);
 }
 
 .main-content {

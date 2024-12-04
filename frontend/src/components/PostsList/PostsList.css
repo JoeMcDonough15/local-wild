@@ -1,0 +1,59 @@
+.posts-list {
+  gap: 10px;
+  padding: 1vw 8vw;
+  width: 100%;
+}
+
+.post-row {
+  align-items: center;
+  justify-content: space-between;
+}
+
+.post-thumbnail {
+  height: 8.5vw;
+  object-fit: cover;
+  width: 8.5vw;
+}
+
+.post-name,
+.post-upload-date {
+  text-align: left;
+}
+
+.post-name {
+  font-size: inherit;
+  width: 12.5vw;
+}
+
+.post-upload-date {
+  font-size: 0.8rem;
+  width: 22vw;
+}
+
+.post-control-buttons {
+  gap: 1vw;
+  justify-content: space-between;
+}
+
+.post-control-button {
+  border: 1px solid black;
+  border-radius: 4px;
+  background-color: transparent;
+  padding: 6px 1.17vw;
+  width: 6.34vw;
+}
+
+.page-buttons {
+  margin-top: 15px;
+}
+
+.page-change-button {
+  background: none;
+  border: none;
+  color: grey;
+  font-size: 1.2rem;
+}
+
+.page-change-button:hover {
+  color: black;
+}

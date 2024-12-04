@@ -3,6 +3,7 @@ import { useAppSelector, useAppDispatch } from "../../store";
 import DisplayPosts from "../DisplayPosts";
 import { useEffect } from "react";
 import { userSlice } from "../../store/slices/userSlice";
+import "./MyPostsPage.css";
 
 const MyPostsPage = (): JSX.Element => {
   const sessionUser = useAppSelector((state) => state.session.sessionUser);
@@ -25,8 +26,8 @@ const MyPostsPage = (): JSX.Element => {
   }
 
   return (
-    <section>
-      <DisplayPosts listOrCarousel="list" postsPerPageOrSlide={10} />;
+    <section className="my-posts-page flex-row">
+      <DisplayPosts listOrCarousel="list" postsPerPageOrSlide={4} />
     </section>
   );
 };
