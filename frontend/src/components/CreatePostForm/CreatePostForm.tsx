@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
+import { useDropzone } from "react-dropzone";
 import { useAppDispatch, useAppSelector } from "../../store";
 import { makeNewPostThunk } from "../../store/slices/postsSlice";
 import { useNavigate } from "react-router-dom";
 import { Post, ServerError } from "../../types";
+import "./CreatePostForm.css";
 
 const CreatePostForm = (): JSX.Element => {
   const dispatch = useAppDispatch();
@@ -27,8 +29,7 @@ const CreatePostForm = (): JSX.Element => {
 
   if (!sessionUser) return <></>;
 
-  const updateImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target?.files?.[0];
+  const updateImage = async (file: File) => {
     const reader = new FileReader();
     if (file) {
       reader.readAsDataURL(file);
@@ -40,6 +41,38 @@ const CreatePostForm = (): JSX.Element => {
       setImgFile(file);
       setShowUpload(false);
     }
+  };
+
+  const DragAndDropOneFile = () => {
+    const onDrop = useCallback((files: File[]) => {
+      const file = files[0];
+      if (file) {
+        updateImage(file);
+      }
+    }, []);
+    const { getRootProps, getInputProps, isDragActive } = useDropzone({
+      onDrop,
+      maxFiles: 1,
+      accept: { "image/jpeg": [], "image/png": [], "image/jpg": [] },
+    });
+
+    return (
+      <div className="drag-container" {...getRootProps()}>
+        <label htmlFor="file-upload">
+          <input accept="png jpeg jpg" id="file-upload" {...getInputProps()} />
+        </label>
+        {isDragActive ? (
+          <p>Drop photo here</p>
+        ) : (
+          <>
+            <p>
+              Drag a file here or click to select one. Only jpg, jpeg, and png
+              files are acceptable.
+            </p>
+          </>
+        )}
+      </div>
+    );
   };
 
   const handleClientSideErrors = () => {
@@ -104,7 +137,7 @@ const CreatePostForm = (): JSX.Element => {
   };
 
   return (
-    <>
+    <section className="below-header main-container">
       <h1 className="update-post-header">Create A Post</h1>
       {errors.serverError && <p className="error-text">{errors.serverError}</p>}
       <form
@@ -113,23 +146,20 @@ const CreatePostForm = (): JSX.Element => {
         onSubmit={handleSubmit}
       >
         <div>
-          <button type="button">
-            <label htmlFor="file-upload">
-              {" "}
-              {showUpload ? "Choose Image" : "Change Image"}
-              <input
-                hidden
-                type="file"
-                id="file-upload"
-                name="img_url"
-                onChange={updateImage}
-                accept=".jpg, .jpeg, .png, .gif"
-              />
-            </label>
-          </button>
-          {!showUpload && (
+          {showUpload ? (
+            <DragAndDropOneFile />
+          ) : (
             <div>
               <img src={previewUrl} alt="preview" />
+              <button
+                onClick={() => {
+                  setShowUpload(true);
+                  setImgFile(null);
+                }}
+                type="button"
+              >
+                Select a different file
+              </button>
             </div>
           )}
         </div>
@@ -195,7 +225,7 @@ const CreatePostForm = (): JSX.Element => {
         </label>
         <button type="submit">Submit Post</button>
       </form>
-    </>
+    </section>
   );
 };
 

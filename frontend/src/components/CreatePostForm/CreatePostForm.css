@@ -1,0 +1,9 @@
+.drag-container {
+  align-items: center;
+  border: 1px solid black;
+  display: flex;
+  height: 25vw;
+  justify-content: center;
+  padding: 5vw;
+  width: 25vw;
+}
