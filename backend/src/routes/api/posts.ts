@@ -4,6 +4,7 @@ import type { ApiError, NewPost } from "../../types/index.js";
 import { prisma } from "../../db/database_client.js";
 import { singleMulterUpload, singlePublicFileUpload } from "../../aws/index.js";
 import { validatePostBody, checkForImage } from "../../utils/validation.js";
+import calculateDistance from "../../utils/sortByClosest.js";
 
 const router = express.Router();
 
@@ -12,15 +13,17 @@ router.get("/", async (req, res, next) => {
   let size = 6;
   let offset = 0;
 
-  const { givenSize, slide, userId } = req.query;
+  const { givenSize, slide, userId, userLat, userLng } = req.query;
   if (
     (slide && isNaN(Math.floor(Number(slide)))) ||
     (givenSize && isNaN(Math.floor(Number(givenSize)))) ||
-    (userId && isNaN(Math.floor(Number(userId))))
+    (userId && isNaN(Math.floor(Number(userId)))) ||
+    isNaN(Number(userLat)) ||
+    isNaN(Number(userLng))
   ) {
     const err: ApiError = {
       name: "Bad Request Error",
-      message: "Slide number and userId must both be digits.",
+      message: "All query params must be numbers.",
       status: 400,
     };
     return next(err);
@@ -33,7 +36,7 @@ router.get("/", async (req, res, next) => {
     offset = (Number(slide) - 1) * size;
   }
 
-  const queryObj = {
+  const postsByUserQuery = {
     orderBy: [{ createdAt: "desc" } as any],
     skip: offset,
     take: size,
@@ -44,15 +47,38 @@ router.get("/", async (req, res, next) => {
     let totalNumPosts;
     if (userId) {
       posts = await prisma.post.findMany({
-        ...queryObj,
+        ...postsByUserQuery,
         where: { photographerId: Number(userId) },
       });
       totalNumPosts = await prisma.post.count({
         where: { photographerId: Number(userId) },
       });
     } else {
-      posts = await prisma.post.findMany(queryObj);
+      posts = await prisma.post.findMany(); // return all of the posts
       totalNumPosts = await prisma.post.count();
+      if (userLat && userLng) {
+        posts.sort((postA, postB) => {
+          const userLatAsNum = Number(userLat);
+          const userLngAsNum = Number(userLng);
+          if (postA.lat && postA.lng && postB.lat && postB.lng) {
+            return (
+              calculateDistance(
+                userLatAsNum,
+                userLngAsNum,
+                Number(postA.lat),
+                Number(postA.lng)
+              ) -
+              calculateDistance(
+                userLatAsNum,
+                userLngAsNum,
+                Number(postB.lat),
+                Number(postB.lng)
+              )
+            );
+          }
+          return 0;
+        });
+      }
     }
     res.status(200).json({ posts, totalNumPosts });
   } catch (err) {

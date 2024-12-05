@@ -18,6 +18,8 @@ const Homepage = () => {
     dispatch(userSlice.actions.removeCurrentUser());
   }, [dispatch]);
 
+  // const location = navigator.geolocation.getCurrentPosition(() => {});
+
   return (
     <>
       <Introduction />
