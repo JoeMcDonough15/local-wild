@@ -12,6 +12,7 @@
   right: 0;
   top: 0;
   width: 100%;
+  z-index: 99998;
 }
 
 .scroll-button {
@@ -22,6 +23,7 @@
   padding: 0.2em 0.4em;
   position: absolute;
   right: 1.5%;
+  z-index: 99999;
 }
 
 @media screen and (max-width: 500) {

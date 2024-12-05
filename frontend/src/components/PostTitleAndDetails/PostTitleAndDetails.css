@@ -1,8 +1,17 @@
 .title-and-details-container {
-  gap: 10px;
+  gap: 40px;
 }
 
 .link-to-photographer {
-  color: dodgerblue;
+  color: var(--accent-blue-dark);
   cursor: pointer;
+}
+
+.post-credit-and-date > .link-to-photographer {
+  margin: 0 0.5em;
+}
+
+.description {
+  margin: 20px 0;
+  padding-right: 5vw;
 }

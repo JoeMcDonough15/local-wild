@@ -31,22 +31,24 @@ const Navigation = () => {
 
         <div className="nav-right flex-row">
           {!sessionUser ? (
-            <>
+            <div className="signup-login-buttons flex-row">
               <OpenModalButton
                 buttonText="Sign Up"
                 modalComponent={<SignupFormModal />}
+                classes="signup-button"
               />
               <OpenModalButton
                 buttonText="Login"
                 modalComponent={<LoginFormModal />}
+                classes="login-out-button"
               />
-            </>
+            </div>
           ) : (
             <>
               <Link className="new-post-button" to="/posts/new">
                 Post
               </Link>
-              <button className="logout-button" onClick={handleLogOut}>
+              <button className="login-out-button" onClick={handleLogOut}>
                 Log Out
               </button>
             </>

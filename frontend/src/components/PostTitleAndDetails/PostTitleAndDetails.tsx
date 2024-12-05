@@ -14,8 +14,8 @@ const PostTitleAndDetails = () => {
     <div className="title-and-details-container flex-col">
       <h1 className="post-title">{currentPost.title}</h1>
       <div className="post-details-container flex-col">
-        <p className="post-credit-and-date">
-          Taken by{" "}
+        <p className="post-credit-and-date flex-row">
+          <span>Taken by </span>{" "}
           <Link
             className="link-to-photographer"
             to={`/users/${currentPost.photographerId}`}
@@ -24,7 +24,9 @@ const PostTitleAndDetails = () => {
             {currentPost?.photographer?.username}
           </Link>{" "}
           {currentPost?.datePhotographed && (
-            <span>{formattedDate(currentPost.datePhotographed)}</span>
+            <span className="date-photographed">
+              on {formattedDate(currentPost.datePhotographed)}
+            </span>
           )}
         </p>
         {currentPost.fullDescription && (

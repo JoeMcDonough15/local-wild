@@ -3,7 +3,7 @@
 }
 
 .header .nav-bar a:hover {
-  color: var(--link-highlight-color);
+  color: var(--accent-blue);
 }
 
 .nav-bar {
@@ -36,6 +36,10 @@
   align-items: center;
   display: flex;
   margin-right: 25px;
+}
+
+.signup-login-buttons {
+  gap: 1vw;
 }
 
 .logout-button {

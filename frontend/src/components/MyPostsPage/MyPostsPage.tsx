@@ -17,7 +17,7 @@ const MyPostsPage = (): JSX.Element => {
   }, [dispatch, sessionUser]);
 
   if (!sessionUser) {
-    navigate("/");
+    navigate("/#skip-intro");
     return <></>;
   }
 

@@ -62,7 +62,7 @@ function Layout() {
       <header className="header">
         <Navigation />
       </header>
-      <main className="main-content">
+      <main>
         <Outlet />{" "}
       </main>
       <footer className="footer flex-col">

@@ -8,6 +8,8 @@ import {
 } from "../../store/slices/commentsSlice";
 import { PayloadAction } from "@reduxjs/toolkit";
 import { CommentOnPost } from "../../types";
+import "./CommentsSection.css";
+import { formattedDate } from "../../utils/formatter";
 
 const emptyCommentErrorMessage = "Comment cannot be empty";
 const commentTooLongErrorMessage = "Comment must be less than 500 characters";
@@ -95,25 +97,34 @@ const CommentForm = ({
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      {errors.emptyComment && (
-        <p className="error-text">{errors.emptyComment}</p>
-      )}
-      {errors.commentTooLong && (
-        <p className="error-text">{errors.commentTooLong}</p>
-      )}
-      <textarea value={commentText} onChange={handleChange}></textarea>
-      <button type="submit">{`${
-        existingCommentToEdit ? "Update" : "Submit"
-      } Comment`}</button>
-      <button
-        onClick={() => {
-          setActiveCommentState(false);
-        }}
-        type="button"
-      >
-        Cancel
-      </button>
+    <form className="comment-form-container flex-row" onSubmit={handleSubmit}>
+      <div className="comment-input-container flex-col">
+        {errors.emptyComment && (
+          <p className="error-text">{errors.emptyComment}</p>
+        )}
+        {errors.commentTooLong && (
+          <p className="error-text">{errors.commentTooLong}</p>
+        )}
+        <textarea
+          className="comment-input"
+          value={commentText}
+          onChange={handleChange}
+        ></textarea>
+      </div>
+      <div className="comment-buttons flex-row">
+        <button className="comment-button" type="submit">{`${
+          existingCommentToEdit ? "Update" : "Submit"
+        }`}</button>
+        <button
+          onClick={() => {
+            setActiveCommentState(false);
+          }}
+          type="button"
+          className="comment-button"
+        >
+          Cancel
+        </button>
+      </div>
     </form>
   );
 };
@@ -137,24 +148,29 @@ const Comment = ({ comment }: CommentProps) => {
   return (
     <>
       {editMode ? (
-        <CommentForm setActiveCommentState={setEditMode} />
+        <CommentForm
+          existingCommentToEdit={comment}
+          setActiveCommentState={setEditMode}
+        />
       ) : (
-        <div className="comment-container">
+        <div className="comment-container flex-col">
           <div className="comment-first-row flex-row">
-            <Link to={`/users/${commenterId}`}>{username}</Link>
+            <Link className="link-to-photographer" to={`/users/${commenterId}`}>
+              {username}
+            </Link>
             <p className="flex-row commenter-name-date">
-              {createdAt.toString()}
+              {formattedDate(createdAt)}
             </p>
           </div>
           <div className="comment-second-row flex-row">
             <p className="comment-text">{commentText}</p>
             {sessionUser?.id === commenterId && (
-              <div className="flex-row">
+              <div className="comment-buttons flex-row">
                 <button
                   onClick={() => {
                     setEditMode(true);
                   }}
-                  className="edit-comment-button"
+                  className="comment-button"
                 >
                   Edit
                 </button>
@@ -162,7 +178,7 @@ const Comment = ({ comment }: CommentProps) => {
                   onClick={() => {
                     deleteComment();
                   }}
-                  className="delete-comment-button"
+                  className="comment-button"
                 >
                   Delete
                 </button>
@@ -191,31 +207,33 @@ const CommentsSection = () => {
   );
 
   return (
-    <>
-      {createCommentMode ? (
+    <div className="comments-section flex-col">
+      {createCommentMode && (
         <CommentForm setActiveCommentState={setCreateCommentMode} />
-      ) : (
-        <div className="commentsSection">
-          <div className="title-and-create-button">
-            <h2>Comments</h2>
-            {sessionUser?.id !== currentPost?.photographerId && (
+      )}
+
+      <div className="existing-comments flex-col">
+        <div className="title-and-create-button flex-row">
+          <h2>Comments</h2>
+          {sessionUser?.id !== currentPost?.photographerId &&
+            !createCommentMode && (
               <button
                 onClick={() => {
                   setCreateCommentMode(true);
                 }}
                 type="button"
+                className="comment-button"
               >
                 Leave a comment
               </button>
             )}
-          </div>
-
-          {sortedCommentsArray.map((comment) => {
-            return <Comment key={comment.id} comment={comment} />;
-          })}
         </div>
-      )}
-    </>
+
+        {sortedCommentsArray.map((comment) => {
+          return <Comment key={comment.id} comment={comment} />;
+        })}
+      </div>
+    </div>
   );
 };
 
