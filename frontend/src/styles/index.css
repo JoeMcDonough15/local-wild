@@ -13,7 +13,9 @@
   font-weight: 400;
   --header-height: 11vh;
   --footer-height: 20vh;
-  --link-highlight-color: #6fc3d2;
+  --accent-blue: #6fc3d2;
+  --accent-blue-dark: #03607b;
+  --z-index-modal: 999999999999999;
 }
 
 .title-font {
@@ -52,17 +54,24 @@ img {
   position: fixed;
   top: 0;
   width: 100%;
+  z-index: 99997;
+}
+
+.below-header {
+  margin-top: var(--header-height);
+}
+
+.not-found {
+  margin: var(--header-height) 0 75vh;
+  text-align: center;
 }
 
 .footer {
-  bottom: 0;
   font-size: 0.75rem;
   height: var(--footer-height);
   justify-content: center;
   padding: 1.5em 0 0.2em;
-  position: fixed;
   width: 100vw;
-  z-index: -9999;
 }
 
 .footer a {
@@ -70,15 +79,12 @@ img {
 }
 
 .footer a:hover {
-  color: var(--link-highlight-color);
-}
-
-.main-content {
-  margin-top: var(--header-height);
+  color: var(--accent-blue);
 }
 
 .main-container {
-  margin: 0 2vw;
+  margin-left: 2vw;
+  margin-right: 2vw;
 }
 
 .flex-row,
@@ -92,6 +98,32 @@ img {
 
 button:hover {
   cursor: pointer;
+}
+
+.signup-button {
+  background: var(--accent-blue-dark);
+  border: none;
+  color: white;
+  font-weight: bold;
+  padding: 5px 1vw;
+}
+
+.signup-button:hover {
+  opacity: 0.8;
+}
+
+.login-out-button {
+  background: transparent;
+  border: 2px solid white;
+  color: white;
+  font-weight: bold;
+  padding: 0.5em 1em;
+  transition: all 250ms ease-in-out;
+}
+
+.login-out-button:hover {
+  background: white;
+  color: black;
 }
 
 .error-text {

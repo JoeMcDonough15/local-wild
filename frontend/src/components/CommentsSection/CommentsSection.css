@@ -1,0 +1,47 @@
+.comments-section {
+  width: 45%;
+}
+
+.existing-comments {
+  gap: 30px;
+}
+
+.comment-container {
+  gap: 10px;
+}
+
+.title-and-create-button {
+  justify-content: space-between;
+  width: 100%;
+}
+
+.comment-form-container {
+  align-items: center;
+  justify-content: space-between;
+}
+
+.comment-input-container {
+  width: 70%;
+}
+
+.comment-input {
+  margin-top: 4px;
+  outline-color: black;
+  outline-width: 1px;
+}
+
+.comment-buttons {
+  align-self: flex-end;
+  justify-content: space-between;
+  width: 20%;
+}
+
+.comment-button {
+  background: transparent;
+  border: none;
+}
+
+.comment-first-row,
+.comment-second-row {
+  justify-content: space-between;
+}

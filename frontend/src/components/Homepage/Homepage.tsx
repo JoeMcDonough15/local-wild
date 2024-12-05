@@ -28,12 +28,11 @@ const Homepage = () => {
       >
         Enter
       </button>
-      <div
+      <section
         id="skip-intro"
-        style={{ marginTop: "200vh" }}
         ref={beginHomepageContent}
-      ></div>
-      <section className="homepage-content flex-col">
+        className="homepage-content flex-col"
+      >
         <div className="hero-img-container">
           <img className="hero-img" src="assets/images/bridge.png" alt="" />
         </div>

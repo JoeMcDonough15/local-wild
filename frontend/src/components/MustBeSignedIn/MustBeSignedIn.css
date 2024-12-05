@@ -1,0 +1,32 @@
+.not-signed-in {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 35vh 0;
+}
+
+.not-signed-in-header {
+  text-align: center;
+}
+
+.redirect-options {
+  align-items: center;
+  background-color: black;
+  border-radius: 8px;
+  margin-top: 3vw;
+  padding: 40px;
+}
+
+.redirect-options > .signup-login-buttons {
+  margin-bottom: 40px;
+}
+
+.redirect-options > .signup-login-buttons > .signup-button,
+.redirect-options > .signup-login-buttons > .log-in-out-button {
+  padding: 10px 2vw;
+}
+
+.redirect-options > .go-home-button {
+  color: white;
+}

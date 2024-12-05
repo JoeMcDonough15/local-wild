@@ -6,6 +6,7 @@
 
 .user-profile-page {
   gap: 20px;
+  margin-top: var(--header-height);
   padding-top: 20px;
 }
 

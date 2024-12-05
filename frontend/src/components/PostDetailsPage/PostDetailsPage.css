@@ -1,4 +1,5 @@
 .post-details-page {
+  gap: 40px;
   padding-top: 20px;
 }
 
@@ -20,13 +21,21 @@
   background: none;
   border: 0;
   cursor: pointer;
+  margin-bottom: 10px;
 }
 
 .post-details-page-image-and-caption-container {
   align-items: center;
 }
 
+.post-details-second-row {
+  margin-bottom: 42vw;
+  position: relative;
+}
+
 .google-maps-widget {
-  height: 400px;
-  width: 400px;
+  height: 42vw;
+  position: absolute;
+  right: 0;
+  width: 42vw;
 }
