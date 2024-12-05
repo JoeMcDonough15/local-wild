@@ -2,13 +2,11 @@ import { useState } from "react";
 import { UpdateOrDeletePostArgs } from "../../types";
 import { useModal } from "../../context/useModal";
 import { useAppDispatch } from "../../store";
-// import "./ConfirmDelete.css";
 import { deletePostThunk } from "../../store/slices/postsSlice";
 import { PayloadAction } from "@reduxjs/toolkit";
 
 const ConfirmDeleteModal = ({
   postId,
-  keyForStore,
 }: UpdateOrDeletePostArgs): JSX.Element => {
   const dispatch = useAppDispatch();
   const { closeModal } = useModal();
@@ -19,7 +17,7 @@ const ConfirmDeleteModal = ({
   );
 
   const deletePost = async () => {
-    const deleteArgs: UpdateOrDeletePostArgs = { postId, keyForStore };
+    const deleteArgs: UpdateOrDeletePostArgs = { postId };
     const serverResponse: PayloadAction<any> = await dispatch(
       deletePostThunk(deleteArgs)
     );

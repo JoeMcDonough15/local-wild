@@ -1,14 +1,15 @@
 import { useRef, useEffect } from "react";
 import Introduction from "../Introduction";
-import DisplayPosts from "../DisplayPosts";
-import { useAppDispatch } from "../../store";
+import { useAppDispatch, useAppSelector } from "../../store";
 import { userSlice } from "../../store/slices/userSlice";
 import "./Homepage.css";
 import OurMission from "../OurMission";
+import PostsCarousel from "../PostsCarousel";
 
 const Homepage = () => {
   const beginHomepageContent = useRef<HTMLDivElement | null>(null);
   const dispatch = useAppDispatch();
+  const currentUser = useAppSelector((state) => state.users.currentUser);
 
   const scrollContentIntoView = () => {
     beginHomepageContent?.current?.scrollIntoView({ behavior: "smooth" });
@@ -19,7 +20,11 @@ const Homepage = () => {
   }, [dispatch]);
 
   // const location = navigator.geolocation.getCurrentPosition(() => {});
+  // console.log("location: ", location);
 
+  if (currentUser) {
+    return <></>;
+  }
   return (
     <>
       <Introduction />
@@ -42,7 +47,7 @@ const Homepage = () => {
           <h2 className="title-font">Local Wild</h2>
           <p>Discover the beauty in your own backyard...</p>
         </div>
-        <DisplayPosts listOrCarousel="carousel" postsPerPageOrSlide={3} />
+        <PostsCarousel />
         <OurMission />
       </section>
     </>

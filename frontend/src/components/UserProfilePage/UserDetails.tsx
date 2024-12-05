@@ -3,9 +3,7 @@ import "./UserProfilePage.css";
 
 const UserDetails = () => {
   const currentUser = useAppSelector((state) => state.users.currentUser);
-  const totalNumPostsByUser = useAppSelector(
-    (state) => state.posts.totalNumPosts
-  );
+  const allPostsByUser = useAppSelector((state) => state.posts.allPosts);
 
   if (!currentUser) return <></>;
 
@@ -28,9 +26,9 @@ const UserDetails = () => {
       <div className="details">
         {location && <p>{location}</p>}
         {aboutMe && <p>{aboutMe}</p>}
-        {totalNumPostsByUser && (
+        {allPostsByUser.length && (
           <p>
-            {username} has posted {totalNumPostsByUser} times!
+            {username} has posted {allPostsByUser.length} times!
           </p>
         )}
       </div>

@@ -1,6 +1,7 @@
 import express from "express";
 import { prisma } from "../../db/database_client.js";
 import type { ApiError, User } from "../../types/index.js";
+import { Post } from "@prisma/client";
 
 const router = express.Router();
 
@@ -8,15 +9,14 @@ router.get("/:id", async (req, res, next) => {
   const { id } = req.params;
   if (!id) return;
   const userId = Number(id);
-  const user: null | User = await prisma.user.findUnique({
+  const user = await prisma.user.findUnique({
     omit: {
       password: true,
     },
     where: { id: userId },
+    include: { posts: { orderBy: { createdAt: "desc" } } },
   });
-  const usersPosts = await prisma.post.count({
-    where: { photographerId: userId },
-  });
+
   if (!user) {
     const userNotFound: ApiError = {
       name: "Not Found Error",
@@ -26,7 +26,7 @@ router.get("/:id", async (req, res, next) => {
     };
     return next(userNotFound);
   }
-  user["totalNumPosts"] = usersPosts;
+
   res.status(200).json({ user });
 });
 

@@ -1,5 +1,4 @@
 import { useAppSelector, useAppDispatch } from "../../store";
-import DisplayPosts from "../DisplayPosts";
 import { useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
 import { getUserThunk } from "../../store/slices/userSlice";
@@ -7,6 +6,7 @@ import type { LoadingState } from "../../types";
 import { PayloadAction } from "@reduxjs/toolkit";
 import UserDetails from "./UserDetails";
 import "./UserProfilePage.css";
+import PostsCarousel from "../PostsCarousel";
 
 const UserProfilePage = () => {
   const currentUser = useAppSelector((state) => state.users.currentUser);
@@ -46,7 +46,7 @@ const UserProfilePage = () => {
   return (
     <section className="user-profile-page main-container flex-col">
       <UserDetails />
-      <DisplayPosts listOrCarousel="carousel" postsPerPageOrSlide={3} />
+      <PostsCarousel />
     </section>
   );
 };

@@ -1,9 +1,9 @@
 import { useNavigate } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "../../store";
-import DisplayPosts from "../DisplayPosts";
 import { useEffect } from "react";
-import { userSlice } from "../../store/slices/userSlice";
+import { getUserThunk } from "../../store/slices/userSlice";
 import "./MyPostsPage.css";
+import PostsList from "../PostsList";
 
 const MyPostsPage = (): JSX.Element => {
   const sessionUser = useAppSelector((state) => state.session.sessionUser);
@@ -13,7 +13,8 @@ const MyPostsPage = (): JSX.Element => {
 
   useEffect(() => {
     if (!sessionUser) return;
-    dispatch(userSlice.actions.setCurrentUser(sessionUser));
+    // sets the currentUser and also gets all the posts associated with logged in user
+    dispatch(getUserThunk(sessionUser.id));
   }, [dispatch, sessionUser]);
 
   if (!sessionUser) {
@@ -27,7 +28,7 @@ const MyPostsPage = (): JSX.Element => {
 
   return (
     <section className="my-posts-page flex-row">
-      <DisplayPosts listOrCarousel="list" postsPerPageOrSlide={4} />
+      <PostsList />
     </section>
   );
 };

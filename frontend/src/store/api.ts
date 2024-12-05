@@ -118,14 +118,21 @@ const serverMethods = {
     getBatch: async (
       getPostsOptions: GetPostsOptions
     ): Promise<BatchOfPosts> => {
-      const { givenSize, slideOrPageNum, userId } = getPostsOptions;
-      let url = `/posts?slide=${slideOrPageNum}`;
-      if (givenSize !== undefined) {
-        url += `&givenSize=${givenSize}`;
-      }
-      if (userId) {
-        url += `&userId=${userId}`;
-      }
+      let url = "/posts";
+
+      const allQueryParams = Object.entries(getPostsOptions); // [ [userId, 0], [userLat, 34.5334], [userLng, 45.3534] ]
+
+      allQueryParams.forEach((queryParam, index) => {
+        const paramName = queryParam[0];
+        const paramValue = queryParam[1];
+        const paramToAdd = `${paramName}=${paramValue}`;
+        if (index === 0) {
+          url += `?${paramToAdd}`;
+        } else {
+          url += `&${paramToAdd}`;
+        }
+      });
+
       const data: BatchOfPosts = await fetchWithJson(url);
       return data;
     },

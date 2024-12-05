@@ -40,13 +40,11 @@ export interface Post extends PostUpdate {
   comments?: CommentOnPost[];
   createdAt: Date;
   updatedAt: Date;
-  key?: number;
 }
 
 export interface UpdateOrDeletePostArgs {
   postId: number;
   postDetails?: PostUpdate;
-  keyForStore?: number;
 }
 
 export interface BatchOfPosts {
@@ -85,9 +83,9 @@ export interface Signup {
 }
 
 export interface GetPostsOptions {
-  givenSize?: number;
-  slideOrPageNum: number;
   userId?: number;
+  userLat?: number;
+  userLng?: number;
 }
 
 export interface NewComment {

@@ -10,16 +10,11 @@ const router = express.Router();
 
 // * get all posts (for Homepage,  UserProfilePage, and MyPostsPage)
 router.get("/", async (req, res, next) => {
-  let size = 6;
-  let offset = 0;
-
-  const { givenSize, slide, userId, userLat, userLng } = req.query;
+  const { userId, userLat, userLng } = req.query;
   if (
-    (slide && isNaN(Math.floor(Number(slide)))) ||
-    (givenSize && isNaN(Math.floor(Number(givenSize)))) ||
     (userId && isNaN(Math.floor(Number(userId)))) ||
-    isNaN(Number(userLat)) ||
-    isNaN(Number(userLng))
+    (userLat !== undefined && isNaN(Number(userLat))) ||
+    (userLng !== undefined && isNaN(Number(userLng)))
   ) {
     const err: ApiError = {
       name: "Bad Request Error",
@@ -29,39 +24,47 @@ router.get("/", async (req, res, next) => {
     return next(err);
   }
 
-  if (givenSize) {
-    size = Number(givenSize);
-  }
-  if (slide) {
-    offset = (Number(slide) - 1) * size;
-  }
-
   const postsByUserQuery = {
     orderBy: [{ createdAt: "desc" } as any],
-    skip: offset,
-    take: size,
+    where: { photographerId: Number(userId) },
   };
 
   try {
     let posts;
-    let totalNumPosts;
+
     if (userId) {
-      posts = await prisma.post.findMany({
-        ...postsByUserQuery,
-        where: { photographerId: Number(userId) },
-      });
-      totalNumPosts = await prisma.post.count({
-        where: { photographerId: Number(userId) },
-      });
+      posts = await prisma.post.findMany(postsByUserQuery);
     } else {
       posts = await prisma.post.findMany(); // return all of the posts
-      totalNumPosts = await prisma.post.count();
       if (userLat && userLng) {
         posts.sort((postA, postB) => {
           const userLatAsNum = Number(userLat);
           const userLngAsNum = Number(userLng);
-          if (postA.lat && postA.lng && postB.lat && postB.lng) {
+          // if one post has lat/lng and another does not, put the one that does first
+          if (
+            postA.lat !== null &&
+            postA.lng !== null &&
+            postB.lat === null &&
+            postB.lng === null
+          ) {
+            return -1;
+          }
+          if (
+            postB.lat !== null &&
+            postB.lng !== null &&
+            postA.lat === null &&
+            postA.lng === null
+          ) {
+            return 1;
+          }
+          if (
+            postA.lat !== null &&
+            postA.lng !== null &&
+            postB.lat !== null &&
+            postB.lng !== null
+          ) {
             return (
+              // if both posts have lat/lng, calculate the distance from the user's lat/lng and put shortest distances first
               calculateDistance(
                 userLatAsNum,
                 userLngAsNum,
@@ -76,11 +79,12 @@ router.get("/", async (req, res, next) => {
               )
             );
           }
+          // if neither post has lat/lng, leave them in the order they're in
           return 0;
         });
       }
     }
-    res.status(200).json({ posts, totalNumPosts });
+    res.status(200).json({ posts });
   } catch (err) {
     next(err);
   }
