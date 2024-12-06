@@ -46,3 +46,7 @@
 .comment-second-row {
   justify-content: space-between;
 }
+
+.comment-text {
+  padding-right: 40%;
+}
