@@ -5,6 +5,7 @@ import { makeNewPostThunk } from "../../store/slices/postsSlice";
 import { useNavigate } from "react-router-dom";
 import { Post, ServerError } from "../../types";
 import "./CreatePostForm.css";
+import { dateAsString } from "../../utils/formatter";
 
 const CreatePostForm = (): JSX.Element => {
   const dispatch = useAppDispatch();
@@ -20,7 +21,7 @@ const CreatePostForm = (): JSX.Element => {
   const [lat, setLat] = useState<number | null>(null);
   const [lng, setLng] = useState<number | null>(null);
   const [partOfDay, setPartOfDay] = useState("");
-  const [datePhotographed, setDatePhotographed] = useState<Date | null>(null);
+  const [datePhotographed, setDatePhotographed] = useState<Date>(new Date());
   const [errors, setErrors] = useState(
     {} as {
       serverError?: string;
@@ -198,6 +199,7 @@ const CreatePostForm = (): JSX.Element => {
               <div>
                 <img className="preview-img" src={previewUrl} alt="preview" />
                 <button
+                  className="signup-button"
                   onClick={() => {
                     setShowUpload(true);
                     setImgFile(null);
@@ -258,8 +260,12 @@ const CreatePostForm = (): JSX.Element => {
               id="post-date"
               type="date"
               max={new Date().toISOString().substring(0, 10)}
-              value={datePhotographed?.toString()}
-              onChange={(e) => setDatePhotographed(new Date(e.target.value))}
+              value={dateAsString(datePhotographed)}
+              onChange={(e) => {
+                console.log("value: ", e.target.value);
+                const dateToSet = new Date(e.target.value + "T12:00:00.000");
+                setDatePhotographed(new Date(dateToSet));
+              }}
             />
           </div>
           <div className="more-details flex-col">

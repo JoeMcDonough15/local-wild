@@ -7,6 +7,7 @@ import {
   getSinglePostThunk,
 } from "../../store/slices/postsSlice";
 import { PostUpdate, UpdateOrDeletePostArgs, LoadingState } from "../../types";
+import { dateAsString } from "../../utils/formatter";
 
 const EditPostFormModal = ({ postId }: UpdateOrDeletePostArgs) => {
   const dispatch = useAppDispatch();
@@ -18,7 +19,7 @@ const EditPostFormModal = ({ postId }: UpdateOrDeletePostArgs) => {
   const [lat, setLat] = useState<number | null>(null);
   const [lng, setLng] = useState<number | null>(null);
   const [partOfDay, setPartOfDay] = useState("");
-  const [datePhotographed, setDatePhotographed] = useState<Date | null>(null);
+  const [datePhotographed, setDatePhotographed] = useState<Date>(new Date());
   const [originalPostLoaded, setOriginalPostLoaded] =
     useState<LoadingState>("no");
   const [errors, setErrors] = useState(
@@ -174,14 +175,19 @@ const EditPostFormModal = ({ postId }: UpdateOrDeletePostArgs) => {
             onChange={(e) => setPartOfDay(e.target.value)}
           />
         </label>
-        <label>
-          Date Photographed
+        <div className="flex-col post-input-container">
+          <label htmlFor="post-date">Date Photographed</label>
           <input
+            id="post-date"
             type="date"
-            value={datePhotographed?.toString()}
-            onChange={(e) => setDatePhotographed(new Date(e.target.value))}
+            max={new Date().toISOString().substring(0, 10)}
+            value={dateAsString(datePhotographed)}
+            onChange={(e) => {
+              const dateToSet = new Date(e.target.value + "T12:00:00.000");
+              setDatePhotographed(new Date(dateToSet));
+            }}
           />
-        </label>
+        </div>
         <button type="submit">Update Your Post</button>
       </form>
     </>
