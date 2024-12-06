@@ -1,7 +1,6 @@
 import express from "express";
 import { prisma } from "../../db/database_client.js";
-import type { ApiError, User } from "../../types/index.js";
-import { Post } from "@prisma/client";
+import type { ApiError } from "../../types/index.js";
 
 const router = express.Router();
 
@@ -14,7 +13,6 @@ router.get("/:id", async (req, res, next) => {
       password: true,
     },
     where: { id: userId },
-    include: { posts: { orderBy: { createdAt: "desc" } } },
   });
 
   if (!user) {

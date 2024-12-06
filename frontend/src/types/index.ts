@@ -29,6 +29,7 @@ export interface PostUpdate {
   lat?: number;
   lng?: number;
   partOfDay?: string;
+  locationString?: string;
   datePhotographed?: Date;
 }
 

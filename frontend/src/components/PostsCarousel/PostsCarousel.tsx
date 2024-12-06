@@ -34,6 +34,10 @@ const PostsCarousel = () => {
   const endingIndex = startingIndex + postsPerSlide; // slice will go up to but not including endingIndex
   const postsToRender: Post[] = [...allPosts.slice(startingIndex, endingIndex)];
 
+  if (postsToRender.length === 0) {
+    return <h1>Loading...</h1>;
+  }
+
   return (
     <section className="carousel flex-row">
       {slideNum > 1 && (

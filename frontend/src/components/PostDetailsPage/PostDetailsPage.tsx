@@ -68,6 +68,7 @@ const PostDetailsPage = () => {
                 imageText={currentPost?.caption ? currentPost.caption : ""}
                 containerClasses="post-details-page-image-and-caption-container flex-col"
                 imgClasses="post-details-main-image"
+                imageTextClasses="post-details-main-image-caption"
               />{" "}
             </div>
             <div className="post-title-and-details-container flex-col">
@@ -81,10 +82,12 @@ const PostDetailsPage = () => {
           {userOwnsPost && (
             <div className="post-control-buttons flex-row">
               <OpenModalButton
+                classes="post-control-button"
                 buttonText="Edit"
                 modalComponent={<EditPostFormModal postId={currentPost.id} />}
               />
               <OpenModalButton
+                classes="post-control-button"
                 buttonText="Delete"
                 modalComponent={<ConfirmDeleteModal postId={currentPost.id} />}
               />

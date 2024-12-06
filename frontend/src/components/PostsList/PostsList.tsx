@@ -1,20 +1,39 @@
 import OpenModalButton from "../OpenModalButton/OpenModalButton";
 import EditPostFormModal from "../EditPostFormModal";
-import { useAppSelector } from "../../store";
+import { useAppDispatch, useAppSelector } from "../../store";
 import ConfirmDeleteModal from "../ConfirmDeleteModal";
 import "./PostsList.css";
 import { formattedDate } from "../../utils/formatter";
-import { useState } from "react";
-import { Post } from "../../types";
+import { useEffect, useState } from "react";
+import { GetPostsOptions, Post } from "../../types";
+import { getAllPostsThunk } from "../../store/slices/postsSlice";
+import { Link } from "react-router-dom";
 
 const PostsList = () => {
   const allPosts = useAppSelector((state) => state.posts.allPosts);
+  const currentUser = useAppSelector((state) => state.users.currentUser);
+  const dispatch = useAppDispatch();
   const postsPerPage = 4;
   const [pageNum, setPageNum] = useState(1);
   const numberOfPageChangeButtons = Math.ceil(allPosts.length / postsPerPage);
   const mapArray = [];
   for (let i = numberOfPageChangeButtons; i > 0; i--) {
     mapArray.push(null);
+  }
+
+  useEffect(() => {
+    if (!currentUser) {
+      return;
+    }
+
+    const getPostsOptions: GetPostsOptions = {};
+
+    getPostsOptions.userId = currentUser.id;
+    dispatch(getAllPostsThunk(getPostsOptions));
+  }, [dispatch, currentUser]);
+
+  if (!currentUser) {
+    return <></>;
   }
 
   // handle pagination inside the component
@@ -29,11 +48,14 @@ const PostsList = () => {
         return (
           eachPost && (
             <div key={eachPost.id} className="post-row flex-row">
-              <img
-                className="post-thumbnail"
-                src={eachPost.imageUrl}
-                alt={eachPost.title}
-              />
+              <Link to={`/posts/${eachPost.id}`}>
+                <img
+                  className="post-thumbnail"
+                  src={eachPost.imageUrl}
+                  alt={eachPost.title}
+                />{" "}
+              </Link>
+
               <h3 className="post-name">{eachPost.title}</h3>
               <p className="post-upload-date">
                 added {formattedDate(eachPost.createdAt)}

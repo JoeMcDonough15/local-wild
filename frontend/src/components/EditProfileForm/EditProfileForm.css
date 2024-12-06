@@ -1,0 +1,11 @@
+.drag-container {
+  align-items: center;
+  background-color: white;
+  border: 1px solid black;
+  cursor: pointer;
+  font-size: 0.7rem;
+  justify-content: center;
+  margin: 0 auto 0.6em;
+  padding: 15% 10%;
+  text-align: center;
+}

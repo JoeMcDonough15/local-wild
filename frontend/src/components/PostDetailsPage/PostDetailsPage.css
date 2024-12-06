@@ -39,3 +39,8 @@
   right: 0;
   width: 42vw;
 }
+
+.post-details-page .post-control-buttons {
+  justify-content: flex-end;
+  margin-bottom: 20px;
+}

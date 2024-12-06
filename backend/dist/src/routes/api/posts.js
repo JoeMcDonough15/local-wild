@@ -29,36 +29,36 @@ router.get("/", async (req, res, next) => {
         }
         else {
             posts = await prisma.post.findMany(); // return all of the posts
-            if (userLat && userLng) {
-                posts.sort((postA, postB) => {
-                    const userLatAsNum = Number(userLat);
-                    const userLngAsNum = Number(userLng);
-                    // if one post has lat/lng and another does not, put the one that does first
-                    if (postA.lat !== null &&
-                        postA.lng !== null &&
-                        postB.lat === null &&
-                        postB.lng === null) {
-                        return -1;
-                    }
-                    if (postB.lat !== null &&
-                        postB.lng !== null &&
-                        postA.lat === null &&
-                        postA.lng === null) {
-                        return 1;
-                    }
-                    if (postA.lat !== null &&
-                        postA.lng !== null &&
-                        postB.lat !== null &&
-                        postB.lng !== null) {
-                        return (
-                        // if both posts have lat/lng, calculate the distance from the user's lat/lng and put shortest distances first
-                        calculateDistance(userLatAsNum, userLngAsNum, Number(postA.lat), Number(postA.lng)) -
-                            calculateDistance(userLatAsNum, userLngAsNum, Number(postB.lat), Number(postB.lng)));
-                    }
-                    // if neither post has lat/lng, leave them in the order they're in
-                    return 0;
-                });
-            }
+        }
+        if (userLat && userLng) {
+            posts.sort((postA, postB) => {
+                const userLatAsNum = Number(userLat);
+                const userLngAsNum = Number(userLng);
+                // if one post has lat/lng and another does not, put the one that does first
+                if (postA.lat !== null &&
+                    postA.lng !== null &&
+                    postB.lat === null &&
+                    postB.lng === null) {
+                    return -1;
+                }
+                if (postB.lat !== null &&
+                    postB.lng !== null &&
+                    postA.lat === null &&
+                    postA.lng === null) {
+                    return 1;
+                }
+                if (postA.lat !== null &&
+                    postA.lng !== null &&
+                    postB.lat !== null &&
+                    postB.lng !== null) {
+                    return (
+                    // if both posts have lat/lng, calculate the distance from the user's lat/lng and put shortest distances first
+                    calculateDistance(userLatAsNum, userLngAsNum, Number(postA.lat), Number(postA.lng)) -
+                        calculateDistance(userLatAsNum, userLngAsNum, Number(postB.lat), Number(postB.lng)));
+                }
+                // if neither post has lat/lng, leave them in the order they're in
+                return 0;
+            });
         }
         res.status(200).json({ posts });
     }

@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { updateUserThunk } from "../../store/slices/sessionSlice";
 import { useAppDispatch } from "../../store";
 import { PayloadAction } from "@reduxjs/toolkit";
 import { useModal } from "../../context/useModal";
+import { useDropzone } from "react-dropzone";
+import "./EditProfileForm.css";
 
 const EditProfileForm = () => {
   const dispatch = useAppDispatch();
@@ -12,16 +14,12 @@ const EditProfileForm = () => {
   const [showUpload, setShowUpload] = useState(true);
   //img url we will load in react
   const [previewUrl, setPreviewUrl] = useState<string>("");
-  const [numYearsExperience, setNumYearsExperience] = useState<string>("");
   const [location, setLocation] = useState<string>("");
-  const [favoriteSubject, setFavoriteSubject] = useState<string>("");
+  const [aboutMe, setAboutMe] = useState<string>("");
   const [errors, setErrors] = useState({} as { serverError: string });
   const { closeModal } = useModal();
 
-  //function to get image from local
-
-  const updateImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target?.files?.[0];
+  const updateImage = async (file: File) => {
     const reader = new FileReader();
     if (file) {
       reader.readAsDataURL(file);
@@ -35,6 +33,35 @@ const EditProfileForm = () => {
     }
   };
 
+  const DragAndDropOneFile = () => {
+    const onDrop = useCallback((files: File[]) => {
+      const file = files[0];
+      if (file) {
+        updateImage(file);
+      }
+    }, []);
+    const { getRootProps, getInputProps, isDragActive } = useDropzone({
+      onDrop,
+      maxFiles: 1,
+      accept: { "image/jpeg": [], "image/png": [], "image/jpg": [] },
+    });
+
+    return (
+      <div className="drag-container flex-col" {...getRootProps()}>
+        <label htmlFor="file-upload">
+          <input accept="png jpeg jpg" id="file-upload" {...getInputProps()} />
+        </label>
+        {isDragActive ? (
+          <p>Drop photo here</p>
+        ) : (
+          <>
+            <p>Drag a file here or click to select one.</p>
+          </>
+        )}
+      </div>
+    );
+  };
+
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
 
@@ -42,9 +69,10 @@ const EditProfileForm = () => {
     if (imgFile) {
       formData.append("image", imgFile);
     }
-    formData.append("numYearsExperience", numYearsExperience);
+
     formData.append("location", location);
-    formData.append("favoriteSubject", favoriteSubject);
+    formData.append("aboutMe", aboutMe);
+
     const updatedUser: PayloadAction<any> = await dispatch(
       updateUserThunk(formData)
     );
@@ -59,52 +87,28 @@ const EditProfileForm = () => {
   return (
     <div>
       <h1>Edit Your Profile</h1>
-      <form onSubmit={handleSubmit}>
+      <form className="form-container flex-col" onSubmit={handleSubmit}>
         {errors.serverError && (
           <p className="error-text">{errors.serverError}</p>
         )}
         <div>
-          {showUpload && (
-            <label htmlFor="file-upload">
-              {" "}
-              Select From Computer
-              <input
-                type="file"
-                id="file-upload"
-                name="img_url"
-                onChange={updateImage}
-                accept=".jpg, .jpeg, .png, .gif"
-              />
-            </label>
-          )}
-          {!showUpload && (
+          {showUpload ? (
+            <DragAndDropOneFile />
+          ) : (
             <div>
               <img src={previewUrl} alt="preview" />
+              <button
+                onClick={() => {
+                  setShowUpload(true);
+                  setImgFile(null);
+                }}
+                type="button"
+              >
+                Select a different file
+              </button>
             </div>
           )}
         </div>
-        <label htmlFor="num-years-experience">
-          Number of Years As a Wildlife Photographer
-          <input
-            onChange={(e) => {
-              setNumYearsExperience(e.target.value);
-            }}
-            type="text"
-            id="num-years-experience"
-          />
-        </label>
-
-        <label htmlFor="favorite-subject">
-          What's your favorite wildlife to photograph?
-          <input
-            onChange={(e) => {
-              setFavoriteSubject(e.target.value);
-            }}
-            type="text"
-            id="favorite-subject"
-          />
-        </label>
-
         <label htmlFor="location">
           Where are you located?
           <input
@@ -113,6 +117,16 @@ const EditProfileForm = () => {
             }}
             type="text"
             id="location"
+          />
+        </label>
+        <label htmlFor="about-me">
+          Tell Us About You
+          <textarea
+            maxLength={2000}
+            onChange={(e) => {
+              setAboutMe(e.target.value);
+            }}
+            id="about-me"
           />
         </label>
 

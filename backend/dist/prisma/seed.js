@@ -22,7 +22,7 @@ async function main() {
                 email: "jeanne6@email.com",
                 username: "Jeanne6",
                 password: bcrypt.hashSync("myPassword"),
-                profileImageUrl: "",
+                profileImageUrl: "https://local-wild-images.s3.us-east-1.amazonaws.com/profile3.png",
                 location: "Upstate NY",
             },
             {
@@ -157,7 +157,7 @@ async function main() {
                 imageUrl: "https://local-wild-images.s3.us-east-1.amazonaws.com/bear-stare.png",
                 title: "Bear Stare",
                 caption: "A grizzly bear chewing some grass",
-                fullDescription: "As I crouched low in the tall grasses of British Columbia Wildlife Park, the world seemed to fall away. The only sound was the whisper of the wind through the trees and the steady rhythm of my breathing. It was early morning, just as the first rays of sunlight pierced through the mist, casting a soft golden glow across the landscape. I had been waiting for hours, my camera ready, my eyes trained on the dense thicket where I knew something was stirring. Then, there it was—a massive, powerful figure emerging from the shadows. A grizzly bear. Its dark fur seemed to shimmer as it moved, muscles rippling under its thick coat. I held my breath, my heart racing, as it ambled across the clearing, its massive paws leaving prints in the soft earth. But instead of the aggressive stance I was used to seeing in most grizzly encounters, this one was calm, almost serene. To my surprise, the bear dropped to its haunches and began chewing on a patch of fresh grass. Its large jaws worked slowly, almost meditative, as it grazed in the early morning light. The sight was nothing like the fierce, wild animal most people imagine when they think of a grizzly. It was a peaceful moment, a rare glimpse into a side of nature that few ever get to witness. I could feel my hands steady as I adjusted the lens, capturing the scene. The sunlight flickered off the bear’s fur, and I clicked the shutter, hoping to preserve this quiet, unexpected moment. As the bear chewed and looked out over the park, its eyes briefly met mine—an unspoken understanding, a brief connection between two creatures in a vast and untamed world.",
+                fullDescription: "As I crouched low in the tall grasses of British Columbia Wildlife Park, the world seemed to fall away. The only sound was the whisper of the wind through the trees and the steady rhythm of my breathing. It was early morning, just as the first rays of sunlight pierced through the mist, casting a soft golden glow across the landscape. I had been waiting for hours, my camera ready, my eyes trained on the dense thicket where I knew something was stirring. Then, there it was—a massive, powerful figure emerging from the shadows. A grizzly bear. Its dark fur seemed to shimmer as it moved, muscles rippling under its thick coat. I held my breath, my heart racing, as it ambled across the clearing, its massive paws leaving prints in the soft earth. But instead of the aggressive stance I was used to seeing in most grizzly encounters, this one was calm, almost serene. To my surprise, the bear dropped to its haunches and began chewing on a patch of fresh grass. Its large jaws worked slowly, almost meditative, as it grazed in the afternoon sun. The sight was nothing like the fierce, wild animal most people imagine when they think of a grizzly. It was a peaceful moment, a rare glimpse into a side of nature that few ever get to witness. I could feel my hands steady as I adjusted the lens, capturing the scene. The sunlight flickered off the bear’s fur, and I clicked the shutter, hoping to preserve this quiet, unexpected moment. As the bear chewed and looked out over the park, its eyes briefly met mine—an unspoken understanding, a brief connection between two creatures in a vast and untamed world.",
                 partOfDay: "afternoon",
                 locationString: "BC Wildlife Park, Canada",
                 lat: 50.73229,
@@ -344,6 +344,11 @@ async function main() {
             { commentText: "Super cool!", commenterId: 1, postId: 8 },
             { commentText: "I love this", commenterId: 2, postId: 9 },
             { commentText: "So great", commenterId: 1, postId: 10 },
+            {
+                postId: 1,
+                commenterId: 4,
+                commentText: "Nature at its finest – a true moment captured in time.",
+            },
         ],
     });
     await prisma.commentReply.createMany({

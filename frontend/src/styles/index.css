@@ -41,6 +41,12 @@ img {
   max-width: 100%;
 }
 
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
 .header,
 .footer {
   background-color: black;
@@ -59,11 +65,6 @@ img {
 
 .below-header {
   margin-top: var(--header-height);
-}
-
-.not-found {
-  margin: var(--header-height) 0 75vh;
-  text-align: center;
 }
 
 .footer {
@@ -106,13 +107,15 @@ button:hover {
   color: white;
   font-weight: bold;
   padding: 5px 1vw;
+  transition: opacity 250ms ease-in-out;
 }
 
 .signup-button:hover {
   opacity: 0.8;
 }
 
-.login-out-button {
+.login-out-button,
+.edit-profile-button {
   background: transparent;
   border: 2px solid white;
   color: white;
@@ -126,7 +129,27 @@ button:hover {
   color: black;
 }
 
-.error-text {
+.edit-profile-button {
+  border-color: black;
+  color: black;
+}
+
+.edit-profile-button:hover {
+  background: black;
+  color: white;
+}
+
+.error-text,
+.not-found {
   color: red;
   margin-top: 4px;
+}
+
+.error-text {
+  font-size: 0.8rem;
+}
+
+.not-found {
+  margin: var(--header-height) 0 75vh;
+  text-align: center;
 }

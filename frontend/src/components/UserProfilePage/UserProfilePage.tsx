@@ -1,12 +1,12 @@
 import { useAppSelector, useAppDispatch } from "../../store";
 import { useNavigate, useParams } from "react-router-dom";
-import { useState } from "react";
+import { useEffect } from "react";
 import { getUserThunk } from "../../store/slices/userSlice";
-import type { LoadingState } from "../../types";
-import { PayloadAction } from "@reduxjs/toolkit";
 import UserDetails from "./UserDetails";
 import "./UserProfilePage.css";
 import PostsCarousel from "../PostsCarousel";
+import OpenModalButton from "../OpenModalButton/OpenModalButton";
+import EditProfileForm from "../EditProfileForm/EditProfileForm";
 
 const UserProfilePage = () => {
   const currentUser = useAppSelector((state) => state.users.currentUser);
@@ -14,41 +14,29 @@ const UserProfilePage = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { id } = useParams();
-  const [errors, setErrors] = useState({} as { serverError: string });
-  const [userLoaded, setUserLoaded] = useState<LoadingState>("no");
+
+  useEffect(() => {
+    dispatch(getUserThunk(Number(id)));
+  }, [dispatch, id]);
 
   if (!sessionUser) {
     navigate("/");
     return <></>;
   }
 
-  if (userLoaded === "no") {
-    setUserLoaded("loading");
-  } else if (userLoaded === "loading") {
-    dispatch(getUserThunk(Number(id))).then((response) => {
-      const serverResponse: PayloadAction<any> = response;
-      if (response.payload) {
-        setErrors({ serverError: serverResponse.payload.message });
-      }
-      setUserLoaded("response");
-    });
-  } else if (userLoaded === "response") {
-    if (errors.serverError) {
-      return (
-        <h1 style={{ margin: "20vh" }} className="error-text">
-          {errors.serverError}
-        </h1>
-      );
-    }
-    setUserLoaded("finished");
-  }
-
   if (!currentUser) {
-    return <h1 style={{ margin: "20vh" }}>Loading...</h1>;
+    return <h1 className="not-found">User Not Found.</h1>;
   }
 
   return (
     <section className="user-profile-page main-container flex-col">
+      {sessionUser.id === Number(id) && (
+        <OpenModalButton
+          buttonText="Edit Profile"
+          classes="edit-profile-button"
+          modalComponent={<EditProfileForm />}
+        />
+      )}
       <UserDetails />
       <PostsCarousel />
     </section>
