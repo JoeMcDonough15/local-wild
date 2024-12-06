@@ -8,7 +8,7 @@ import {
 } from "../../store/slices/postsSlice";
 import { PostUpdate, UpdateOrDeletePostArgs, LoadingState } from "../../types";
 
-const EditPostFormModal = ({ postId, keyForStore }: UpdateOrDeletePostArgs) => {
+const EditPostFormModal = ({ postId }: UpdateOrDeletePostArgs) => {
   const dispatch = useAppDispatch();
   const currentPost = useAppSelector((state) => state.posts.currentPost);
   const { closeModal } = useModal();
@@ -102,7 +102,6 @@ const EditPostFormModal = ({ postId, keyForStore }: UpdateOrDeletePostArgs) => {
 
     const editArgs: UpdateOrDeletePostArgs = {
       postId,
-      keyForStore,
       postDetails,
     };
 

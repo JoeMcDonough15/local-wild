@@ -11,9 +11,7 @@ router.get("/:id", async (req, res, next) => {
             password: true,
         },
         where: { id: userId },
-    });
-    const usersPosts = await prisma.post.count({
-        where: { photographerId: userId },
+        include: { posts: { orderBy: { createdAt: "desc" } } },
     });
     if (!user) {
         const userNotFound = {
@@ -24,7 +22,6 @@ router.get("/:id", async (req, res, next) => {
         };
         return next(userNotFound);
     }
-    user["totalNumPosts"] = usersPosts;
     res.status(200).json({ user });
 });
 export default router;

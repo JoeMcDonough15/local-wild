@@ -141,6 +141,7 @@ const CreatePostForm = (): JSX.Element => {
       <h1 className="update-post-header">Create A Post</h1>
       {errors.serverError && <p className="error-text">{errors.serverError}</p>}
       <form
+        style={{ marginTop: "15vh" }}
         encType="multipart/form-data"
         className="form-container flex-col"
         onSubmit={handleSubmit}

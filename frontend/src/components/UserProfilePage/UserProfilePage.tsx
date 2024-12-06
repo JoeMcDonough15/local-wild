@@ -1,5 +1,4 @@
 import { useAppSelector, useAppDispatch } from "../../store";
-import DisplayPosts from "../DisplayPosts";
 import { useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
 import { getUserThunk } from "../../store/slices/userSlice";
@@ -7,6 +6,7 @@ import type { LoadingState } from "../../types";
 import { PayloadAction } from "@reduxjs/toolkit";
 import UserDetails from "./UserDetails";
 import "./UserProfilePage.css";
+import PostsCarousel from "../PostsCarousel";
 
 const UserProfilePage = () => {
   const currentUser = useAppSelector((state) => state.users.currentUser);
@@ -34,19 +34,23 @@ const UserProfilePage = () => {
     });
   } else if (userLoaded === "response") {
     if (errors.serverError) {
-      return <h1 className="error-text">{errors.serverError}</h1>;
+      return (
+        <h1 style={{ margin: "20vh" }} className="error-text">
+          {errors.serverError}
+        </h1>
+      );
     }
     setUserLoaded("finished");
   }
 
   if (!currentUser) {
-    return <h1>Loading...</h1>;
+    return <h1 style={{ margin: "20vh" }}>Loading...</h1>;
   }
 
   return (
     <section className="user-profile-page main-container flex-col">
       <UserDetails />
-      <DisplayPosts listOrCarousel="carousel" postsPerPageOrSlide={3} />
+      <PostsCarousel />
     </section>
   );
 };

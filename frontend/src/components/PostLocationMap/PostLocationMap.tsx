@@ -5,15 +5,15 @@ interface MapProps {
   lng?: number;
   apiKey: string;
 }
-const PostLocationMap = ({
-  lat = 40.231548,
-  lng = -74.954861,
-  apiKey,
-}: MapProps) => {
+const PostLocationMap = ({ lat, lng, apiKey }: MapProps) => {
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
     googleMapsApiKey: apiKey,
   });
+
+  if (lat === undefined || lng === undefined) {
+    return <></>;
+  }
 
   const center = {
     lat,
@@ -25,7 +25,7 @@ const PostLocationMap = ({
       <GoogleMap
         center={center}
         mapContainerClassName="google-maps-widget"
-        zoom={16}
+        zoom={12}
       >
         <Marker position={center}></Marker>
       </GoogleMap>

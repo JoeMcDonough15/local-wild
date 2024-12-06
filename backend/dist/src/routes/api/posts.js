@@ -3,50 +3,64 @@ import { requireAuth } from "../../utils/auth.js";
 import { prisma } from "../../db/database_client.js";
 import { singleMulterUpload, singlePublicFileUpload } from "../../aws/index.js";
 import { validatePostBody, checkForImage } from "../../utils/validation.js";
+import calculateDistance from "../../utils/sortByClosest.js";
 const router = express.Router();
 // * get all posts (for Homepage,  UserProfilePage, and MyPostsPage)
 router.get("/", async (req, res, next) => {
-    let size = 6;
-    let offset = 0;
-    const { givenSize, slide, userId } = req.query;
-    if ((slide && isNaN(Math.floor(Number(slide)))) ||
-        (givenSize && isNaN(Math.floor(Number(givenSize)))) ||
-        (userId && isNaN(Math.floor(Number(userId))))) {
+    const { userId, userLat, userLng } = req.query;
+    if ((userId && isNaN(Math.floor(Number(userId)))) ||
+        (userLat !== undefined && isNaN(Number(userLat))) ||
+        (userLng !== undefined && isNaN(Number(userLng)))) {
         const err = {
             name: "Bad Request Error",
-            message: "Slide number and userId must both be digits.",
+            message: "All query params must be numbers.",
             status: 400,
         };
         return next(err);
     }
-    if (givenSize) {
-        size = Number(givenSize);
-    }
-    if (slide) {
-        offset = (Number(slide) - 1) * size;
-    }
-    const queryObj = {
+    const postsByUserQuery = {
         orderBy: [{ createdAt: "desc" }],
-        skip: offset,
-        take: size,
+        where: { photographerId: Number(userId) },
     };
     try {
         let posts;
-        let totalNumPosts;
         if (userId) {
-            posts = await prisma.post.findMany({
-                ...queryObj,
-                where: { photographerId: Number(userId) },
-            });
-            totalNumPosts = await prisma.post.count({
-                where: { photographerId: Number(userId) },
-            });
+            posts = await prisma.post.findMany(postsByUserQuery);
         }
         else {
-            posts = await prisma.post.findMany(queryObj);
-            totalNumPosts = await prisma.post.count();
+            posts = await prisma.post.findMany(); // return all of the posts
+            if (userLat && userLng) {
+                posts.sort((postA, postB) => {
+                    const userLatAsNum = Number(userLat);
+                    const userLngAsNum = Number(userLng);
+                    // if one post has lat/lng and another does not, put the one that does first
+                    if (postA.lat !== null &&
+                        postA.lng !== null &&
+                        postB.lat === null &&
+                        postB.lng === null) {
+                        return -1;
+                    }
+                    if (postB.lat !== null &&
+                        postB.lng !== null &&
+                        postA.lat === null &&
+                        postA.lng === null) {
+                        return 1;
+                    }
+                    if (postA.lat !== null &&
+                        postA.lng !== null &&
+                        postB.lat !== null &&
+                        postB.lng !== null) {
+                        return (
+                        // if both posts have lat/lng, calculate the distance from the user's lat/lng and put shortest distances first
+                        calculateDistance(userLatAsNum, userLngAsNum, Number(postA.lat), Number(postA.lng)) -
+                            calculateDistance(userLatAsNum, userLngAsNum, Number(postB.lat), Number(postB.lng)));
+                    }
+                    // if neither post has lat/lng, leave them in the order they're in
+                    return 0;
+                });
+            }
         }
-        res.status(200).json({ posts, totalNumPosts });
+        res.status(200).json({ posts });
     }
     catch (err) {
         next(err);

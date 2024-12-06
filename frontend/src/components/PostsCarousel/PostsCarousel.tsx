@@ -1,23 +1,39 @@
 import { AiOutlineRight, AiOutlineLeft } from "react-icons/ai";
-import { Post } from "../../types";
+import { GetPostsOptions, Post } from "../../types";
 import PostImageAndCaption from "../PostImageAndCaption";
 import "./PostsCarousel.css";
+import { useEffect, useState } from "react";
+import { useAppDispatch, useAppSelector } from "../../store";
+import { getAllPostsThunk } from "../../store/slices/postsSlice";
 
-interface CarouselProps {
-  postsToRender: Post[];
-  totalNumPosts: number;
-  slideNum: number;
-  postsPerSlide: number;
-  setSlideNum: (num: number) => void;
-}
+const PostsCarousel = () => {
+  const dispatch = useAppDispatch();
+  const allPosts: Post[] = useAppSelector((state) => state.posts.allPosts);
+  const currentUser = useAppSelector((state) => state.users.currentUser);
+  const [slideNum, setSlideNum] = useState(1);
+  const postsPerSlide = 3;
 
-const PostsCarousel = ({
-  postsToRender,
-  totalNumPosts,
-  slideNum,
-  postsPerSlide,
-  setSlideNum,
-}: CarouselProps) => {
+  useEffect(() => {
+    const getPostsOptions: GetPostsOptions = {};
+
+    if (currentUser) {
+      getPostsOptions.userId = currentUser.id;
+    }
+    // get device's location if allowed by user
+    navigator.geolocation.getCurrentPosition(
+      (position: GeolocationPosition) => {
+        getPostsOptions.userLat = position.coords.latitude;
+        getPostsOptions.userLng = position.coords.longitude;
+        dispatch(getAllPostsThunk(getPostsOptions));
+      }
+    );
+  }, [dispatch, currentUser]);
+
+  // handle which posts are viewed on each slide
+  const startingIndex = slideNum * postsPerSlide - postsPerSlide;
+  const endingIndex = startingIndex + postsPerSlide; // slice will go up to but not including endingIndex
+  const postsToRender: Post[] = [...allPosts.slice(startingIndex, endingIndex)];
+
   return (
     <section className="carousel flex-row">
       {slideNum > 1 && (
@@ -33,11 +49,11 @@ const PostsCarousel = ({
         </button>
       )}
       <div className="gallery flex-row">
-        {postsToRender.map((eachPost, index) => {
+        {postsToRender.map((eachPost) => {
           return (
             eachPost && (
               <PostImageAndCaption
-                key={index + 1}
+                key={eachPost.id}
                 postId={eachPost.id}
                 imageUrl={eachPost.imageUrl}
                 imageText={eachPost.title}
@@ -48,7 +64,7 @@ const PostsCarousel = ({
           );
         })}
       </div>
-      {totalNumPosts > slideNum * postsPerSlide && (
+      {allPosts.length > slideNum * postsPerSlide && (
         <button
           onClick={() => {
             const newSlideNum = slideNum + 1;
