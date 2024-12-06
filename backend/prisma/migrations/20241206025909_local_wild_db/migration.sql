@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Post" ALTER COLUMN "fullDescription" SET DATA TYPE VARCHAR(5000);

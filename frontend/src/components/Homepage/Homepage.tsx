@@ -38,7 +38,11 @@ const Homepage = () => {
         className="homepage-content flex-col"
       >
         <div className="hero-img-container">
-          <img className="hero-img" src="assets/images/bridge.png" alt="" />
+          <img
+            className="hero-img"
+            src="https://local-wild-images.s3.us-east-1.amazonaws.com/bridge.png"
+            alt=""
+          />
         </div>
         <div className="title flex-col">
           <h2 className="title-font">Local Wild</h2>

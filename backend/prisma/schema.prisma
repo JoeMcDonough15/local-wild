@@ -36,7 +36,8 @@ model Post {
     photographer User @relation(fields: [photographerId], references: [id], onDelete: Cascade )
     photographerId Int 
     caption String? @db.VarChar(75)
-    fullDescription String? @db.VarChar(2000)
+    fullDescription String? @db.VarChar(5000)
+    locationString String? @db.VarChar(255)
     lat Decimal? @db.Decimal(100, 98)
     lng Decimal? @db.Decimal(100, 97)
     partOfDay String? @db.VarChar(50)

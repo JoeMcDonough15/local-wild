@@ -12,14 +12,17 @@ const MapProvider = () => {
     dispatch(getKeyThunk());
   }, [dispatch]);
 
-  // if (!key || !currentPost || !currentPost.lat || !currentPost.lng) {
-  //   return <></>;
-  // }
-
-  if (!key || !currentPost) {
+  if (!key || !currentPost || !currentPost.lat || !currentPost.lng) {
     return <></>;
   }
-  return <PostLocationMap apiKey={key} />;
+
+  return (
+    <PostLocationMap
+      apiKey={key}
+      lat={Number(currentPost.lat)}
+      lng={Number(currentPost.lng)}
+    />
+  );
 };
 
 export default MapProvider;

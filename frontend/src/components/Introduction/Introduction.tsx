@@ -1,8 +1,10 @@
 import "./Introduction.css";
 import { useState, useEffect } from "react";
 
-const introImageLandscape = "coopershawklandscape.jpg";
-const introImagePortrait = "coopershawkportrait.jpg";
+const introImageLandscape =
+  "https://local-wild-images.s3.us-east-1.amazonaws.com/coopershawkcry.jpg";
+const introImagePortrait =
+  "https://local-wild-images.s3.us-east-1.amazonaws.com/coopershawkportrait.jpg";
 
 const Introduction = () => {
   const [introImage, setIntroImage] = useState<string>(introImageLandscape);
@@ -27,7 +29,7 @@ const Introduction = () => {
     <>
       <div className="introduction-image-container">
         <img
-          src={`/assets/images/${introImage}`}
+          src={introImage}
           alt="coopers hawk crying out"
           className="introduction-image"
         />{" "}
