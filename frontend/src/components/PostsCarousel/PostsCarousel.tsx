@@ -10,6 +10,7 @@ const PostsCarousel = () => {
   const dispatch = useAppDispatch();
   const allPosts: Post[] = useAppSelector((state) => state.posts.allPosts);
   const currentUser = useAppSelector((state) => state.users.currentUser);
+  const [loaded, setLoaded] = useState(false);
   const [slideNum, setSlideNum] = useState(1);
   const postsPerSlide = 3;
 
@@ -24,10 +25,14 @@ const PostsCarousel = () => {
       (position: GeolocationPosition) => {
         getPostsOptions.userLat = position.coords.latitude;
         getPostsOptions.userLng = position.coords.longitude;
-        dispatch(getAllPostsThunk(getPostsOptions));
+        dispatch(getAllPostsThunk(getPostsOptions)).then(() => setLoaded(true));
       }
     );
-  }, [dispatch, currentUser]);
+  }, [dispatch, currentUser, setLoaded]);
+
+  if (!loaded) {
+    return <h1 className="loading">Loading...</h1>;
+  }
 
   // handle which posts are viewed on each slide
   const startingIndex = slideNum * postsPerSlide - postsPerSlide;
@@ -35,7 +40,7 @@ const PostsCarousel = () => {
   const postsToRender: Post[] = [...allPosts.slice(startingIndex, endingIndex)];
 
   if (postsToRender.length === 0) {
-    return <h1>Loading...</h1>;
+    return <h1 className="loading">No Posts To Display</h1>;
   }
 
   return (

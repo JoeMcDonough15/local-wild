@@ -81,12 +81,12 @@ router.get("/:id", requireAuth, async (req, res, next) => {
         const post = await prisma.post.findUnique({
             where: { id: Number(id) },
             include: {
-                photographer: { select: { id: true, username: true } },
+                photographer: { select: { id: true, name: true } },
                 comments: {
                     orderBy: { createdAt: "asc" },
                     include: {
                         replies: { orderBy: { createdAt: "asc" } },
-                        commenter: { select: { username: true, id: true } },
+                        commenter: { select: { name: true, id: true } },
                     },
                 },
             },
@@ -194,27 +194,3 @@ router.delete("/:id", requireAuth, async (req, res, next) => {
     }
 });
 export default router;
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-// ? get all posts that are closest to the user's location - for the eventual homepage
-// 1. we'd have to know the user's location
-// 2. we'd have to only pull records of posts that include lat/lng, since these are optional fields
-// 3. we'd have to only pull records of posts whose lat/lng were within a certain min/max that corresponded to the user's lat/lng, derived from their location
-// * So we'd either need some input to come into the request that would include the user's lat/lng
-// *    - we could check to see if there's a user on the request object.
-// *    - we could modify the user object to include lat/lng from their current location
-// * or we could use query params for minLat, minLng, maxLat, and maxLng that are derived from the user's current location
-// *    - we could grab the values from the query params and use those in the query

@@ -1,34 +1,40 @@
 import { useAppSelector } from "../../store";
+import EditProfileForm from "../EditProfileForm/EditProfileForm";
+import OpenModalButton from "../OpenModalButton/OpenModalButton";
 import "./UserProfilePage.css";
 
 const UserDetails = () => {
   const currentUser = useAppSelector((state) => state.users.currentUser);
+  const sessionUser = useAppSelector((state) => state.session.sessionUser);
   const allPostsByUser = useAppSelector((state) => state.posts.allPosts);
 
-  if (!currentUser) return <></>;
+  if (!currentUser || !sessionUser) return <></>;
 
-  const { username, location, aboutMe } = currentUser;
+  const { name, location, aboutMe, profileImageUrl } = currentUser;
 
   return (
-    <div className="user-details flex-row">
+    <div className="user-details flex-col">
       <div className="name-and-avatar flex-row">
-        <h2 className="username">{username}</h2>
-        {currentUser.profileImageUrl && (
+        <h2 className="username">{name}</h2>
+        {profileImageUrl && (
           <div className="user-avatar-container">
-            <img
-              className="user-avatar"
-              src={currentUser.profileImageUrl}
-              alt=""
-            />
+            <img className="user-avatar" src={profileImageUrl} alt="" />
           </div>
         )}
+        {sessionUser.id === Number(currentUser.id) && (
+          <OpenModalButton
+            buttonText="Edit Profile"
+            classes="edit-profile-button"
+            modalComponent={<EditProfileForm />}
+          />
+        )}
       </div>
-      <div className="details">
-        {location && <p>{location}</p>}
-        {aboutMe && <p>{aboutMe}</p>}
+      <div className="details flex-col">
+        {location && <p className="location">{location}</p>}
+        {aboutMe && <p className="about-me">{aboutMe}</p>}
         {allPostsByUser.length > 0 && (
-          <p>
-            {username} has posted {allPostsByUser.length} times!
+          <p className="num-posts">
+            {name} has posted {allPostsByUser.length} times!
           </p>
         )}
       </div>

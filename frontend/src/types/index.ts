@@ -5,7 +5,7 @@ export interface ServerError extends Error {
 
 export interface User {
   id: number;
-  username: string;
+  name: string;
   email: string;
   profileImageUrl: string | null;
   location: string | null;
@@ -19,7 +19,7 @@ export interface User {
 export interface SafeUser {
   id: number;
   email: string;
-  username: string;
+  name: string;
 }
 
 export interface PostUpdate {
@@ -36,7 +36,7 @@ export interface PostUpdate {
 export interface Post extends PostUpdate {
   id: number;
   imageUrl: string;
-  photographer?: { username: string; id: number };
+  photographer?: { name: string; id: number };
   photographerId: number;
   comments?: CommentOnPost[];
   createdAt: Date;
@@ -78,7 +78,7 @@ export interface Login {
 }
 
 export interface Signup {
-  username: string;
+  name: string;
   email: string;
   password: string;
 }

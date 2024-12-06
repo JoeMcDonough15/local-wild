@@ -35,7 +35,7 @@ export const restoreUser = (req, res, next) => {
                 where: { id },
                 select: {
                     id: true,
-                    username: true,
+                    name: true,
                     email: true,
                 },
             });

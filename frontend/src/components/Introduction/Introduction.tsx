@@ -30,7 +30,7 @@ const Introduction = () => {
       <div className="introduction-image-container">
         <img
           src={introImage}
-          alt="coopers hawk crying out"
+          alt="cooper's hawk crying out"
           className="introduction-image"
         />{" "}
       </div>

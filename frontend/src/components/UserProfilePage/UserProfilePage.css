@@ -11,13 +11,19 @@
 }
 
 .user-details {
-  justify-content: space-between;
+  align-items: center;
+  gap: 40px;
+  padding: 20px 10vw;
   width: 100%;
 }
 
 .name-and-avatar {
   justify-content: space-between;
-  width: 15%;
+  width: 100%;
+}
+
+.username {
+  margin-right: 20px;
 }
 
 .user-avatar-container {
@@ -31,4 +37,18 @@
   height: 100%;
   object-fit: cover;
   width: 100%;
+}
+
+.details {
+  gap: 10px;
+  margin: auto;
+  padding-right: 30%;
+}
+
+.location {
+  margin-bottom: 10px;
+}
+
+.num-posts {
+  margin-top: 30px;
 }

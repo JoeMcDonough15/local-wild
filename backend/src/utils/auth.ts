@@ -52,7 +52,7 @@ export const restoreUser = (
         where: { id },
         select: {
           id: true,
-          username: true,
+          name: true,
           email: true,
         },
       });

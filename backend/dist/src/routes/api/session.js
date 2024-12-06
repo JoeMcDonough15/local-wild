@@ -35,7 +35,7 @@ router.post("/", validateLogin, async (req, res, next) => {
     const safeUser = {
         id: user.id,
         email: user.email,
-        username: user.username,
+        name: user.name,
     };
     setTokenCookie(res, safeUser);
     const { password: newPassword, ...userDetails } = user;
@@ -50,30 +50,22 @@ router.delete("/", (_req, res) => {
 });
 // Sign up
 router.post("/signup", validateSignup, async (req, res, next) => {
-    const { email, password, username } = req.body;
+    const { email, name, password } = req.body;
     try {
         // first, query the db and see if there's a user with this email or username
         const usersMatched = await prisma.user.findMany({
-            where: { OR: [{ email }, { username }] },
+            where: { email },
         });
         const emailMustBeUnique = "The email address you chose is already taken.";
-        const usernameMustBeUnique = "The username you chose is already taken.";
         const uniqueConstraintErrors = {
             title: "Invalid input",
             errors: {},
             status: 400,
-            message: "Email and Username must both be unique",
+            message: "This email is already in use.",
         };
         usersMatched.forEach((userMatched) => {
-            if (userMatched.email === email && userMatched.username === username) {
+            if (userMatched.email === email) {
                 uniqueConstraintErrors.errors.email = emailMustBeUnique;
-                uniqueConstraintErrors.errors.username = usernameMustBeUnique;
-            }
-            else if (userMatched.email === email) {
-                uniqueConstraintErrors.errors.email = emailMustBeUnique;
-            }
-            else if (userMatched.username === username) {
-                uniqueConstraintErrors.errors.username = usernameMustBeUnique;
             }
         });
         if (Object.keys(uniqueConstraintErrors.errors).length > 0) {
@@ -82,13 +74,13 @@ router.post("/signup", validateSignup, async (req, res, next) => {
         // then, if no user exists with either of those details, create our new user
         const hashedPassword = bcrypt.hashSync(password);
         const user = await prisma.user.create({
-            data: { email, username, password: hashedPassword },
+            data: { email, name, password: hashedPassword },
         });
         const { password: newPassword, ...userDetails } = user;
         const safeUser = {
             id: user.id,
             email: user.email,
-            username: user.username,
+            name: user.name,
         };
         setTokenCookie(res, safeUser);
         return res.status(201).json({

@@ -196,7 +196,7 @@ const CreatePostForm = (): JSX.Element => {
               <DragAndDropOneFile />
             ) : (
               <div>
-                <img src={previewUrl} alt="preview" />
+                <img className="preview-img" src={previewUrl} alt="preview" />
                 <button
                   onClick={() => {
                     setShowUpload(true);

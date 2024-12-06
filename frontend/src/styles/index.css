@@ -153,3 +153,9 @@ button:hover {
   margin: var(--header-height) 0 75vh;
   text-align: center;
 }
+
+.loading {
+  font-size: 3.5rem;
+  margin-bottom: 30vh;
+  margin-top: 30vh;
+}

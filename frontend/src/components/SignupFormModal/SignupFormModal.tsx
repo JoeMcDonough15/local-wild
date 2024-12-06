@@ -7,13 +7,12 @@ import { PayloadAction } from "@reduxjs/toolkit";
 function SignupFormModal() {
   const dispatch = useAppDispatch();
   const [email, setEmail] = useState("");
-  const [username, setUsername] = useState("");
+  const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errors, setErrors] = useState(
     {} as {
       email?: string;
-      username?: string;
       password?: string;
       confirmPassword?: string;
     }
@@ -52,7 +51,7 @@ function SignupFormModal() {
     const serverResponse: PayloadAction<any> = await dispatch(
       signupThunk({
         email,
-        username,
+        name,
         password,
       })
     );
@@ -60,7 +59,6 @@ function SignupFormModal() {
     if (serverResponse.payload) {
       setErrors({
         email: serverResponse.payload.errors?.email,
-        username: serverResponse.payload.errors?.username,
       });
     } else {
       closeModal();
@@ -82,15 +80,14 @@ function SignupFormModal() {
         </label>
         {errors.email && <p className="error-text">{errors.email}</p>}
         <label>
-          Username
+          Name
           <input
             type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            value={name}
+            onChange={(e) => setName(e.target.value)}
             required
           />
         </label>
-        {errors.username && <p className="error-text">{errors.username}</p>}
         <label>
           Password
           <input
