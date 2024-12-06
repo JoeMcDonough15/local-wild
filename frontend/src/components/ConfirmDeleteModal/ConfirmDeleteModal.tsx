@@ -5,6 +5,7 @@ import { useAppDispatch } from "../../store";
 import { deletePostThunk } from "../../store/slices/postsSlice";
 import { PayloadAction } from "@reduxjs/toolkit";
 import { useNavigate } from "react-router-dom";
+import "./ConfirmDeleteModal.css";
 
 const ConfirmDeleteModal = ({
   postId,
