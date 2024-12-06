@@ -7,35 +7,83 @@ async function main() {
     data: [
       {
         email: "alice@prisma.io",
-        username: "Alice",
+        name: "Alice",
         password: bcrypt.hashSync("myPassword"),
         profileImageUrl:
           "https://local-wild-images.s3.us-east-1.amazonaws.com/profile1.png",
         location: "Eugene, Oregon",
+        aboutMe:
+          "I’m a hobbyist wildlife photographer with a passion for capturing the beauty of nature. What started as a personal interest has grown into a deep love for documenting wildlife in its natural habitat. I spend my weekends exploring local forests, wetlands, and reserves, always on the lookout for those fleeting moments that reveal the raw grace of animals. While I’m not a professional, I’m proud that my photos have been featured in local exhibitions and conservation publications. My goal is simple: to inspire others to appreciate and protect the incredible wildlife around us.",
       },
       {
         email: "bob@gmail.com",
-        username: "Bob",
+        name: "Bob",
         password: bcrypt.hashSync("thisismypassword"),
         profileImageUrl:
           "https://local-wild-images.s3.us-east-1.amazonaws.com/profile2.jpg",
         location: "Denver, Colorado",
+        aboutMe:
+          "I’m a nature enthusiast and self-taught wildlife photographer, captivated by the wonders of the animal world. My camera is my way of connecting with the outdoors, and I love capturing moments that reveal the beauty and complexity of wildlife. Whether I’m tracking elusive creatures or simply observing a bird in flight, every photo tells a story. While photography is a hobby, I hope my images spark curiosity and appreciation for the natural world, encouraging others to protect the creatures we share this planet with.",
       },
       {
         email: "jeanne6@email.com",
-        username: "Jeanne6",
+        name: "Jeanne",
         password: bcrypt.hashSync("myPassword"),
         profileImageUrl:
           "https://local-wild-images.s3.us-east-1.amazonaws.com/profile3.png",
         location: "Upstate NY",
+        aboutMe:
+          "I’ve always had a deep love for nature, and wildlife photography allows me to share that passion with others. As an avid photographer, I spend countless hours in the field, seeking out animals and moments that reflect the quiet elegance of the wild. My goal is to capture images that show the intimate side of wildlife—whether it’s a deer in the mist or a hawk soaring high. I may not be a professional, but through my photos, I hope to inspire others to look closer and see the beauty of the creatures around us.",
       },
       {
         email: "shawnymac@prisma.io",
-        username: "Shawny_Mac",
+        name: "Shawny_Mac",
         password: bcrypt.hashSync("myPassword"),
         profileImageUrl:
           "https://local-wild-images.s3.us-east-1.amazonaws.com/profile4.png",
         location: "Philadelphia, Pennsylvania",
+        aboutMe:
+          "As a hobbyist wildlife photographer, I’m constantly in awe of the world around me. Armed with my camera, I explore forests, wetlands, and open fields, hoping to capture those special, fleeting moments that reveal the soul of nature. I’m drawn to the unique behaviors and hidden beauty of animals, and I strive to create images that bring attention to their delicate existence. Photography is my way of connecting with wildlife, and through my work, I hope to inspire others to appreciate and protect these incredible creatures.",
+      },
+      {
+        email: "james@prisma.io",
+        name: "James",
+        password: bcrypt.hashSync("myPassword"),
+        profileImageUrl:
+          "https://local-wild-images.s3.us-east-1.amazonaws.com/default_profile_pic.png",
+        location: "Columbus, Ohio",
+        aboutMe:
+          "Wildlife photography is my way of exploring and preserving the natural world. I’m an amateur photographer, always seeking out the perfect shot that captures the essence of an animal in its environment. Whether it's a quiet moment with a deer or a bird in mid-flight, I love the challenge of telling nature's story through my lens. Though photography is a hobby for me, I hope my images encourage others to appreciate and protect wildlife and the ecosystems that sustain them.",
+      },
+      {
+        email: "sarah@prisma.io",
+        name: "Sarah",
+        password: bcrypt.hashSync("myPassword"),
+        profileImageUrl:
+          "https://local-wild-images.s3.us-east-1.amazonaws.com/default_profile_pic.png",
+        location: "Dallas, Texas",
+        aboutMe:
+          "Wildlife photography is a way for me to merge my love of nature with my passion for storytelling. I’m an avid hobbyist who spends as much time as I can outdoors, photographing the animals I encounter along the way. From the smallest creatures to the most majestic, each subject has a story to tell, and I strive to capture those moments authentically. Through my images, I hope to inspire others to appreciate the fragile beauty of the natural world and work toward its protection.",
+      },
+      {
+        email: "tom@prisma.io",
+        name: "Tom",
+        password: bcrypt.hashSync("myPassword"),
+        profileImageUrl:
+          "https://local-wild-images.s3.us-east-1.amazonaws.com/default_profile_pic.png",
+        location: "Chicago, Illinois",
+        aboutMe:
+          "I’m a nature lover and hobbyist photographer who enjoys documenting the untold stories of wildlife. From the smallest insect to the largest mammal, I find joy in capturing the moments that show the beauty and complexity of the animal kingdom. My photography is a personal pursuit, but I hope it resonates with others, inspiring a deeper connection to the wild and a desire to protect it for future generations.",
+      },
+      {
+        email: "mary@prisma.io",
+        name: "Mary",
+        password: bcrypt.hashSync("myPassword"),
+        profileImageUrl:
+          "https://local-wild-images.s3.us-east-1.amazonaws.com/default_profile_pic.png",
+        location: "Portland, Maine",
+        aboutMe:
+          "Photography allows me to get closer to the wild than I ever thought possible. As a hobbyist wildlife photographer, I spend my free time in nature, camera in hand, seeking out animals in their natural habitats. I’m particularly drawn to the subtle details that often go unnoticed—whether it’s a bird’s feather pattern or the way light hits a leopard’s coat. My goal is to share these moments with others and spark a greater appreciation for wildlife and conservation.",
       },
     ],
   });
@@ -369,41 +417,460 @@ async function main() {
     data: [
       {
         commentText: "Absolutely beautiful!",
-        commenterId: 1,
-        postId: 3,
+        commenterId: 2,
+        postId: 1,
       },
       { commentText: "Incredible Picture!", commenterId: 1, postId: 4 },
       {
         commentText: "Sooooo cool!!!",
-        commenterId: 2,
-        postId: 5,
+        commenterId: 3,
+        postId: 1,
       },
       { commentText: "What a great shot!", commenterId: 2, postId: 6 },
       {
         commentText: "Amazing photograph!  What luck!!",
-        commenterId: 3,
-        postId: 2,
+        commenterId: 4,
+        postId: 1,
       },
       {
         commentText: "You should be really proud of this!  Just fantastic!!",
-        commenterId: 3,
+        commenterId: 5,
         postId: 1,
       },
       { commentText: "Wow!!!", commenterId: 4, postId: 2 },
       {
         commentText: "I love the great resolution you got on this!!!",
+        commenterId: 6,
+        postId: 1,
+      },
+
+      { commentText: "Excellent shot.", commenterId: 7, postId: 1 },
+      { commentText: "Super cool!", commenterId: 8, postId: 1 },
+      {
+        commentText: "Such a powerful moment captured in time!",
+        commenterId: 8,
+        postId: 2,
+      },
+      {
+        commentText: "Incredible shot! The detail is stunning.",
+        commenterId: 7,
+        postId: 2,
+      },
+      {
+        commenterId: 6,
+        commentText: "Nature at its finest – a true moment captured in time.",
+        postId: 2,
+      },
+      {
+        commentText: "The way the light hits this animal is mesmerizing.",
+        commenterId: 5,
+        postId: 2,
+      },
+      {
+        commentText: "Nature at its finest—beautiful photo!",
+        commenterId: 4,
+        postId: 2,
+      },
+      {
+        commentText: "You really brought out the soul of this creature.",
+        commenterId: 3,
+        postId: 2,
+      },
+      {
+        commentText: "Wow, what a majestic animal!",
+        commenterId: 2,
+        postId: 2,
+      },
+      {
+        commentText: "This shot tells such a beautiful story.",
+        commenterId: 8,
+        postId: 3,
+      },
+      {
+        commentText: "Such grace and elegance in this capture.",
+        commenterId: 7,
+        postId: 3,
+      },
+      {
+        commenterId: 6,
+        commentText: "The colors in this photo are just breathtaking!",
+        postId: 3,
+      },
+      {
+        commentText: "A rare moment beautifully frozen in time.",
+        commenterId: 5,
+        postId: 3,
+      },
+      {
+        commentText:
+          "Absolutely love how you captured the essence of this animal.",
         commenterId: 4,
         postId: 3,
       },
-
-      { commentText: "Excellent shot.", commenterId: 3, postId: 7 },
-      { commentText: "Super cool!", commenterId: 1, postId: 8 },
-      { commentText: "I love this", commenterId: 2, postId: 9 },
-      { commentText: "So great", commenterId: 1, postId: 10 },
       {
-        postId: 1,
-        commenterId: 4,
+        commentText: "This image speaks to the beauty of the wild.",
+        commenterId: 3,
+        postId: 3,
+      },
+      {
+        commentText: "So much character in this one! Great shot.",
+        commenterId: 1,
+        postId: 3,
+      },
+      {
+        commentText: "What an incredible animal and such a perfect shot!",
+        commenterId: 8,
+        postId: 4,
+      },
+      { commentText: "So great", commenterId: 7, postId: 4 },
+      {
+        commenterId: 6,
         commentText: "Nature at its finest – a true moment captured in time.",
+        postId: 4,
+      },
+      {
+        commentText: "This photo truly highlights the wild’s raw beauty.",
+        commenterId: 5,
+        postId: 4,
+      },
+      {
+        commentText:
+          "Nature is full of surprises, and this one is spectacular.",
+        commenterId: 4,
+        postId: 4,
+      },
+      {
+        commentText: "The detail in this photo is just mesmerizing!",
+        commenterId: 3,
+        postId: 4,
+      },
+      { commentText: "I love this", commenterId: 1, postId: 4 },
+      {
+        commentText: "A moment frozen in time—stunning work.",
+        commenterId: 8,
+        postId: 5,
+      },
+      {
+        commentText: "This animal looks like it’s right out of a storybook!",
+        commenterId: 7,
+        postId: 5,
+      },
+      {
+        commenterId: 6,
+        commentText: "Nature at its finest – a true moment captured in time.",
+        postId: 5,
+      },
+      {
+        commentText: "Nature in all its glory—beautifully captured.",
+        commenterId: 5,
+        postId: 5,
+      },
+      {
+        commentText: "So much life and energy in this shot!",
+        commenterId: 4,
+        postId: 5,
+      },
+      {
+        commentText: "Such a peaceful moment. Love how you captured it.",
+        commenterId: 2,
+        postId: 5,
+      },
+      {
+        commentText: "A beautiful portrayal of the wild in its natural state.",
+        commenterId: 1,
+        postId: 5,
+      },
+      {
+        commentText:
+          "This image really brings out the power and majesty of wildlife.",
+        commenterId: 8,
+        postId: 6,
+      },
+      { commentText: "So great", commenterId: 7, postId: 6 },
+      {
+        commenterId: 6,
+        commentText: "Nature at its finest – a true moment captured in time.",
+        postId: 6,
+      },
+      {
+        commentText:
+          "You’ve captured the wild’s essence perfectly with this one.",
+        commenterId: 5,
+        postId: 6,
+      },
+      {
+        commentText: "Incredible detail and composition—this is stunning!",
+        commenterId: 4,
+        postId: 6,
+      },
+      {
+        commentText: "This moment feels so alive, love how you captured it!",
+        commenterId: 2,
+        postId: 6,
+      },
+      {
+        commentText:
+          "What a stunning shot—this animal’s elegance shines through.",
+        commenterId: 1,
+        postId: 6,
+      },
+      {
+        commentText: "The colors and lighting in this photo are just perfect!",
+        commenterId: 8,
+        postId: 7,
+      },
+      {
+        commentText: "Wow, the expression on this animal is priceless.",
+        commenterId: 7,
+        postId: 7,
+      },
+      {
+        commenterId: 6,
+        commentText: "You’ve truly captured the wild’s spirit in this one.",
+        postId: 7,
+      },
+      {
+        commentText: "Such an amazing capture—nature’s beauty at its best!",
+        commenterId: 5,
+        postId: 7,
+      },
+      {
+        commentText: "What a beautiful creature—your photo does it justice!",
+        commenterId: 2,
+        postId: 7,
+      },
+      {
+        commentText: "I love how the environment blends with the subject here.",
+        commenterId: 3,
+        postId: 7,
+      },
+      {
+        commentText: "This photo brings out the raw beauty of nature—amazing!",
+        commenterId: 1,
+        postId: 7,
+      },
+      {
+        commentText: "Such a rare and powerful moment to capture.",
+        commenterId: 8,
+        postId: 8,
+      },
+      {
+        commentText:
+          "This picture perfectly shows the delicate balance of the wild.",
+        commenterId: 7,
+        postId: 8,
+      },
+      {
+        commenterId: 6,
+        commentText:
+          "What an awe-inspiring animal, and you’ve captured it beautifully.",
+        postId: 8,
+      },
+      {
+        commentText: "The motion and energy in this shot are incredible!",
+        commenterId: 5,
+        postId: 8,
+      },
+      {
+        commentText:
+          "This photo makes you stop and appreciate nature’s wonders.",
+        commenterId: 2,
+        postId: 8,
+      },
+      {
+        commentText:
+          "You’ve perfectly captured the harmony between wildlife and its environment.",
+        commenterId: 3,
+        postId: 8,
+      },
+      {
+        commentText: "The textures in this image are so captivating.",
+        commenterId: 1,
+        postId: 8,
+      },
+      {
+        commentText:
+          "Such a stunning shot of this animal in its natural habitat!",
+        commenterId: 8,
+        postId: 9,
+      },
+      {
+        commentText: "You’ve managed to freeze such a fleeting moment in time.",
+        commenterId: 7,
+        postId: 9,
+      },
+      {
+        commenterId: 6,
+        commentText: "Nature at its finest – a true moment captured in time.",
+        postId: 9,
+      },
+      {
+        commentText:
+          "What an intense, powerful shot—this animal's presence is undeniable!",
+        commenterId: 5,
+        postId: 9,
+      },
+      {
+        commentText: "The framing and focus in this shot are spot on.",
+        commenterId: 2,
+        postId: 9,
+      },
+      {
+        commentText:
+          "The lighting adds so much depth—what an extraordinary photo.",
+        commenterId: 3,
+        postId: 9,
+      },
+      {
+        commentText: "This is a perfect example of the wild’s quiet strength.",
+        commenterId: 1,
+        postId: 9,
+      },
+      {
+        commentText:
+          "Every detail is so crisp and vivid—such a beautiful image!",
+        commenterId: 8,
+        postId: 10,
+      },
+      {
+        commentText:
+          "This is pure magic! You’ve captured the heart of the wild.",
+        commenterId: 7,
+        postId: 10,
+      },
+      {
+        commenterId: 6,
+        commentText: "This shot is full of life and beauty—amazing capture!",
+        postId: 10,
+      },
+      {
+        commentText:
+          "You’ve captured the wild in such a unique way. Love this!",
+        commenterId: 5,
+        postId: 10,
+      },
+      {
+        commentText: "Such a majestic creature, beautifully photographed!",
+        commenterId: 2,
+        postId: 10,
+      },
+      {
+        commentText: "The emotion in this shot is incredible—great job!",
+        commenterId: 3,
+        postId: 10,
+      },
+      {
+        commentText: "Such a perfect moment frozen in time!",
+        commenterId: 1,
+        postId: 10,
+      },
+      {
+        commentText:
+          "The colors are so vivid, it almost feels like you’re there.",
+        commenterId: 5,
+        postId: 11,
+      },
+      {
+        commentText: "This image takes you right into the heart of nature.",
+        commenterId: 2,
+        postId: 11,
+      },
+      {
+        commentText:
+          "Such a beautiful and rare moment to witness—great capture!",
+        commenterId: 3,
+        postId: 11,
+      },
+      {
+        commentText: "The detail in this shot is extraordinary—wow!",
+        commenterId: 8,
+        postId: 11,
+      },
+      {
+        commentText: "Such a powerful image—this animal’s presence is felt!",
+        commenterId: 4,
+        postId: 12,
+      },
+      {
+        commentText:
+          "This moment feels so intimate, almost like we’re a part of it.",
+        commenterId: 5,
+        postId: 12,
+      },
+      {
+        commentText: "This shot perfectly captures the essence of the wild.",
+        commenterId: 6,
+        postId: 12,
+      },
+      {
+        commentText: "I love how you’ve captured this animal’s personality.",
+        commenterId: 7,
+        postId: 12,
+      },
+      {
+        commentText: "Such grace, such beauty—amazing photography!",
+        commenterId: 4,
+        postId: 13,
+      },
+      {
+        commentText:
+          "The way this light falls on the animal is simply gorgeous.",
+        commenterId: 5,
+        postId: 13,
+      },
+      {
+        commentText: "You’ve captured a true moment of wild serenity here.",
+        commenterId: 6,
+        postId: 13,
+      },
+      {
+        commentText: "Every element of this photo is so thoughtfully composed!",
+        commenterId: 7,
+        postId: 13,
+      },
+      {
+        commentText:
+          "This is a perfect example of how beautiful nature can be.",
+        commenterId: 5,
+        postId: 14,
+      },
+      {
+        commentText:
+          "Such an incredible shot—like something out of a wildlife documentary!",
+        commenterId: 6,
+        postId: 14,
+      },
+      {
+        commentText:
+          "This is the kind of moment that makes you fall in love with nature.",
+        commenterId: 7,
+        postId: 14,
+      },
+      {
+        commentText: "Such an emotional and powerful photograph!",
+        commenterId: 4,
+        postId: 12,
+      },
+      {
+        commentText: "This animal looks so at peace—wonderful shot.",
+        commenterId: 1,
+        postId: 15,
+      },
+      {
+        commentText:
+          "The way the animal blends with its surroundings is just perfect.",
+        commenterId: 3,
+        postId: 15,
+      },
+      {
+        commentText: "Nature in its purest form—this photo is breathtaking!",
+        commenterId: 6,
+        postId: 15,
+      },
+      {
+        commentText: "You’ve captured something truly special here. Well done!",
+        commenterId: 7,
+        postId: 16,
       },
     ],
   });
@@ -412,7 +879,7 @@ async function main() {
     data: [
       {
         replyText: "I still can't believe I got this!",
-        replyerId: 3,
+        replyerId: 2,
         replyingTo: 3,
       },
       { replyText: "I know, right??", replyerId: 4, replyingTo: 9 },

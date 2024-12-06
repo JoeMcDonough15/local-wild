@@ -1,6 +1,6 @@
 export interface User {
   id?: number;
-  username?: string;
+  name?: string;
   email?: string;
   password?: string;
   profileImageUrl?: string | null;
@@ -16,11 +16,11 @@ export interface User {
 export interface SafeUser {
   id: number;
   email: string;
-  username: string;
+  name: string;
 }
 
 export interface NewUser {
-  username: string;
+  name: string;
   email: string;
   password: string;
 }

@@ -21,7 +21,7 @@ const PostTitleAndDetails = () => {
             to={`/users/${currentPost.photographerId}`}
           >
             {" "}
-            {currentPost?.photographer?.username}
+            {currentPost?.photographer?.name}
           </Link>{" "}
           {currentPost?.datePhotographed && (
             <span className="date-photographed">

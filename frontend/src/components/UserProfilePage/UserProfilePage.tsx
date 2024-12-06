@@ -5,8 +5,6 @@ import { getUserThunk } from "../../store/slices/userSlice";
 import UserDetails from "./UserDetails";
 import "./UserProfilePage.css";
 import PostsCarousel from "../PostsCarousel";
-import OpenModalButton from "../OpenModalButton/OpenModalButton";
-import EditProfileForm from "../EditProfileForm/EditProfileForm";
 
 const UserProfilePage = () => {
   const currentUser = useAppSelector((state) => state.users.currentUser);
@@ -20,7 +18,7 @@ const UserProfilePage = () => {
   }, [dispatch, id]);
 
   if (!sessionUser) {
-    navigate("/");
+    navigate("/#skip-intro");
     return <></>;
   }
 
@@ -30,13 +28,6 @@ const UserProfilePage = () => {
 
   return (
     <section className="user-profile-page main-container flex-col">
-      {sessionUser.id === Number(id) && (
-        <OpenModalButton
-          buttonText="Edit Profile"
-          classes="edit-profile-button"
-          modalComponent={<EditProfileForm />}
-        />
-      )}
       <UserDetails />
       <PostsCarousel />
     </section>

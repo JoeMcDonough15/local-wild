@@ -135,7 +135,7 @@ const Comment = ({ comment }: CommentProps) => {
     id,
     createdAt,
     commenterId,
-    commenter: { username },
+    commenter: { name },
   } = comment;
   const dispatch = useAppDispatch();
   const sessionUser = useAppSelector((state) => state.session.sessionUser);
@@ -156,7 +156,7 @@ const Comment = ({ comment }: CommentProps) => {
         <div className="comment-container flex-col">
           <div className="comment-first-row flex-row">
             <Link className="link-to-photographer" to={`/users/${commenterId}`}>
-              {username}
+              {name}
             </Link>
             <p className="flex-row commenter-name-date">
               {formattedDate(createdAt)}

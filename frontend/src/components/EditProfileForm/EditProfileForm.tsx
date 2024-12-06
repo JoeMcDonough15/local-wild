@@ -85,54 +85,53 @@ const EditProfileForm = () => {
   };
 
   return (
-    <div>
-      <h1>Edit Your Profile</h1>
-      <form className="form-container flex-col" onSubmit={handleSubmit}>
-        {errors.serverError && (
-          <p className="error-text">{errors.serverError}</p>
-        )}
-        <div>
-          {showUpload ? (
-            <DragAndDropOneFile />
-          ) : (
-            <div>
-              <img src={previewUrl} alt="preview" />
-              <button
-                onClick={() => {
-                  setShowUpload(true);
-                  setImgFile(null);
-                }}
-                type="button"
-              >
-                Select a different file
-              </button>
+    <form className="form-container flex-col" onSubmit={handleSubmit}>
+      {errors.serverError && <p className="error-text">{errors.serverError}</p>}
+      <div>
+        {showUpload ? (
+          <DragAndDropOneFile />
+        ) : (
+          <div>
+            <div className="preview-img-container">
+              <img className="preview-img" src={previewUrl} alt="preview" />
             </div>
-          )}
-        </div>
-        <label htmlFor="location">
-          Where are you located?
-          <input
-            onChange={(e) => {
-              setLocation(e.target.value);
-            }}
-            type="text"
-            id="location"
-          />
-        </label>
-        <label htmlFor="about-me">
-          Tell Us About You
-          <textarea
-            maxLength={2000}
-            onChange={(e) => {
-              setAboutMe(e.target.value);
-            }}
-            id="about-me"
-          />
-        </label>
 
-        <button type="submit">Update Profile</button>
-      </form>
-    </div>
+            <button
+              className="change-avatar-button"
+              onClick={() => {
+                setShowUpload(true);
+                setImgFile(null);
+              }}
+              type="button"
+            >
+              Change Avatar
+            </button>
+          </div>
+        )}
+      </div>
+      <label htmlFor="location">
+        Where are you located?
+        <input
+          onChange={(e) => {
+            setLocation(e.target.value);
+          }}
+          type="text"
+          id="location"
+        />
+      </label>
+      <label htmlFor="about-me">
+        Tell Us About You
+        <textarea
+          maxLength={2000}
+          onChange={(e) => {
+            setAboutMe(e.target.value);
+          }}
+          id="about-me"
+        />
+      </label>
+
+      <button type="submit">Update Profile</button>
+    </form>
   );
 };
 

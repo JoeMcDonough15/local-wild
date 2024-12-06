@@ -77,7 +77,7 @@ router.put("/:id", requireAuth, async (req, res, next) => {
                 data: { commentText, updatedAt: new Date() },
                 include: {
                     replies: { orderBy: { createdAt: "asc" } },
-                    commenter: { select: { username: true, id: true } },
+                    commenter: { select: { name: true, id: true } },
                 },
             });
             if (!comment) {

@@ -5,7 +5,25 @@
   cursor: pointer;
   font-size: 0.7rem;
   justify-content: center;
-  margin: 0 auto 0.6em;
+  margin: 0 auto 20px;
   padding: 15% 10%;
   text-align: center;
+}
+
+.change-avatar-button {
+  margin: 20px 0;
+}
+
+.preview-img-container {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  margin: 20px auto;
+  width: 50%;
+}
+
+.preview-img {
+  height: 100%;
+  object-fit: cover;
+  width: 100%;
 }

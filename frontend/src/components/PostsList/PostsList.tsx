@@ -15,6 +15,7 @@ const PostsList = () => {
   const dispatch = useAppDispatch();
   const postsPerPage = 4;
   const [pageNum, setPageNum] = useState(1);
+  const [loaded, setLoaded] = useState(false);
   const numberOfPageChangeButtons = Math.ceil(allPosts.length / postsPerPage);
   const mapArray = [];
   for (let i = numberOfPageChangeButtons; i > 0; i--) {
@@ -29,17 +30,25 @@ const PostsList = () => {
     const getPostsOptions: GetPostsOptions = {};
 
     getPostsOptions.userId = currentUser.id;
-    dispatch(getAllPostsThunk(getPostsOptions));
-  }, [dispatch, currentUser]);
+    dispatch(getAllPostsThunk(getPostsOptions)).then(() => setLoaded(true));
+  }, [dispatch, currentUser, setLoaded]);
 
   if (!currentUser) {
     return <></>;
+  }
+
+  if (!loaded) {
+    return <h1 className="loading">Loading...</h1>;
   }
 
   // handle pagination inside the component
   const startingIndex = pageNum * postsPerPage - postsPerPage;
   const endingIndex = startingIndex + postsPerPage; // slice will go up to but not including endingIndex
   const postsToRender: Post[] = [...allPosts.slice(startingIndex, endingIndex)];
+
+  if (postsToRender.length === 0) {
+    return <h1 className="loading">No Posts To Display</h1>;
+  }
 
   return (
     <section className="posts-list flex-col">
