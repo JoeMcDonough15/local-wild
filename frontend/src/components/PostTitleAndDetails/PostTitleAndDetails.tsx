@@ -32,10 +32,13 @@ const PostTitleAndDetails = () => {
         {currentPost.fullDescription && (
           <p className="description">{currentPost.fullDescription}</p>
         )}
-        {currentPost.partOfDay && (
-          <p className="post-location-and-part-of-day">
-            {currentPost.partOfDay}
-          </p>
+        {(currentPost.partOfDay || currentPost.locationString) && (
+          <div className="post-location-and-part-of-day flex-row">
+            {currentPost.partOfDay && (
+              <p className="part-of-day">{currentPost.partOfDay}</p>
+            )}
+            {currentPost.locationString && <p>{currentPost.locationString}</p>}
+          </div>
         )}
       </div>
     </div>

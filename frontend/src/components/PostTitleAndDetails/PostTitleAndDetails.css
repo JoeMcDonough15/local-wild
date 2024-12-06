@@ -12,6 +12,14 @@
 }
 
 .description {
-  margin: 20px 0;
+  margin: 20px 0 100px;
   padding-right: 5vw;
+}
+
+.post-location-and-part-of-day {
+  width: 100%;
+}
+
+.part-of-day {
+  margin-right: 5vw;
 }

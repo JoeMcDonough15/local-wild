@@ -103,7 +103,7 @@ router.post("/signup", validateSignup, async (req, res, next) => {
 router.put("/", requireAuth, singleMulterUpload("image"), async (req, res, next) => {
     const { user } = req;
     const userId = user?.id;
-    const { favoriteSubject, location, numYearsExperience } = req.body;
+    const { location, aboutMe } = req.body;
     const imgFile = req.file;
     if (!userId)
         return;
@@ -117,6 +117,7 @@ router.put("/", requireAuth, singleMulterUpload("image"), async (req, res, next)
             data: {
                 location: location ?? null,
                 profileImageUrl: resourceUrl ?? null,
+                aboutMe: aboutMe ?? null,
             },
         });
         if (!userToUpdate) {

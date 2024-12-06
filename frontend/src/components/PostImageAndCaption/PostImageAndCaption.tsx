@@ -21,7 +21,6 @@ const PostImageAndCaption = ({
   const navigate = useNavigate();
   return (
     <div
-      style={{ cursor: "pointer" }}
       onClick={() => {
         navigate(`/posts/${postId}`);
       }}

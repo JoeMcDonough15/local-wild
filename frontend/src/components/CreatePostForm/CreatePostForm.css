@@ -1,9 +1,79 @@
-.drag-container {
+.page-wrapper {
+  background: aliceblue;
+  padding: 5vh 0;
+}
+
+.create-post-page {
   align-items: center;
-  border: 1px solid black;
-  display: flex;
-  height: 25vw;
-  justify-content: center;
-  padding: 5vw;
+}
+
+.create-post-header {
+  color: var(--accent-blue-dark);
+  font-size: 4rem;
+}
+
+.create-post-page .form-container {
+  background: white;
+  border-radius: 8px;
+  gap: 10px;
+  margin-top: 20px;
+  padding: 10% 15%;
+  width: 80%;
+}
+
+.create-post-page .form-container .drag-container {
+  font-size: 1.3rem;
+}
+
+.post-input-container > label {
+  font-size: 1rem;
+  margin-bottom: 0.5em;
+}
+
+.post-input-container > input,
+.post-input-container > textarea {
+  outline-color: var(--accent-blue-dark);
+  padding: 10px 5px;
+}
+
+.help-header {
+  font-size: 1.2rem;
+  margin: 10px 0;
+}
+
+.lat-lng-fieldset {
+  border-color: var(--accent-blue-dark);
+  margin: 1em 0 1em 1.25em;
+  padding: 1em;
+}
+
+.lat-lng-fieldset input {
+  padding: 5px;
+}
+
+.post-input-row {
+  align-items: center;
+  font-size: 0.75rem;
+  justify-content: space-between;
   width: 25vw;
+}
+
+.post-input-row:first-of-type {
+  margin-bottom: 10px;
+}
+
+.submit-post-button {
+  background: var(--accent-blue-dark);
+  border: 1px solid var(--accent-blue-dark);
+  border-radius: 4px;
+  color: white;
+  font-weight: bold;
+  margin-top: 50px;
+  padding: 15px 1vw;
+  transition: all 250ms ease-in-out;
+}
+
+.submit-post-button:hover {
+  background-color: white;
+  color: var(--accent-blue-dark);
 }

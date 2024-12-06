@@ -41,11 +41,13 @@
 
 #modal-content .form-container,
 #modal-content .form-container label,
-#modal-content .form-container label > input {
+#modal-content .form-container label > input,
+#modal-content .form-container label > textarea {
   width: 100%;
 }
 
-#modal-content input {
+#modal-content input,
+#modal-content textarea {
   background: rgba(0, 128, 128, 0.1);
   border: 2px solid darkblue;
   padding: 0.5em 0.2em;

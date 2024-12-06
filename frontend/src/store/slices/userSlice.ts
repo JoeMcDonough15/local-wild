@@ -5,7 +5,6 @@ import {
 } from "@reduxjs/toolkit";
 import type { User, ServerError } from "../../types";
 import serverMethods from "../api";
-import { postsSlice } from "./postsSlice";
 
 // thunks
 
@@ -16,7 +15,6 @@ export const getUserThunk = createAsyncThunk(
     try {
       const userDetails = await serverMethods.users.getUser(userId);
       dispatch(userSlice.actions.setCurrentUser(userDetails));
-      dispatch(postsSlice.actions.setAllPosts(userDetails.posts));
     } catch (error: any) {
       const errorResponse: ServerError = error;
       return errorResponse;

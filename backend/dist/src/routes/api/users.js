@@ -11,7 +11,6 @@ router.get("/:id", async (req, res, next) => {
             password: true,
         },
         where: { id: userId },
-        include: { posts: { orderBy: { createdAt: "desc" } } },
     });
     if (!user) {
         const userNotFound = {

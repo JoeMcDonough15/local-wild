@@ -214,7 +214,11 @@ const CommentsSection = () => {
 
       <div className="existing-comments flex-col">
         <div className="title-and-create-button flex-row">
-          <h2>Comments</h2>
+          <h2>
+            {`${
+              sortedCommentsArray.length > 0 ? "Comments" : "No comments yet."
+            }`}
+          </h2>
           {sessionUser?.id !== currentPost?.photographerId &&
             !createCommentMode && (
               <button
@@ -228,10 +232,13 @@ const CommentsSection = () => {
               </button>
             )}
         </div>
-
-        {sortedCommentsArray.map((comment) => {
-          return <Comment key={comment.id} comment={comment} />;
-        })}
+        {sortedCommentsArray.length > 0 && (
+          <>
+            {sortedCommentsArray.map((comment) => {
+              return <Comment key={comment.id} comment={comment} />;
+            })}
+          </>
+        )}
       </div>
     </div>
   );

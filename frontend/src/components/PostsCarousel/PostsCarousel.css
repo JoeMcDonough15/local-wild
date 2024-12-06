@@ -20,6 +20,10 @@
   width: 30vw;
 }
 
+.carousel-tile-container:hover {
+  cursor: pointer;
+}
+
 .carousel-img {
   object-fit: cover;
   height: 100%;
