@@ -34,13 +34,17 @@ const UserProfilePage = () => {
     });
   } else if (userLoaded === "response") {
     if (errors.serverError) {
-      return <h1 className="error-text">{errors.serverError}</h1>;
+      return (
+        <h1 style={{ margin: "20vh" }} className="error-text">
+          {errors.serverError}
+        </h1>
+      );
     }
     setUserLoaded("finished");
   }
 
   if (!currentUser) {
-    return <h1>Loading...</h1>;
+    return <h1 style={{ margin: "20vh" }}>Loading...</h1>;
   }
 
   return (

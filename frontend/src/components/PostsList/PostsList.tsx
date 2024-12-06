@@ -24,6 +24,7 @@ const PostsList = () => {
 
   return (
     <section className="posts-list flex-col">
+      {postsToRender.length === 0 && <h1>No posts yet</h1>}
       {postsToRender.map((eachPost) => {
         return (
           eachPost && (
@@ -35,7 +36,7 @@ const PostsList = () => {
               />
               <h3 className="post-name">{eachPost.title}</h3>
               <p className="post-upload-date">
-                uploaded on {formattedDate(eachPost.createdAt)}
+                added {formattedDate(eachPost.createdAt)}
               </p>
 
               <div className="post-control-buttons flex-row">

@@ -4,10 +4,12 @@ import { useModal } from "../../context/useModal";
 import { useAppDispatch } from "../../store";
 import { deletePostThunk } from "../../store/slices/postsSlice";
 import { PayloadAction } from "@reduxjs/toolkit";
+import { useNavigate } from "react-router-dom";
 
 const ConfirmDeleteModal = ({
   postId,
 }: UpdateOrDeletePostArgs): JSX.Element => {
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { closeModal } = useModal();
   const [errors, setErrors] = useState(
@@ -25,6 +27,7 @@ const ConfirmDeleteModal = ({
       setErrors({ serverError: serverResponse.payload.errors.message });
     } else {
       closeModal();
+      navigate("/my-posts");
     }
   };
   return (

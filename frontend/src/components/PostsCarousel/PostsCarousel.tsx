@@ -6,34 +6,33 @@ import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../store";
 import { getAllPostsThunk } from "../../store/slices/postsSlice";
 
-// have a viewing window of 3 indices for allPosts that determine which ones show up in view on the carousel
-interface BrowserLocation {
-  userLat: number;
-  userLng: number;
-}
-interface CarouselProps {
-  userLocation?: BrowserLocation;
-}
-
-const PostsCarousel = ({ userLocation }: CarouselProps) => {
+const PostsCarousel = () => {
   const dispatch = useAppDispatch();
-  const postsToRender: Post[] = useAppSelector((state) => state.posts.allPosts);
+  const allPosts: Post[] = useAppSelector((state) => state.posts.allPosts);
   const currentUser = useAppSelector((state) => state.users.currentUser);
   const [slideNum, setSlideNum] = useState(1);
   const postsPerSlide = 3;
 
   useEffect(() => {
     const getPostsOptions: GetPostsOptions = {};
-    if (userLocation) {
-      getPostsOptions.userLat = userLocation.userLat;
-      getPostsOptions.userLng = userLocation.userLng;
-    }
+
     if (currentUser) {
       getPostsOptions.userId = currentUser.id;
     }
+    // get device's location if allowed by user
+    navigator.geolocation.getCurrentPosition(
+      (position: GeolocationPosition) => {
+        getPostsOptions.userLat = position.coords.latitude;
+        getPostsOptions.userLng = position.coords.longitude;
+        dispatch(getAllPostsThunk(getPostsOptions));
+      }
+    );
+  }, [dispatch, currentUser]);
 
-    dispatch(getAllPostsThunk(getPostsOptions));
-  }, [dispatch, userLocation, currentUser]);
+  // handle which posts are viewed on each slide
+  const startingIndex = slideNum * postsPerSlide - postsPerSlide;
+  const endingIndex = startingIndex + postsPerSlide; // slice will go up to but not including endingIndex
+  const postsToRender: Post[] = [...allPosts.slice(startingIndex, endingIndex)];
 
   return (
     <section className="carousel flex-row">
@@ -65,7 +64,7 @@ const PostsCarousel = ({ userLocation }: CarouselProps) => {
           );
         })}
       </div>
-      {postsToRender.length > slideNum * postsPerSlide && (
+      {allPosts.length > slideNum * postsPerSlide && (
         <button
           onClick={() => {
             const newSlideNum = slideNum + 1;

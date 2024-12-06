@@ -145,6 +145,9 @@ export const postsSlice = createSlice({
     setCurrentPost: (state, action: PayloadAction<Post>) => {
       state.currentPost = action.payload;
     },
+    clearCurrentPost: (state) => {
+      state.currentPost = null;
+    },
   },
 });
 

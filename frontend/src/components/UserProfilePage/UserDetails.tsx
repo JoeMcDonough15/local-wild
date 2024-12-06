@@ -26,7 +26,7 @@ const UserDetails = () => {
       <div className="details">
         {location && <p>{location}</p>}
         {aboutMe && <p>{aboutMe}</p>}
-        {allPostsByUser.length && (
+        {allPostsByUser.length > 0 && (
           <p>
             {username} has posted {allPostsByUser.length} times!
           </p>

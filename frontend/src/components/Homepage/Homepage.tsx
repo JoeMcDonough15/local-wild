@@ -10,17 +10,14 @@ const Homepage = () => {
   const beginHomepageContent = useRef<HTMLDivElement | null>(null);
   const dispatch = useAppDispatch();
   const currentUser = useAppSelector((state) => state.users.currentUser);
-
   const scrollContentIntoView = () => {
     beginHomepageContent?.current?.scrollIntoView({ behavior: "smooth" });
   };
 
   useEffect(() => {
+    // clear current user so we query for all the posts, not just a single user's posts
     dispatch(userSlice.actions.removeCurrentUser());
   }, [dispatch]);
-
-  // const location = navigator.geolocation.getCurrentPosition(() => {});
-  // console.log("location: ", location);
 
   if (currentUser) {
     return <></>;
