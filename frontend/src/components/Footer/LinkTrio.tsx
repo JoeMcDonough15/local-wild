@@ -15,9 +15,15 @@ const LinkTrio = ({
     <div className="link-trio">
       {headerName && <h3 className="link-trio-header">{headerName}</h3>}
       <div className="link-trio-links flex-col">
-        <a href={link1}>{linkName1}</a>
-        <a href={link2}>{linkName2}</a>
-        <a href={link3}>{linkName3}</a>
+        <a target="_blank" href={link1}>
+          {linkName1}
+        </a>
+        <a target="_blank" href={link2}>
+          {linkName2}
+        </a>
+        <a target="_blank" href={link3}>
+          {linkName3}
+        </a>
       </div>
     </div>
   );
